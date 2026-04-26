@@ -2,6 +2,7 @@
 
 class Solution:
     def totalFruit(self, fruits: List[int]) -> int:
+        
         left = right = result = 0
         hashmap = {}
         

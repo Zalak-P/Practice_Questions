@@ -6,6 +6,7 @@
 
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
+
         left = right = result = 0
         hashmap = {}
 
@@ -20,7 +21,6 @@ class Solution:
                 left += 1
             
             result = max(right - left + 1, result)
-
             right += 1
 
         return result
