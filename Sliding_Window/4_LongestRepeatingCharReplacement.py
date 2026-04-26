@@ -1,4 +1,6 @@
 # Problem: https://takeuforward.org/data-structure/longest-repeating-character-replacement
+# Video Soln Followed: https://www.youtube.com/watch?v=_eNhaDCr6P0
+
 # Core Trick: 👉 max_freq = count of the most frequent character in the current window
 # Goal = make all characters in the window identical using ≤ k replacements
 # Best strategy = keep the most frequent character, replace the rest, “Keep the largest group, fix the rest”
