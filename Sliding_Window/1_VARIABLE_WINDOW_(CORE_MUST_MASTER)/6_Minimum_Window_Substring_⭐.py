@@ -1,3 +1,6 @@
+# Problem: https://takeuforward.org/plus/dsa/problems/minimum-window-substring-?source=strivers-a2z-dsa-track
+# Video Soln Followed: https://www.youtube.com/watch?v=WJaij9ffOIY
+
 class Solution:
     def minWindow(self, s: str, t: str) -> str:
 
