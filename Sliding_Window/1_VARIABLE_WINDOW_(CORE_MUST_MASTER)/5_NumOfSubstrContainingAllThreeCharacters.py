@@ -18,7 +18,7 @@ class Solution:
                 result += len(s) - right
                 hashmap[s[left]] -= 1
                 if hashmap[s[left]] == 0:
-                    del hashmap[s[left]]
+                    del hashmap[s[left]]   # 🔹 shrink → release character
                 left += 1
             
             right += 1 

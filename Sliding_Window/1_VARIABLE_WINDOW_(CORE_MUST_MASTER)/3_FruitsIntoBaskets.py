@@ -12,7 +12,7 @@ class Solution:
             while len(hashmap) > 2:
                 hashmap[fruits[left]] -= 1
                 if hashmap[fruits[left]] == 0:
-                    del hashmap[fruits[left]]
+                    del hashmap[fruits[left]]                 # 🔹 shrink → release character
                 left += 1
 
             result = max(result, right - left + 1)

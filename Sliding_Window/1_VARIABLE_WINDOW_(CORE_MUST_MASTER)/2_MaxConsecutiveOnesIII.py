@@ -10,7 +10,7 @@ class Solution:
                 curr_k += 1
             
             while curr_k > k:
-                if nums[left] == 0:
+                if nums[left] == 0:  # 🔹 shrink → release character
                     curr_k -= 1
                 left += 1
 

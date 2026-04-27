@@ -19,7 +19,7 @@ class Solution:
             while (right - left + 1) - max_freq > k:
                 hashmap[s[left]] -= 1
                 if hashmap[s[left]] == 0:
-                    del hashmap[s[left]]
+                    del hashmap[s[left]]    # 🔹 shrink → release character
                 left += 1
             
             result = max(right - left + 1, result)
