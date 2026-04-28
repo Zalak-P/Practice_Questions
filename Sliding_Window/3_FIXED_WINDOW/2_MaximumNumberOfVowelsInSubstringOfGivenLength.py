@@ -9,7 +9,7 @@ class Solution:
             if s[right] in hashmap:
                 counter += 1
 
-            if right - left + 1 > k:
+            while right - left + 1 > k:
                 if s[left] in hashmap:
                     counter -= 1
                 left += 1
