@@ -28,7 +28,7 @@ class Solution:
                     hashmap[s[left]] += 1
                 left += 1
             
-            # check window size
+            # check window size - 👉 Even if frequencies match, if length ≠ len(p), it’s not a valid anagram.
             if right - left + 1 == len(p):
                 result.append(left)
             right += 1
