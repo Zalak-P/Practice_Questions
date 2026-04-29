@@ -17,7 +17,7 @@ class Solution:
                         hashmap[s[left]] += 1
                     left += 1
                 right += 1
-                continue
+                continue   # 🔥 IMPORTANT
             
             # Traditional Sliding Window starts from here
             if s[right] in hashmap:
