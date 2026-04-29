@@ -20,11 +20,9 @@ class Solution:
                 continue
             
             # Traditional Sliding Window starts from here
-            # 🟢 Case 2: include valid char
             if s[right] in hashmap:
                 hashmap[s[right]] -= 1
             
-            # 🔴 Case 3: too many of a char → shrink
             while hashmap[s[right]] < 0:
                 if s[left] in hashmap:
                     hashmap[s[left]] += 1
