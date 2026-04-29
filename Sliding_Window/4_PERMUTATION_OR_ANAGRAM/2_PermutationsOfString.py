@@ -1,3 +1,5 @@
+# Problem: https://leetcode.com/problems/permutation-in-string/description/
+# Core Trick: invalid char = hard reset, don’t touch anything else in this iteration
 class Solution:
     def checkInclusion(self, s1: str, s2: str) -> bool:
         hashmap = Counter(s1)
