@@ -18,7 +18,8 @@ class Solution:
                     left += 1
                 right += 1
                 continue
-
+            
+            # Traditional Sliding Window starts from here
             # 🟢 Case 2: include valid char
             if s[right] in hashmap:
                 hashmap[s[right]] -= 1
