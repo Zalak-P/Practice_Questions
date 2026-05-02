@@ -1,6 +1,6 @@
 # Problem: https://leetcode.com/problems/middle-of-the-linked-list/description/
 """
-FIRST MIDDLE vs SECOND MIDDLE
+IMP Concept: FIRST MIDDLE vs SECOND MIDDLE
 
 Rule:
 - Second middle → use: while fast and fast.next
