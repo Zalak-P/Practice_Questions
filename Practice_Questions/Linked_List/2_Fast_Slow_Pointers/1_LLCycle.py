@@ -1,10 +1,4 @@
-# Problem:
-
-# Definition for singly-linked list.
-# class ListNode:
-#     def __init__(self, x):
-#         self.val = x
-#         self.next = None
+# Problem: https://leetcode.com/problems/linked-list-cycle/
 
 class Solution:
     def hasCycle(self, head: Optional[ListNode]) -> bool:
