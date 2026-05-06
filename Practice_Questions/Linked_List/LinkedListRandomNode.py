@@ -51,10 +51,7 @@ class SolutionArray:
 Time:  O(n)
 Space: O(1)
 
-2-line intuition:
-→ At i-th node, pick it with probability 1/i
-→ Ensures every node has equal probability (1/n)
-
+Core Trick: 👉 “At every node, give it a fresh chance: pick it with probability 1 / (nodes seen so far)”
 Use when:
 → Linked list size unknown / too large
 → Cannot store all elements
