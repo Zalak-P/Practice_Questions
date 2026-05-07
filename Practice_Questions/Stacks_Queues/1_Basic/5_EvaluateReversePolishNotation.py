@@ -7,7 +7,7 @@ class Solution:
 
         for item in tokens:
             if item not in "+-/*":
-                stack.append(int(item)) #bit integer cannot be 
+                stack.append(int(item))
                 continue
 
             num2 = stack.pop()
@@ -21,7 +21,7 @@ class Solution:
             elif item == '*':
                 ans = num1 * num2
             else:
-                ans = int(num1 / num2) #bit integer cannot be 
+                ans = int(num1 / num2) 
             
             stack.append(ans)
 
