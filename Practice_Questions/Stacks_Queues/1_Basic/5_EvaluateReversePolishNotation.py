@@ -1,4 +1,5 @@
 # Problem: https://leetcode.com/problems/evaluate-reverse-polish-notation/
+# Core Trick: If token is number, push it. If token is operator, pop num2 then num1, calculate num1 operator num2, and push result back.
 
 class Solution:
     def evalRPN(self, tokens: List[str]) -> int:
