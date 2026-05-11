@@ -4,21 +4,17 @@
 
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        n = len(nums)
-
         stack = []
-        result = [-1] * n
+        result = [-1] * len(nums)
 
-        for i in range(2 * n):
-            curr_num = nums[i % n]
-
+        for i in range(2 * len(nums)):
+            curr_num = nums[i % len(nums)]
             while stack and nums[stack[-1]] < curr_num:
                 index = stack.pop()
                 result[index] = curr_num
-
             # Only push original indices.
             # Second traversal only helps unresolved indices.
-            if i < n:
+            if i < len(nums):
                 stack.append(i)
 
         return result
