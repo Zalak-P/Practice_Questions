@@ -4,7 +4,6 @@
 
 # Base class for all burgers
 # Every burger must implement prepare()
-
 class Burger:
     def prepare(self):
         pass
