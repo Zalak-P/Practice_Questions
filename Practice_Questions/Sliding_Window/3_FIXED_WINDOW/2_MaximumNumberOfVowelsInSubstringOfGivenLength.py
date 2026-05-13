@@ -1,0 +1,20 @@
+# Problem: https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/description/
+
+class Solution:
+    def maxVowels(self, s: str, k: int) -> int:
+        hashmap = {'a', 'e', 'i', 'o', 'u'}
+        left = right = counter = result = 0
+
+        while right < len(s):
+            if s[right] in hashmap:
+                counter += 1
+
+            while right - left + 1 > k:
+                if s[left] in hashmap:
+                    counter -= 1
+                left += 1
+            
+            result = max(result, counter)
+            right += 1
+            
+        return result
