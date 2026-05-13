@@ -1,8 +1,7 @@
 # Problem: https://leetcode.com/problems/largest-rectangle-in-histogram/
 # Core Trick: Stack stores indices of increasing heights.
 # When smaller height appears, popped bar gets:
-# left boundary = stack[-1]
-# right boundary = current index i
+# left boundary = stack[-1], right boundary = current index i
 # So rectangle exists between: previous smaller element and next smaller element
 
 class Solution:
