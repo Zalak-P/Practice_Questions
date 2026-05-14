@@ -2,18 +2,12 @@ class ThreadSafeEagerSingleton:
     def __init__(self):
         print("Singleton Constructor Called!")
 
-# ---------------------------------------------------
 # EAGER OBJECT CREATION: Object created IMMEDIATELY.
 # Unlike Lazy Singleton: Object is NOT waiting until first request.
-# ---------------------------------------------------
 instance = ThreadSafeEagerSingleton()
 
 def get_instance():
     return instance
-
-# ========================================================
-# MAIN
-# =========================================================
 
 s1 = get_instance()
 s2 = get_instance()
@@ -22,6 +16,8 @@ print(s1 is s2)
 # Output:
 # Singleton Constructor Called!
 # True
+
+
 
 
 # =========================================================
