@@ -32,53 +32,40 @@ print(s1 is s2)
 # ---------------------------------------------------
 # JAVA SINGLETON
 # ---------------------------------------------------
-
 Java uses: private Constructor
-
 private Singleton()
-
 “Nobody outside this class can call the constructor.”
 
 So THIS becomes illegal:
-
 new ThreadSafeEagerSingleton();
-
 outside the class.
 
 Only the class itself can create object.
-
 That is how Java STRICTLY enforces Singleton.
-
 # ---------------------------------------------------
 # PYTHON SINGLETON
 # ---------------------------------------------------
 Python does NOT have true private constructors.
 
 Even if you write:
-
 def __init__(self):
 
 users can STILL do:
-
 obj = MySingleton()
-
 from outside.
 
 Python does not block that.
 
 class MyClass:
     pass
-
 a = MyClass()
 b = MyClass()
-
 always allowed.
 
 Python "Private" Is Mostly Convention.
 
 Example:
 _instance or __something
-
 only means: “Please don't touch this.”
 
 It is NOT true access restriction like Java.
