@@ -1,7 +1,3 @@
-# =========================================================
-# SINGLETON CLASS
-# =========================================================
-
 class Singleton:
     
     _instance = None    # CLASS variable -> this belongs to Class, not object, only 1 shared copy

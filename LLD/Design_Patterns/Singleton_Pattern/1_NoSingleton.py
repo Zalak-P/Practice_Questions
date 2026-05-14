@@ -1,7 +1,3 @@
-# =========================================================
-# NORMAL CLASS (NOT Singleton)
-# =========================================================
-
 class NoSingleton:
     def __init__(self):
     # Runs AFTER object is created.
