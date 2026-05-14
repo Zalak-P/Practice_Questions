@@ -1,6 +1,6 @@
 # Problem: https://leetcode.com/problems/car-fleet/
 # Trick: Sort cars by position. For each car: calc time = (target - position) / speed
-# Once car catches up to another car, the speed of the car will changed to the one in the front, since it's single lane road.
+# Once the car catch up to another car, then it will drive at the same speed as the car ahead of it.
 
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
@@ -21,14 +21,3 @@ class Solution:
 
         return result
     
-
-# At one point this problem does look like Next Greater Element, since we are looking for bigger TIME,
-# in the future but it's not.
-# WHY? Next Greater Element works like:
-# "Current element resolves older waiting elements."
-# Example: current_num > stack_top
-# So current element immediately answers pending questions.
-
-# Car Fleet is not resolving pending cars like that.
-# Instead: Current car must compare itself with the FINAL fleet ahead.
-# because fleets can merge and change speeds/times dynamically.
