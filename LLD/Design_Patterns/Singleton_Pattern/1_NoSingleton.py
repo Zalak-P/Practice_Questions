@@ -11,6 +11,8 @@ print("s1", s1)
 print("s2", s2)
 print("s1 is s2 :", s1 is s2)
 
+# Output:
+# False
 
 # 1. __init__()
 # Runs after object creation.
@@ -26,9 +28,6 @@ print("s1 is s2 :", s1 is s2)
 
 # 4. s1 is s2
 # 'is' checks whether both variables point to the SAME object.
-
-# Output:
-# False
 
 # because:
 # - s1 points to Object A
