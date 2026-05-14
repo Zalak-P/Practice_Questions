@@ -4,7 +4,6 @@ class ThreadSafeLockingSingleton:
     _lock = threading.Lock()
 
     def __new__(cls):
-
         with cls._lock:
             if cls._instance is None:
                 print("Singleton Constructor Called!")
