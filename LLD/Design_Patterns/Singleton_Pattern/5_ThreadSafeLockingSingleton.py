@@ -23,3 +23,7 @@ print(s1 is s2)
 # ThreadSafeLockingSingleton()
 # the method acquires a lock.
 # Only one thread can enter at a time.
+
+# Main Problem
+# This version locks EVERY call.
+# Even after Singleton already exists.
