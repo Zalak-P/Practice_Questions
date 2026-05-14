@@ -37,6 +37,5 @@ print("obj1 is obj2 :", obj1 is obj2) # Same object: Output -> True
 # =========================================================
 
 print("----- Memory Address Check -----")
-
 print("obj1 id:", id(obj1))
 print("obj2 id:", id(obj2)) # Same memory address
