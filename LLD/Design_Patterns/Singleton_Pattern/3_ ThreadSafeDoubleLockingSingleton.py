@@ -5,8 +5,13 @@ class ThreadSafeDoubleLockingSingleton:
     _lock = threading.Lock()
 
     def __new__(cls):
+        # First check: no lock
         if cls._instance is None:
+
+            # Lock only if object is not created yet
             with cls._lock:
+
+                # Second check: after getting lock
                 if cls._instance is None:
                     print("Creating Singleton Object...")
                     cls._instance = super().__new__(cls)
