@@ -1,7 +1,6 @@
 # Problem: https://leetcode.com/problems/car-fleet/
 # Trick: Sort cars by position. For each car: calc time = (target - position) / speed
-# If one car catches up to another then that is a Car Fleet. We need to count no. of such car fleet. 
-# Once car catches up to another car, the speed of the car will change to the one in the front, since it's single lane road.
+# Once car catches up to another car, the speed of the car will changed to the one in the front, since it's single lane road.
 
 class Solution:
     def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
