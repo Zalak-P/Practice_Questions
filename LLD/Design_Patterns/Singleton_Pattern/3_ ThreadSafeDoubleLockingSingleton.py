@@ -10,8 +10,9 @@ class ThreadSafeDoubleLockingSingleton:
 
             # Lock only if object is not created yet
             with cls._lock:
+            # ACQUIRE LOCK, Only ONE thread can enter here at a time.
 
-                # Second check: after getting lock
+                # Second check: after getting lock-> WHY: Another thread may have already created object while current thread was waiting for lock.
                 if cls._instance is None:
                     print("Creating Singleton Object...")
                     cls._instance = super().__new__(cls)
