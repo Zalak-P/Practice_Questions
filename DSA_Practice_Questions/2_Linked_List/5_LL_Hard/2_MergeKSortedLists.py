@@ -1,4 +1,5 @@
 # Problem: https://leetcode.com/problems/merge-k-sorted-lists/
+# Video Soln: https://www.youtube.com/watch?v=1zktEppsdig
 # Trick: Put each list head in min-heap. Always pop smallest node, attach it in result list, then push its next node.
 
 from typing import List, Optional
