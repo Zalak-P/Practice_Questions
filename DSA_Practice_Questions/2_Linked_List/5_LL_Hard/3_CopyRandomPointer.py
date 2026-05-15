@@ -8,17 +8,18 @@ class Solution:
         hashmap = {}
         curr = head
 
-        while curr:       
-            hashmap[curr] = Node(curr.val)   
-            curr = curr.next    
-
-        curr = head 
-
         while curr:
-            if curr.next:
-                hashmap[curr].next = hashmap[curr.next]
-            if curr.random:
-                hashmap[curr].random = hashmap[curr.random]
+            hashmap[curr] = Node(curr.val)
+            curr = curr.next
+
+        curr = head
+        while curr:
+            next_node = curr.next
+            random_node = curr.random
+            if next_node:
+                hashmap[curr].next = hashmap[next_node]
+            if random_node:
+                hashmap[curr].random = hashmap[random_node]
             curr = curr.next
 
         return hashmap[head]
