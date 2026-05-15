@@ -10,7 +10,7 @@ class Solution:
         while curr:
             hashmap[curr] = Node(curr.val)
             curr = curr.next
-
+            
         curr = head
         while curr:
             next_node = curr.next
