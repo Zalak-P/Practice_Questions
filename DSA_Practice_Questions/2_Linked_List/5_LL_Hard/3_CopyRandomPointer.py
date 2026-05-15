@@ -7,7 +7,6 @@ class Solution:
 
         hashmap = {}
         curr = head
-
         while curr:
             hashmap[curr] = Node(curr.val)
             curr = curr.next
