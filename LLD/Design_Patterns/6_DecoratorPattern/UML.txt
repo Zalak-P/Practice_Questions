@@ -1,0 +1,62 @@
+                 Character
+                    |
+        -------------------------
+        |                       |
+      Mario             CharacterDecorator
+                                |
+                --------------------------------
+                |              |               |
+             HeightUp      GunPowerUp      StarPowerUp
+
+
+Design Flow:
+1. Character defines common behavior.
+   - getAbilities()
+
+2. Mario is the concrete base object.
+   - Returns "Mario"
+
+3. CharacterDecorator stores a Character object.
+   - This allows wrapping another Character.
+
+4. HeightUp extends CharacterDecorator.
+   - Adds "with HeightUp"
+
+5. GunPowerUp extends CharacterDecorator.
+   - Adds "with Gun"
+
+6. StarPowerUp extends CharacterDecorator.
+   - Adds "with Star Power"
+
+7. Client code keeps reassigning mario.
+   - mario = new HeightUp(mario)
+   - mario = new GunPowerUp(mario)
+   - mario = new StarPowerUp(mario)
+
+What changes if a new power-up is added later?
+Suppose you want to add FirePowerUp.
+
+You do not change:
+Mario
+Character
+HeightUp
+GunPowerUp
+StarPowerUp
+
+You only add one new class:
+
+class FirePowerUp extends CharacterDecorator {
+    public FirePowerUp(Character c) {
+        super(c);
+    }
+
+    public String getAbilities() {
+        return character.getAbilities() + " with Fire";
+    }
+}
+
+Then use it like:
+mario = new FirePowerUp(mario);
+
+That is why Decorator Pattern follows Open/Closed Principle:
+Open for extension, closed for modification.

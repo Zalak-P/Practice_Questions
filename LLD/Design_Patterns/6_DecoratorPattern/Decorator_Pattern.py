@@ -42,3 +42,6 @@ print("After StarPowerUp:", mario.get_abilities())
 # After HeightUp: Mario with HeightUp
 # After GunPowerUp: Mario with HeightUp with Gun
 # After StarPowerUp: Mario with HeightUp with Gun with Star Power (Limited Time)
+
+# So decorator has both:
+# is-a Character and has-a Character
