@@ -36,3 +36,9 @@ print("After GunPowerUp:", mario.get_abilities())
 
 mario = StarPowerUp(mario)
 print("After StarPowerUp:", mario.get_abilities())
+
+# Output:
+# Basic Character: Mario
+# After HeightUp: Mario with HeightUp
+# After GunPowerUp: Mario with HeightUp with Gun
+# After StarPowerUp: Mario with HeightUp with Gun with Star Power (Limited Time)
