@@ -1,0 +1,142 @@
+Notes
+-----
+1. Command is the interface/base class.
+   It defines two common methods:
+   - execute()
+   - undo()
+
+2. Light and Fan are receivers.
+   They are the real objects that perform the actual work.
+
+3. LightCommand wraps the Light object.
+   - execute() calls light.on()
+   - undo() calls light.off()
+
+4. FanCommand wraps the Fan object.
+   - execute() calls fan.on()
+   - undo() calls fan.off()
+
+5. RemoteController is the invoker.
+   It does not directly know about Light or Fan.
+   It only stores Command objects.
+
+6. Main application connects everything.
+   - Button 0 gets LightCommand
+   - Button 1 gets FanCommand
+
+
+Design Flow
+-----------
+
+Command
+  |
+  |-- LightCommand -----> Light
+  |
+  |-- FanCommand -------> Fan
+
+
+RemoteController
+  |
+  |-- stores list of Command objects
+  |
+  |-- press_button()
+          |
+          |-- command.execute()
+          |-- command.undo()
+
+
+Button Press Flow
+-----------------
+
+1. First press on button 0:
+   - button_pressed[0] is False
+   - remote calls execute()
+   - Light turns ON
+   - button_pressed[0] becomes True
+
+2. Second press on button 0:
+   - button_pressed[0] is True
+   - remote calls undo()
+   - Light turns OFF
+   - button_pressed[0] becomes False
+
+
+What If A New Device Is Added Later?
+------------------------------------
+
+Suppose we add AC.
+
+We add:
+
+class AC:
+    def on(self):
+        print("AC is ON")
+
+    def off(self):
+        print("AC is OFF")
+
+
+class ACCommand(Command):
+    def __init__(self, ac):
+        self.ac = ac
+
+    def execute(self):
+        self.ac.on()
+
+    def undo(self):
+        self.ac.off()
+
+
+Then in main:
+
+ac = AC()
+remote.set_command(2, ACCommand(ac))
+
+
+What Changes?
+-------------
+
+We add:
+- AC
+- ACCommand
+
+We do not change:
+- Command
+- RemoteController
+- Light
+- Fan
+- LightCommand
+- FanCommand
+
+
+Why Command Pattern Is Useful
+-----------------------------
+
+Without Command Pattern, RemoteController would need many if/else conditions:
+
+if button == 0:
+    light.on()
+elif button == 1:
+    fan.on()
+elif button == 2:
+    ac.on()
+
+This becomes messy as more devices are added.
+
+With Command Pattern, the remote only does:
+
+command.execute()
+command.undo()
+
+So the remote stays clean, reusable, and flexible.
+
+
+Simple Definition
+-----------------
+
+Command Pattern means wrapping a request/action inside an object.
+
+In this example:
+- LightCommand wraps the action of turning Light ON/OFF.
+- FanCommand wraps the action of turning Fan ON/OFF.
+- RemoteController only talks to Command, not directly to Light or Fan.
