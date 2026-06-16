@@ -11,9 +11,9 @@ class Solution:
             if i >= len(nums):
                 return 0
 
-            rob_current = nums[i] + dfs(i + 2)
-            skip_current = dfs(i + 1)
+            take = nums[i] + dfs(i + 2)
+            not_take = dfs(i + 1)
 
-            return max(rob_current, skip_current)
+            return max(take, not_take)
 
         return dfs(0)
