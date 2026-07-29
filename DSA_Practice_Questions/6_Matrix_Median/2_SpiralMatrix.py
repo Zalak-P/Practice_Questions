@@ -5,8 +5,8 @@ class Solution:
         
         while top<=bottom and left<=right:
 
-            for j in range(left, right + 1):
-                res.append(matrix[top][j])
+            for i in range(left, right + 1):
+                res.append(matrix[top][i])
             top += 1
 
             for i in range(top, bottom + 1):
@@ -14,8 +14,8 @@ class Solution:
             right -= 1
             
             if top<=bottom:
-                for j in range(right, left - 1, -1):
-                    res.append(matrix[bottom][j])
+                for i in range(right, left - 1, -1):
+                    res.append(matrix[bottom][i])
                 bottom -= 1
 
             if left<=right:
