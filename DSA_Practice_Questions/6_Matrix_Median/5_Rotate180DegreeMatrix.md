@@ -1,6 +1,8 @@
 ![alt text](image-2.png)
 
-Python Code
+# Matrix Rotation - 180° (Python)
+
+```python
 class Solution:
     def rotate180(self, matrix):
         n = len(matrix)
@@ -8,10 +10,11 @@ class Solution:
         for i in range(n):
             for j in range(n):
 
-                new_i = n - 1 - i
-                new_j = n - 1 - j
+                ni = n - 1 - i
+                nj = n - 1 - j
 
-                if (i < new_i) or (i == new_i and j < new_j):
-                    matrix[i][j], matrix[new_i][new_j] = matrix[new_i][new_j], matrix[i][j]
+                if (i < ni) or (i == ni and j < nj):
+                    matrix[i][j], matrix[ni][nj] = matrix[ni][nj], matrix[i][j]
 
         return matrix
+```
