@@ -1,12 +1,12 @@
 # Search in Row-wise and Column-wise Sorted Matrix
 
-![alt text](image.png)
+![alt text](image-1.png)
 
 The rule is simply:
 
-* If `current > target` → move left by one column.
-* If `current < target` → move down by one row.
-* If `current == target` → found it.
+- If `current > target` → move left by one column.
+- If `current < target` → move down by one row.
+- If `current == target` → found it.
 
 ## Core Trick: Start at TOP-RIGHT
 
