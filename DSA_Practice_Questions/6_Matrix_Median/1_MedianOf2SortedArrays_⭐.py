@@ -1,4 +1,4 @@
-# Core Trick: You are shifting your partition from left to right in nums1.
+# Core Trick: You are shift your partition to left or right in nums1.
 
 # Aleft   | Aright
 # ---------|---------
