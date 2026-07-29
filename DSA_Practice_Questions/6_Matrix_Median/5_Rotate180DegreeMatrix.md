@@ -10,11 +10,11 @@ class Solution:
         for i in range(n):
             for j in range(n):
 
-                ni = n - 1 - i
-                nj = n - 1 - j
+                newrow = n - 1 - i
+                newcol = n - 1 - j
 
-                if (i < ni) or (i == ni and j < nj):
-                    matrix[i][j], matrix[ni][nj] = matrix[ni][nj], matrix[i][j]
+                if (i < newrow) or (i == newrow and j < newcol):
+                    matrix[i][j], matrix[newrow][newcol] = matrix[newrow][newcol], matrix[i][j]
 
         return matrix
 ```
