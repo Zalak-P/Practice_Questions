@@ -1,3 +1,12 @@
+# Core Trick: You are shifting your partition from left to right in nums1.
+
+# Aleft   | Aright
+# ---------|---------
+# ...      | ...
+
+# Bleft   | Bright
+# ---------|---------
+# ...      | ...
 
 class Solution:
     def findMedianSortedArrays(self, nums1, nums2):
