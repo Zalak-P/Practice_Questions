@@ -355,7 +355,6 @@ class Solution:
 
             while temp:
                 front = temp.next
-
                 if temp.child:
                     child_head = temp.child
                     child_tail = flattenLevel(child_head)
@@ -363,21 +362,16 @@ class Solution:
                     temp.next = child_head
                     child_head.prev = temp
                     temp.child = None
-
                     if front:
                         child_tail.next = front
                         front.prev = child_tail
-
                     tail = child_tail
                 else:
                     tail = temp
-
                 temp = front
-
             return tail
 
         flattenLevel(head)
-
         return head
 ```
 
