@@ -1,9 +1,5 @@
 # Linked List — Must-Do Problems
 
-The Python solutions below use the same code and variable style from the supplied GitHub repository wherever a matching implementation exists. Missing repository implementations and cases where the repository approach did not match the generated dry run use a matching optimized solution.
-
-Repository: <https://github.com/Zalak-P/Practice_Questions/tree/main/DSA_Practice_Questions/3_Linked_List/1_MUST_DO>
-
 ---
 
 ## 1. Reverse a Linked List — Iterative and Recursive
@@ -15,27 +11,14 @@ Repository: <https://github.com/Zalak-P/Practice_Questions/tree/main/DSA_Practic
 ```python
 class Solution:
     def reverseList(self, head):
-        # Step 1: Initialize the previous pointer as None.
         prev = None
-
-        # Step 2: Start traversal from the head node.
         temp = head
 
-        # Step 3: Process every node one by one.
         while temp is not None:
-            # Step 4: Save the next node before changing the link.
             front = temp.next
-
-            # Step 5: Reverse the current node's next pointer.
             temp.next = prev
-
-            # Step 6: Move prev to the current node.
             prev = temp
-
-            # Step 7: Move temp to the next unprocessed node.
             temp = front
-
-        # Step 8: prev is now the new head of the reversed list.
         return prev
 ```
 
@@ -48,16 +31,10 @@ class Solution:
         if head is None or head.next is None:
             return head
 
-        # Step 2: Recursively reverse the list starting from head.next.
         new_head = self.reverseList(head.next)
-
-        # Step 3: Make the next node point back to the current node.
         head.next.next = head
-
-        # Step 4: Remove the original forward link to avoid a cycle.
         head.next = None
 
-        # Step 5: Return the new head created by the recursive calls.
         return new_head
 ```
 
@@ -103,8 +80,7 @@ class Solution:
         # Step 3: Start another pointer from the head.
         temp = head
 
-        # Step 4: Move both pointers one step at a time.
-        # They meet at the starting node of the loop.
+        # Step 4: Move both pointers one step at a time. They meet at the starting node of the loop.
         while temp != meeting:
             temp = temp.next
             meeting = meeting.next
@@ -197,33 +173,24 @@ class Solution:
 ```python
 class Solution:
     def mergeTwoLists(self, list1, list2):
-        # Step 1: Create traversal pointers for both lists.
         l1 = list1
         l2 = list2
-
-        # Step 2: Create a dummy node for the merged list.
         dummy = ListNode(0)
         temp = dummy
 
-        # Step 3: Compare nodes while both lists still have elements.
         while l1 and l2:
-            # Step 4: Attach the smaller node from list 1.
             if l1.val <= l2.val:
                 temp.next = l1
                 l1 = l1.next
 
-            # Step 5: Otherwise, attach the smaller node from list 2.
             else:
                 temp.next = l2
                 l2 = l2.next
 
-            # Step 6: Move the merged-list pointer forward.
             temp = temp.next
 
-        # Step 7: Attach the remaining non-empty list.
         temp.next = l1 if l1 else l2
 
-        # Step 8: Return the merged list after the dummy node.
         return dummy.next
 ```
 
