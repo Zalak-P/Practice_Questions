@@ -439,7 +439,7 @@ Question: Each cow must be placed in a distinct stall. Find an arrangement of k 
 
 ## 11. Aggressive Cows
 
-![](images/image copy.png)
+![Photo](images/image_copy.png)
 
 ```python
 def can_place_cows(stalls, num_cows, min_dist_allowed):
