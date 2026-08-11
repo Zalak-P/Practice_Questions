@@ -385,8 +385,7 @@ def minEatingSpeed(piles, h):
 ---
 
 ## 10. Allocation of Minimum Number of Pages
-
-DSA_Practice_Questions/6_Binary_Search/images/image.png
+![](images/image.png)
 
 ```python
 def count_students(arr, max_pages_allowed):
