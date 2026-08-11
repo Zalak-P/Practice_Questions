@@ -1,4 +1,5 @@
 # Binary Search Problems
+
 - Style A: The "Exact Target / Match" Style, Code: while low <= high (Striver's Binary Search Vidoes)
 - Style B: The "Property / Convergence" Style, Code: while low < high (Codestory mik)
 
@@ -240,21 +241,22 @@ def find_peak_element(arr):
 
 ```
 
-Instead of looking at both neighbors, you only look at one anchor: the neighbor directly to the right (nums[mid + 1]). This tells you which direction the mountain slope is going.Because low < high, mid can never equal high. This guarantees that mid + 1 is always a valid index inside the array. It will never crash.
+Style B: Instead of looking at both neighbors, you only look at one anchor: the neighbor directly to the right (nums[mid + 1]). This tells you which direction the mountain slope is going.Because low < high, mid can never equal high. This guarantees that mid + 1 is always a valid index inside the array. It will never crash.
+
 ```python
 def find_peak_element(nums):
     low = 0
     high = len(nums) - 1
-    
+
     while low < high:
         mid = (low + high) // 2
-        
+
         # Compare mid with its immediate right neighbor
         if nums[mid] < nums[mid + 1]:
             low = mid + 1   # Upward slope: peak is to the right
         else:
             high = mid      # Downward slope: mid or left could be peak
-            
+
     return low  # low and high converge perfectly on a peak
 ```
 
@@ -320,7 +322,7 @@ def first_and_last_position(arr, target):
 
 ## 8. Find Minimum in a Rotated Sorted Array
 
-This version also handles duplicate values. With distinct values, the time complexity is `O(log n)`. With many duplicates, the worst case can become `O(n)`. Pointer-Convergence Style:
+Style B: This version also handles duplicate values. With distinct values, the time complexity is `O(log n)`. With many duplicates, the worst case can become `O(n)`. Pointer-Convergence Style:
 
 ```python
 class Solution:
