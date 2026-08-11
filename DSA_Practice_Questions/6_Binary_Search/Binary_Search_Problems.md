@@ -1,4 +1,4 @@
-# Binary Search Problems — Python Notes
+# Binary Search Problems - Striver's Binary Search Vidoes
 
 ---
 
