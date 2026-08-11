@@ -4,7 +4,7 @@
 
 ## 1. Lower and Upper Bound
 
-**Core Trick**: Lower bound: arr[i] >= target, Upper bound: arr[i] > target
+**Core Trick**: Lower bound: arr[mid] >= target, Upper bound: arr[mid] > target
 
 ```python
 def lower_bound(arr, target):
@@ -77,10 +77,6 @@ def find_element_infinite_array(arr, target):
 
 ## 3. The N-th Root of an Integer
 
-![The N-th root of an integer dry run](images/03_nth_root.png)
-
-Correction to the image: `531441 = 9⁶`, so for `n = 6` and `m = 531441`, the correct integer root is 9, not 3.
-
 > **Core Trick**: In binary search on answer, you have to define left and right. It's usually on 1 to m.
 
 ```python
@@ -125,7 +121,7 @@ def nth_root(n, m):
 
 ## 4. Square Root of an Integer
 
-![Square root of an integer dry run](images/04_integer_square_root.png)
+**Core Trick:** Finding the Square Root of an Integer \(M\) is a specific case of the \(N\)-th root problem where \(N = 2\). If perfect square is not found then we look for floor value.
 
 ```python
 def floor_sqrt(m):
