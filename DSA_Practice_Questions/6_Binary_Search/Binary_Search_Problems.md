@@ -1,6 +1,6 @@
 # Binary Search Problems
-- Style A: The "Exact Target / Match" StyleThe Code: while low <= high (Striver's Binary Search Vidoes)
-- Style B: The "Property / Convergence" Style (Your LeetCode Style)The Code: while low < high (Codestory mik)
+- Style A: The "Exact Target / Match" Style, Code: while low <= high (Striver's Binary Search Vidoes)
+- Style B: The "Property / Convergence" Style, Code: while low < high (Codestory mik)
 
 ---
 
