@@ -242,8 +242,6 @@ def find_peak_element(arr):
 
 ## 7. Find First and Last Position
 
-![Find first and last position dry run](images/07_first_last_position.png)
-
 ```python
 def find_first_occurrence(arr, target):
     low = 0
