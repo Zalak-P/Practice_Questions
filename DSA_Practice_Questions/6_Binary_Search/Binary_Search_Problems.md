@@ -204,8 +204,8 @@ def search_rotated_sorted_array(arr, target):
 
 ## 6. Find Peak Element
 
-Question: A peak element in an array is an element that is strictly greater than its neighbors.
-If multiple peaks then return any of them. If peak at either side then assume the out-of-bounds neighbors are equal to negative infinity (-∞).
+Question: A peak element in an array is an element that is strictly greater than its **neighbors**.
+If **multiple peaks** then return any of them. If peak at **either side** then assume the out-of-bounds neighbors are equal to negative infinity (-∞).
 
 ```python
 class Solution:
