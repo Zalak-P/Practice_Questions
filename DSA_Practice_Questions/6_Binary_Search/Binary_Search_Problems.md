@@ -81,7 +81,9 @@ def find_element_infinite_array(arr, target):
 
 ![The N-th root of an integer dry run](images/03_nth_root.png)
 
-> **Correction to the image:** `531441 = 9⁶`, so for `n = 6` and `m = 531441`, the correct integer root is **9**, not 3.
+**Correction to the image:** `531441 = 9⁶`, so for `n = 6` and `m = 531441`, the correct integer root is **9**, not 3.
+
+> Core Trick: In binary search on answer, you have to define left and right. It's usually on 1 to m.
 
 ```python
 def multiply(number, n, target):
