@@ -359,37 +359,31 @@ class Solution:
 > **Correction to the image:** for speed `k = 12`, the total time is **12 hours**, not 11. The final minimum speed of **12 bananas/hour** is correct.
 
 ```python
-class Solution:
-    def minEatingSpeed(self, piles: list[int], h: int) -> int:
-        # Step 1: The minimum possible speed is 1.
-        low = 1
+import math
 
-        # Step 2: The maximum required speed is the largest pile.
-        high = max(piles)
-        answer = high
+def minEatingSpeed(piles, h):
+    # Step 1: Define the search space for speed 'k'
+    low = 1
+    high = max(piles)
+    ans = high  # Fallback answer tracking variable
+    
+    while low <= high:
+        mid_speed = (low + high) // 2
+        
+        # Calculate total hours spent eating at 'mid_speed'
+        total_hours = 0
+        for pile in piles:
+            total_hours += math.ceil(pile / mid_speed)
+            
+        # Condition Check
+        if total_hours <= h:
+            ans = mid_speed   # mid_speed works! Save it as a candidate.
+            high = mid_speed - 1  # Try to find a slower, more optimal speed.
+        else:
+            low = mid_speed + 1   # Too slow, Koko runs out of time. Look right.
+            
+    return ans
 
-        # Step 3: Binary-search for the minimum feasible speed.
-        while low <= high:
-            # Step 4: Choose a candidate eating speed.
-            speed = (low + high) // 2
-
-            # Step 5: Calculate the total hours needed at this speed.
-            hours = 0
-            for pile in piles:
-                hours += (pile + speed - 1) // speed
-
-            # Step 6: If Koko finishes within h hours,
-            # save the speed and try a smaller one.
-            if hours <= h:
-                answer = speed
-                high = speed - 1
-
-            # Step 7: Otherwise, the speed is too slow.
-            else:
-                low = speed + 1
-
-        # Step 8: Return the smallest feasible eating speed.
-        return answer
 ```
 
 ---
