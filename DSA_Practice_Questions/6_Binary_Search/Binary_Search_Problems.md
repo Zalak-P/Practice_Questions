@@ -161,7 +161,7 @@ def floor_sqrt(m):
 
 ![Search in a sorted and rotated array dry run](images/05_search_rotated_array.png)
 
-Core Trick: Identify which half is sorted: left/right
+> **Core Trick**: Identify which half is sorted: left/right
 
 ```python
 def search_rotated_sorted_array(arr, target):
