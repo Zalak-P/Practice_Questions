@@ -160,45 +160,34 @@ def floor_sqrt(m):
 ![Search in a sorted and rotated array dry run](images/05_search_rotated_array.png)
 
 ```python
-class Solution:
-    def search(self, nums: list[int], target: int) -> int:
-        # Step 1: Initialize the binary-search range.
-        low = 0
-        high = len(nums) - 1
+def search_rotated_sorted_array(arr, target):
+    low = 0
+    high = len(arr) - 1
 
-        # Step 2: Search while a valid range exists.
-        while low <= high:
-            # Step 3: Find the middle index.
-            mid = (low + high) // 2
+    while low <= high:
+        mid = (low + high) // 2
 
-            # Step 4: Return immediately when target is found.
-            if nums[mid] == target:
-                return mid
+        # Condition 1: Target found
+        if arr[mid] == target:
+            return mid
 
-            # Step 5: Check whether the left half is sorted.
-            if nums[low] <= nums[mid]:
-                # Step 6: If target lies inside the sorted left half,
-                # discard the right half.
-                if nums[low] <= target < nums[mid]:
-                    high = mid - 1
-
-                # Step 7: Otherwise, search the right half.
-                else:
-                    low = mid + 1
-
-            # Step 8: Otherwise, the right half is sorted.
+        # Condition 2: Left half is normally sorted
+        if arr[low] <= arr[mid]:
+            # Check if target falls strictly within this left sorted range
+            if arr[low] <= target < arr[mid]:
+                high = mid - 1  # Search left
             else:
-                # Step 9: If target lies inside the sorted right half,
-                # discard the left half.
-                if nums[mid] < target <= nums[high]:
-                    low = mid + 1
+                low = mid + 1   # Search right
 
-                # Step 10: Otherwise, search the left half.
-                else:
-                    high = mid - 1
+        # Condition 3: Right half is normally sorted
+        else:
+            # Check if target falls strictly within this right sorted range
+            if arr[mid] < target <= arr[high]:
+                low = mid + 1   # Search right
+            else:
+                high = mid - 1  # Search left
 
-        # Step 11: Target is not present.
-        return -1
+    return -1  # Target not found
 ```
 
 ---
