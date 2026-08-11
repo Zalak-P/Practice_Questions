@@ -208,23 +208,40 @@ Question: A peak element in an array is an element that is strictly greater than
 If **multiple peaks** then return any of them. If peak at **either side** then assume the out-of-bounds neighbors are equal to negative infinity (-∞).
 
 ```python
-class Solution:
-    def findPeakElement(self, nums: list[int]) -> int:
-        low = 0
-        high = len(nums) - 1
+def find_peak_element(arr):
+    n = len(arr)
 
-        while low < high:
-            mid = (low + high) // 2
+    # Handle single element edge case
+    if n == 1:
+        return 0
 
-            if nums[mid] < nums[mid + 1]:
-                low = mid + 1
+    # Check if the first or last element is a peak
+    if arr[0] > arr[1]:
+        return 0
+    if arr[n - 1] > arr[n - 2]:
+        return n - 1
 
-            # Step 5: Otherwise, a peak exists at mid or to its left.
-            else:
-                high = mid
+    # Search space excludes the first and last elements since they were already checked
+    low = 1
+    high = n - 2
 
-        # Step 6: low == high, so this index is a peak.
-        return low
+    while low <= high:
+        mid = (low + high) // 2
+
+        # Condition 1: mid is a peak element
+        if arr[mid] > arr[mid - 1] and arr[mid] > arr[mid + 1]:
+            return mid
+
+        # Condition 2: We are on an upward slope to the right
+        elif arr[mid] < arr[mid + 1]:
+            low = mid + 1   # A peak must exist to the right
+
+        # Condition 3: We are on a downward slope, or a local valley
+        else:
+            high = mid - 1  # A peak must exist to the left
+
+    return -1
+
 ```
 
 ---
