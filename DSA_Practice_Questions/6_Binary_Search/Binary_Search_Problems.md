@@ -300,8 +300,6 @@ def first_and_last_position(arr, target):
 
 ## 8. Find Minimum in a Rotated Sorted Array
 
-![Find minimum in a rotated sorted array dry run](images/08_find_minimum_rotated.png)
-
 This version also handles duplicate values. With distinct values, the time complexity is `O(log n)`. With many duplicates, the worst case can become `O(n)`.
 
 ```python
