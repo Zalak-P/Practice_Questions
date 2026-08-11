@@ -7,53 +7,36 @@
 ![Lower and Upper Bound dry run](images/01_lower_upper_bound.png)
 
 ```python
-def lower_bound(nums, target):
-    # Step 1: Initialize the binary-search range.
-    # We use high = len(nums), so the answer can also be len(nums).
+def lower_bound(arr, target):
     low = 0
-    high = len(nums)
+    high = len(arr)
 
-    # Step 2: Continue until the search range becomes empty.
-    while low < high:
-        # Step 3: Find the middle index.
+    while low <= high:
         mid = (low + high) // 2
 
-        # Step 4: If the middle value is smaller than target,
-        # the lower bound must be on the right side.
-        if nums[mid] < target:
-            low = mid + 1
-
-        # Step 5: nums[mid] can be the lower bound,
-        # so keep mid and search further left.
+        # If mid element is greater than or equal to target
+        if arr[mid] >= target:
+            ans = mid
+            high = mid - 1        # Look left; mid is still a candidate
         else:
-            high = mid
+            low = mid + 1     # Look right; mid is too small
+    return ans
 
-    # Step 6: low is the first index where nums[index] >= target.
-    return low
-
-
-def upper_bound(nums, target):
-    # Step 1: Initialize the binary-search range.
+def upper_bound(arr, target):
     low = 0
-    high = len(nums)
+    high = len(arr)
 
-    # Step 2: Continue until low and high meet.
     while low < high:
-        # Step 3: Find the middle index.
         mid = (low + high) // 2
 
-        # Step 4: Upper bound needs a value strictly greater than target.
-        # Therefore, values equal to target are also discarded.
-        if nums[mid] <= target:
-            low = mid + 1
-
-        # Step 5: nums[mid] is greater than target,
-        # so save this position and search further left.
+        # If mid element is strictly greater than target
+        if arr[mid] > target:
+            ans = mid
+            high = mid - 1    # Look left; mid is still a candidate
         else:
-            high = mid
+            low = mid + 1     # Look right; mid is <= target, so discard it
+    return ans
 
-    # Step 6: low is the first index where nums[index] > target.
-    return low
 ```
 
 ---
