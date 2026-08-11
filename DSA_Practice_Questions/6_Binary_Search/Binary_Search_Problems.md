@@ -105,18 +105,18 @@ def nth_root(n, m):
     # Search space for the root is always between 1 and M
     low = 1
     high = m
-    
+
     while low <= high:
         mid = (low + high) // 2
         mid_power_status = multiply(mid, n, m)
-        
+
         if mid_power_status == 0:
             return mid       # Exact N-th root found
         elif mid_power_status == 1:
             high = mid - 1   # mid^N is too big, search left
         else:
             low = mid + 1    # mid^N is too small, search right
-            
+
     return -1  # Return -1 if M is not a perfect N-th power
 
 ```
@@ -128,36 +128,29 @@ def nth_root(n, m):
 ![Square root of an integer dry run](images/04_integer_square_root.png)
 
 ```python
-class Solution:
-    def mySqrt(self, x: int) -> int:
-        # Step 1: Handle the smallest values directly.
-        if x < 2:
-            return x
+def floor_sqrt(m):
+    # Edge case for 0 and 1
+    if m == 0 or m == 1:
+        return m
 
-        # Step 2: Initialize the answer search range.
-        # For x >= 2, floor(sqrt(x)) cannot exceed x // 2.
-        low = 1
-        high = x // 2
-        answer = 1
+    low = 1
+    high = m
+    ans = 0  # To track the closest floor square root
 
-        # Step 3: Binary-search for the greatest valid integer.
-        while low <= high:
-            # Step 4: Calculate the middle candidate.
-            mid = (low + high) // 2
+    while low <= high:
+        mid = (low + high) // 2
+        mid_squared = mid * mid
 
-            # Step 5: Check whether mid * mid <= x.
-            # Using mid <= x // mid avoids overflow.
-            if mid <= x // mid:
-                # Step 6: mid is valid; save it and try a larger value.
-                answer = mid
-                low = mid + 1
+        if mid_squared == m:
+            return mid       # Exact perfect square found
+        elif mid_squared < m:
+            ans = mid        # mid is a potential floor answer, save it
+            low = mid + 1    # Try to find a larger value on the right
+        else:
+            high = mid - 1   # Too big, look left
 
-            else:
-                # Step 7: mid is too large; search the left half.
-                high = mid - 1
+    return ans
 
-        # Step 8: Return the greatest valid integer square root.
-        return answer
 ```
 
 ---
