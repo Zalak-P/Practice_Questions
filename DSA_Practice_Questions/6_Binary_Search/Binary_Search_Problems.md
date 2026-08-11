@@ -238,6 +238,24 @@ def find_peak_element(arr):
 
 ```
 
+Instead of looking at both neighbors, you only look at one anchor: the neighbor directly to the right (nums[mid + 1]). This tells you which direction the mountain slope is going.Because low < high, mid can never equal high. This guarantees that mid + 1 is always a valid index inside the array. It will never crash.
+```python
+def find_peak_element(nums):
+    low = 0
+    high = len(nums) - 1
+    
+    while low < high:
+        mid = (low + high) // 2
+        
+        # Compare mid with its immediate right neighbor
+        if nums[mid] < nums[mid + 1]:
+            low = mid + 1   # Upward slope: peak is to the right
+        else:
+            high = mid      # Downward slope: mid or left could be peak
+            
+    return low  # low and high converge perfectly on a peak
+```
+
 ---
 
 ## 7. Find First and Last Position
