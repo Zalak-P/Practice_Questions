@@ -354,10 +354,6 @@ class Solution:
 
 ## 9. Koko Eating Bananas
 
-![Koko Eating Bananas dry run](images/09_koko_bananas.png)
-
-> **Correction to the image:** for speed `k = 12`, the total time is **12 hours**, not 11. The final minimum speed of **12 bananas/hour** is correct.
-
 ```python
 import math
 
@@ -389,12 +385,6 @@ def minEatingSpeed(piles, h):
 ---
 
 ## 10. Allocation of Minimum Number of Pages
-
-![Allocation of minimum number of pages dry run](images/10_allocate_pages.png)
-
-> **Correction to the image:** for books  
-> `[12, 34, 67, 90, 26, 45, 89, 23, 11, 65]` and `4` students, the correct minimum possible maximum is **134**, not 113.  
-> One optimal allocation is `[12,34,67] | [90,26] | [45,89] | [23,11,65]`.
 
 ```python
 def allocate_minimum_pages(books, students):
