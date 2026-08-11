@@ -245,66 +245,57 @@ def find_peak_element(arr):
 ![Find first and last position dry run](images/07_first_last_position.png)
 
 ```python
-class Solution:
-    def searchRange(self, nums: list[int], target: int) -> list[int]:
-        def find_first():
-            # Step 1: Initialize the search range and default answer.
-            low = 0
-            high = len(nums) - 1
-            answer = -1
+def find_first_occurrence(arr, target):
+    low = 0
+    high = len(arr) - 1
+    first_idx = -1
 
-            # Step 2: Run binary search.
-            while low <= high:
-                mid = (low + high) // 2
+    while low <= high:
+        mid = (low + high) // 2
 
-                # Step 3: When nums[mid] is target or larger,
-                # continue searching toward the left.
-                if nums[mid] >= target:
-                    # Step 4: Store mid when target is found,
-                    # but do not stop because an earlier copy may exist.
-                    if nums[mid] == target:
-                        answer = mid
+        if arr[mid] == target:
+            first_idx = mid
+            high = mid - 1  # Keep looking left for the first occurrence
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
 
-                    high = mid - 1
+    return first_idx
 
-                # Step 5: nums[mid] is smaller than target,
-                # so move to the right half.
-                else:
-                    low = mid + 1
 
-            # Step 6: Return the leftmost target index.
-            return answer
+def find_last_occurrence(arr, target):
+    low = 0
+    high = len(arr) - 1
+    last_idx = -1
 
-        def find_last():
-            # Step 1: Initialize the search range and default answer.
-            low = 0
-            high = len(nums) - 1
-            answer = -1
+    while low <= high:
+        mid = (low + high) // 2
 
-            # Step 2: Run binary search.
-            while low <= high:
-                mid = (low + high) // 2
+        if arr[mid] == target:
+            last_idx = mid
+            low = mid + 1   # Keep looking right for the last occurrence
+        elif arr[mid] < target:
+            low = mid + 1
+        else:
+            high = mid - 1
 
-                # Step 3: When nums[mid] is target or smaller,
-                # continue searching toward the right.
-                if nums[mid] <= target:
-                    # Step 4: Store mid when target is found,
-                    # but continue because a later copy may exist.
-                    if nums[mid] == target:
-                        answer = mid
+    return last_idx
 
-                    low = mid + 1
 
-                # Step 5: nums[mid] is larger than target,
-                # so move to the left half.
-                else:
-                    high = mid - 1
+def first_and_last_position(arr, target):
+    """
+    Returns a list/tuple of [first_occurrence, last_occurrence].
+    Returns [-1, -1] if the target is not found.
+    """
+    first = find_first_occurrence(arr, target)
+    # If the first occurrence doesn't exist, the last won't either
+    if first == -1:
+        return [-1, -1]
 
-            # Step 6: Return the rightmost target index.
-            return answer
+    last = find_last_occurrence(arr, target)
+    return [first, last]
 
-        # Step 7: Run both searches and return the required range.
-        return [find_first(), find_last()]
 ```
 
 ---
