@@ -385,6 +385,7 @@ def minEatingSpeed(piles, h):
 ---
 
 ## 10. Allocation of Minimum Number of Pages
+
 ![](images/image.png)
 
 ```python
@@ -439,57 +440,45 @@ def find_pages(arr, n, m):
 ![Aggressive Cows dry run](images/11_aggressive_cows.png)
 
 ```python
-def aggressive_cows(stalls, cows):
-    # Step 1: Validate the input.
-    if not stalls or cows <= 0 or cows > len(stalls):
-        return -1
+def can_place_cows(stalls, num_cows, min_dist_allowed):
+    """
+    Helper function to check if we can place all cows
+    with at least 'min_dist_allowed' between them.
+    """
+    cows_placed = 1
+    last_position = stalls[0]  # Place the first cow in the very first stall
 
-    # Step 2: With one cow, no distance between cows is required.
-    if cows == 1:
-        return 0
+    for i in range(1, len(stalls)):
+        # If the gap between current stall and last cow is large enough
+        if stalls[i] - last_position >= min_dist_allowed:
+            cows_placed += 1       # Place next cow
+            last_position = stalls[i] # Update the tracking position
 
-    # Step 3: Sort stall positions before greedy placement.
+        if cows_placed >= num_cows:
+            return True            # Successfully placed all cows
+    return False
+
+def aggressive_cows(stalls, num_cows):
+    # Step 1: Stalls must be sorted to calculate actual linear distances
     stalls.sort()
 
-    def can_place(minimum_distance):
-        # Step 4: Place the first cow in the first stall.
-        placed = 1
-        last_position = stalls[0]
+    # Step 2: Define the search space for the distance 'd'
+    low = 1                                      # Min possible gap between stalls
+    high = stalls[-1] - stalls[0]                # Max possible gap (first to last stall)
+    ans = 1
 
-        # Step 5: Greedily place every next cow at the earliest
-        # stall that maintains the required minimum distance.
-        for position in stalls[1:]:
-            if position - last_position >= minimum_distance:
-                placed += 1
-                last_position = position
-
-                # Step 6: The candidate distance is feasible.
-                if placed == cows:
-                    return True
-
-        # Step 7: Not enough cows could be placed.
-        return False
-
-    # Step 8: Search possible minimum distances.
-    low = 1
-    high = stalls[-1] - stalls[0]
-    answer = 0
-
-    # Step 9: Binary-search for the largest feasible distance.
     while low <= high:
-        distance = (low + high) // 2
+        mid_dist = (low + high) // 2
 
-        # Step 10: If feasible, save it and try a larger distance.
-        if can_place(distance):
-            answer = distance
-            low = distance + 1
-
-        # Step 11: Otherwise, try a smaller distance.
+        # Condition Check (Style A)
+        if can_place_cows(stalls, num_cows, mid_dist):
+            ans = mid_dist       # This distance works! Save it as a candidate.
+            low = mid_dist + 1   # Try to find a larger, more optimal minimum distance.
         else:
-            high = distance - 1
+            high = mid_dist - 1  # Gap is too wide; cows don't fit. Look left.
 
-    # Step 12: Return the maximum possible minimum distance.
-    return answer
+    return ans
+
 ```
 
 ---
@@ -499,52 +488,50 @@ def aggressive_cows(stalls, cows):
 ![Painter's Partition Problem dry run](images/12_painter_partition.png)
 
 ```python
-def painters_partition(boards, painters):
-    # Step 1: Validate the input.
-    if not boards or painters <= 0:
-        return -1
+def count_painters(boards, max_time_allowed):
+    """
+    Helper function to count how many painters are needed
+    if no single painter can paint more than 'max_time_allowed' units.
+    """
+    painters = 1
+    current_time_spent = 0
 
-    def painters_needed(time_limit):
-        # Step 2: Start assigning boards to the first painter.
-        used = 1
-        current_work = 0
-
-        # Step 3: Assign boards in contiguous order.
-        for board in boards:
-            # Step 4: Keep the board with the current painter
-            # if the total work stays within time_limit.
-            if current_work + board <= time_limit:
-                current_work += board
-
-            # Step 5: Otherwise, assign this board to a new painter.
-            else:
-                used += 1
-                current_work = board
-
-        # Step 6: Return the painters required for this limit.
-        return used
-
-    # Step 7: No valid answer can be below the largest board.
-    low = max(boards)
-
-    # Step 8: One painter doing all work gives the upper bound.
-    high = sum(boards)
-    answer = high
-
-    # Step 9: Binary-search for the minimum feasible maximum workload.
-    while low <= high:
-        time_limit = (low + high) // 2
-
-        # Step 10: If the work fits within the available painters,
-        # save the limit and try a smaller one.
-        if painters_needed(time_limit) <= painters:
-            answer = time_limit
-            high = time_limit - 1
-
-        # Step 11: Otherwise, increase the time limit.
+    for board in boards:
+        # If the painter can take this board without exceeding the limit
+        if current_time_spent + board <= max_time_allowed:
+            current_time_spent += board
         else:
-            low = time_limit + 1
+            # Assign this board to a brand new painter
+            painters += 1
+            current_time_spent = board
 
-    # Step 12: Return the minimum possible maximum painting time.
-    return answer
+    return painters
+
+
+def paint_boards(boards, k):
+    """
+    k: Number of painters available.
+    boards: List containing the lengths of each contiguous board.
+    """
+    # Step 1: Define the search space boundaries
+    # Min possible answer: The largest single board (must be completed by someone)
+    low = max(boards)
+    # Max possible answer: One painter paints all the boards sequentially
+    high = sum(boards)
+    ans = high
+
+    while low <= high:
+        mid_time = (low + high) // 2
+
+        # Calculate how many painters are required for this time limit
+        required_painters = count_painters(boards, mid_time)
+
+        # Condition Check (Style A: Minimize the maximum)
+        if required_painters <= k:
+            ans = mid_time        # This time limit works! Save it as a candidate.
+            high = mid_time - 1   # Try to find an even smaller maximum time limit.
+        else:
+            low = mid_time + 1    # Time limit is too strict, we need more painters. Look right.
+
+    return ans
 ```
