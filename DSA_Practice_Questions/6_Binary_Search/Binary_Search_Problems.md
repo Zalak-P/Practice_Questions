@@ -303,38 +303,39 @@ def first_and_last_position(arr, target):
 This version also handles duplicate values. With distinct values, the time complexity is `O(log n)`. With many duplicates, the worst case can become `O(n)`.
 
 ```python
-class Solution:
-    def findMin(self, nums: list[int]) -> int:
-        # Step 1: Validate the input.
-        if not nums:
-            raise ValueError("nums must not be empty")
 
-        # Step 2: Initialize the binary-search range.
-        low = 0
-        high = len(nums) - 1
+def find_min_rotated_sorted_ii(arr):
+    low = 0
+    high = len(arr) - 1
+    ans = sys.maxsize  # Track the minimum element found
+    
+    while low <= high:
+        mid = (low + high) // 2
+        
+        # Critical Edge Case: Truncate outer identical bounds when split is ambiguous
+        if arr[low] == arr[mid] == arr[high]:
+            ans = min(ans, arr[low])
+            low += 1
+            high -= 1
+            continue  # Re-evaluate the trimmed search space
+            
+        # Optimization Shortcut: If the current subarray is uniquely sorted
+        if arr[low] < arr[high]:
+            ans = min(ans, arr[low])
+            break
+            
+        # Case 1: Left half is normally sorted
+        if arr[low] <= arr[mid]:
+            ans = min(ans, arr[low])
+            low = mid + 1             # Explore the right side
+            
+        # Case 2: Right half is normally sorted
+        else:
+            ans = min(ans, arr[mid])
+            high = mid - 1            # Explore the left side
+            
+    return ans
 
-        # Step 3: Continue until one minimum candidate remains.
-        while low < high:
-            # Step 4: Find the middle index.
-            mid = (low + high) // 2
-
-            # Step 5: If nums[mid] is smaller than nums[high],
-            # the minimum is at mid or somewhere to its left.
-            if nums[mid] < nums[high]:
-                high = mid
-
-            # Step 6: If nums[mid] is greater than nums[high],
-            # the rotation point must be to the right of mid.
-            elif nums[mid] > nums[high]:
-                low = mid + 1
-
-            # Step 7: Equal values do not reveal the correct half.
-            # Remove one duplicate safely from the right.
-            else:
-                high -= 1
-
-        # Step 8: low points to the minimum element.
-        return nums[low]
 ```
 
 ---
