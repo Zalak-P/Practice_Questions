@@ -9,7 +9,7 @@
 ```python
 def lower_bound(arr, target):
     low = 0
-    ans = 0
+    ans = len(arr)
     high = len(arr) - 1
 
     while low <= high:
@@ -25,7 +25,8 @@ def lower_bound(arr, target):
 
 def upper_bound(arr, target):
     low = 0
-    high = len(arr)
+    ans = len(arr)
+    high = len(arr) - 1
 
     while low < high:
         mid = (low + high) // 2
