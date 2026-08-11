@@ -84,61 +84,41 @@ def find_element_infinite_array(arr, target):
 > **Correction to the image:** `531441 = 9⁶`, so for `n = 6` and `m = 531441`, the correct integer root is **9**, not 3.
 
 ```python
-def compare_power(base, exponent, target):
-    # Step 1: Start the multiplication result at 1.
-    product = 1
-
-    # Step 2: Multiply base exactly exponent times.
-    for _ in range(exponent):
-        # Step 3: Stop early when the next multiplication
-        # would make the result greater than target.
-        if product > target // base:
-            return 1
-
-        product *= base
-
-    # Step 4: Report whether base ** exponent equals target.
-    if product == target:
+def multiply(number, n, target):
+    """
+    Helper function to calculate number^n safely.
+    Returns:
+     1 if number^n > target
+     0 if number^n == target
+    -1 if number^n < target
+    """
+    ans = 1
+    for _ in range(n):
+        ans *= number
+        if ans > target:
+            return 1  # Exceeded target early, prevent unnecessary loops
+    if ans == target:
         return 0
-
-    # Step 5: The calculated power is smaller than target.
     return -1
 
-
-def integer_nth_root(n, m):
-    # Step 1: Validate the input.
-    if n <= 0 or m < 0:
-        raise ValueError("n must be positive and m must be non-negative")
-
-    # Step 2: Handle values whose answer is immediate.
-    if m in (0, 1) or n == 1:
-        return m
-
-    # Step 3: Search for the root in the answer range [1, m].
+def nth_root(n, m):
+    # Search space for the root is always between 1 and M
     low = 1
     high = m
-
-    # Step 4: Apply binary search.
+    
     while low <= high:
         mid = (low + high) // 2
-
-        # Step 5: Compare mid ** n with m safely.
-        comparison = compare_power(mid, n, m)
-
-        # Step 6: Exact power found.
-        if comparison == 0:
-            return mid
-
-        # Step 7: mid ** n is too small, so try larger values.
-        if comparison < 0:
-            low = mid + 1
-
-        # Step 8: mid ** n is too large, so try smaller values.
+        mid_power_status = multiply(mid, n, m)
+        
+        if mid_power_status == 0:
+            return mid       # Exact N-th root found
+        elif mid_power_status == 1:
+            high = mid - 1   # mid^N is too big, search left
         else:
-            high = mid - 1
+            low = mid + 1    # mid^N is too small, search right
+            
+    return -1  # Return -1 if M is not a perfect N-th power
 
-    # Step 9: No exact integer N-th root exists.
-    return -1
 ```
 
 ---
