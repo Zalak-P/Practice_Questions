@@ -362,22 +362,22 @@ def minEatingSpeed(piles, h):
     low = 1
     high = max(piles)
     ans = high  # Fallback answer tracking variable
-    
+
     while low <= high:
         mid_speed = (low + high) // 2
-        
+
         # Calculate total hours spent eating at 'mid_speed'
         total_hours = 0
         for pile in piles:
             total_hours += math.ceil(pile / mid_speed)
-            
+
         # Condition Check
         if total_hours <= h:
             ans = mid_speed   # mid_speed works! Save it as a candidate.
             high = mid_speed - 1  # Try to find a slower, more optimal speed.
         else:
             low = mid_speed + 1   # Too slow, Koko runs out of time. Look right.
-            
+
     return ans
 
 ```
@@ -386,55 +386,51 @@ def minEatingSpeed(piles, h):
 
 ## 10. Allocation of Minimum Number of Pages
 
+DSA_Practice_Questions/6_Binary_Search/images/image.png
+
 ```python
-def allocate_minimum_pages(books, students):
-    # Step 1: Validate the input.
-    if not books or students <= 0 or students > len(books):
+def count_students(arr, max_pages_allowed):
+    """
+    Helper function to count how many students are needed
+    if no single student can read more than 'max_pages_allowed'.
+    """
+    students = 1
+    current_pages = 0
+
+    for pages in arr:
+        if current_pages + pages <= max_pages_allowed:
+            current_pages += pages
+        else:
+            students += 1
+            current_pages = pages
+
+    return students
+
+
+def find_pages(arr, n, m):
+    # Edge case: If there are more students than books, allocation is impossible
+    if m > n:
         return -1
 
-    def students_needed(page_limit):
-        # Step 2: Start by assigning books to the first student.
-        used = 1
-        current_pages = 0
+    # Step 1: Define the search space boundaries
+    low = max(arr)     # Min possible answer: the biggest single book
+    high = sum(arr)    # Max possible answer: one student reads all books
+    ans = -1
 
-        # Step 3: Allocate books in their original contiguous order.
-        for pages in books:
-            # Step 4: Keep the book with the current student
-            # when it does not exceed the page limit.
-            if current_pages + pages <= page_limit:
-                current_pages += pages
-
-            # Step 5: Otherwise, start allocation for a new student.
-            else:
-                used += 1
-                current_pages = pages
-
-        # Step 6: Return how many students this limit requires.
-        return used
-
-    # Step 7: The answer cannot be smaller than the largest book.
-    low = max(books)
-
-    # Step 8: One student reading every book gives the upper bound.
-    high = sum(books)
-    answer = high
-
-    # Step 9: Binary-search for the minimum feasible page limit.
     while low <= high:
-        page_limit = (low + high) // 2
+        mid_pages = (low + high) // 2
 
-        # Step 10: If the allocation uses at most the available students,
-        # save the limit and try a smaller maximum.
-        if students_needed(page_limit) <= students:
-            answer = page_limit
-            high = page_limit - 1
+        # Calculate how many students are required for this page limit
+        required_students = count_students(arr, mid_pages)
 
-        # Step 11: Otherwise, increase the allowed page limit.
+        # Condition Check (Style A)
+        if required_students <= m:
+            ans = mid_pages        # This configuration is valid, save it.
+            high = mid_pages - 1   # Try to find a smaller maximum page limit.
         else:
-            low = page_limit + 1
+            low = mid_pages + 1    # Pages limit is too small, we need more students. Look right.
 
-    # Step 12: Return the minimum possible maximum pages.
-    return answer
+    return ans
 ```
 
 ---
