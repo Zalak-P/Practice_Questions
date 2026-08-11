@@ -4,7 +4,7 @@
 
 ## 1. Lower and Upper Bound
 
-![Lower and Upper Bound dry run](images/01_lower_upper_bound.png)
+**Core Trick**: Lower bound: arr[i] >= target, Upper bound: arr[i] > target
 
 ```python
 def lower_bound(arr, target):
@@ -45,9 +45,7 @@ def upper_bound(arr, target):
 
 ## 2. Search in an Infinitely Long Sorted Array
 
-![Search in an infinitely long sorted array dry run](images/02_infinite_sorted_array.png)
-
-The following implementation uses a regular Python list to simulate the infinite-array problem. It first expands the search range exponentially and then applies binary search.
+It first expands the search range exponentially and then applies binary search.
 
 ```python
 def find_element_infinite_array(arr, target):
