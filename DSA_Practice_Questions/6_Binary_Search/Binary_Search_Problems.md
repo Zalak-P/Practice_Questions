@@ -435,9 +435,9 @@ def find_pages(arr, n, m):
 
 ---
 
-## 11. Aggressive Cows
+Question: Each cow must be placed in a distinct stall. Find an arrangement of k cows that maximizes the shortest gap between any pair of them.
 
-![Aggressive Cows dry run](images/11_aggressive_cows.png)
+## 11. Aggressive Cows
 
 ```python
 def can_place_cows(stalls, num_cows, min_dist_allowed):
@@ -484,8 +484,6 @@ def aggressive_cows(stalls, num_cows):
 ---
 
 ## 12. Painter's Partition Problem
-
-![Painter's Partition Problem dry run](images/12_painter_partition.png)
 
 ```python
 def count_painters(boards, max_time_allowed):
