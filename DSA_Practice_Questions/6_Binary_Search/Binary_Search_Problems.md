@@ -50,43 +50,29 @@ def upper_bound(arr, target):
 The following implementation uses a regular Python list to simulate the infinite-array problem. It first expands the search range exponentially and then applies binary search.
 
 ```python
-def search_in_infinite_sorted_array(nums, target):
-    # Step 1: Handle an empty array.
-    if not nums:
-        return -1
-
-    # Step 2: Start with a small search window.
+def find_element_infinite_array(arr, target):
+    # Phase 1: Exponential Backoff to find the search window
     low = 0
     high = 1
 
-    # Step 3: Expand the window exponentially until:
-    # - high goes beyond the array, or
-    # - nums[high] becomes greater than or equal to target.
-    while high < len(nums) and nums[high] < target:
-        low = high + 1
-        high = 2 * high + 1
+    # Expand high exponentially until arr[high] is >= target
+    while arr[high] < target:
+        low = high
+        high *= 2  # Double the search space window
 
-    # Step 4: Restrict high to the last valid array index.
-    high = min(high, len(nums) - 1)
-
-    # Step 5: Perform normal binary search in the discovered range.
+    # Phase 2: Standard Binary Search within the discovered window [low, high]
     while low <= high:
         mid = (low + high) // 2
 
-        # Step 6: Return the index when target is found.
-        if nums[mid] == target:
-            return mid
-
-        # Step 7: Target is larger, so search the right half.
-        if nums[mid] < target:
-            low = mid + 1
-
-        # Step 8: Target is smaller, so search the left half.
+        if arr[mid] == target:
+            return mid        # Target found, return its index
+        elif arr[mid] > target:
+            high = mid - 1    # Look left
         else:
-            high = mid - 1
+            low = mid + 1     # Look right
 
-    # Step 9: Target does not exist.
-    return -1
+    return -1  # Target is not present in the array
+
 ```
 
 ---
