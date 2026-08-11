@@ -204,22 +204,18 @@ def search_rotated_sorted_array(arr, target):
 
 ## 6. Find Peak Element
 
-![Find peak element dry run](images/06_find_peak.png)
+Question: A peak element in an array is an element that is strictly greater than its neighbors.
+If multiple peaks then return any of them. If peak at either side then assume the out-of-bounds neighbors are equal to negative infinity (-∞).
 
 ```python
 class Solution:
     def findPeakElement(self, nums: list[int]) -> int:
-        # Step 1: Initialize the binary-search range.
         low = 0
         high = len(nums) - 1
 
-        # Step 2: Continue until only one candidate remains.
         while low < high:
-            # Step 3: Find the middle index.
             mid = (low + high) // 2
 
-            # Step 4: If the slope rises from mid to mid + 1,
-            # a peak must exist on the right side.
             if nums[mid] < nums[mid + 1]:
                 low = mid + 1
 
