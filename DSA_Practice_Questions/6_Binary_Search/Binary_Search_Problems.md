@@ -161,7 +161,7 @@ def floor_sqrt(m):
 
 ![Search in a sorted and rotated array dry run](images/05_search_rotated_array.png)
 
-> **Core Trick**: Identify which half is sorted: left/right, in Rotated array II (duplicates) - you might end up with a[low] = a[mid] = a[high], so simple move both together low and high, then continue
+> **Core Trick**: Identify which half is sorted: left/right. In Rotated array II (duplicates) - you might end up with a[low] = a[mid] = a[high], so simple move both together low and high, then continue
 
 ```python
 def search_rotated_sorted_array(arr, target):
