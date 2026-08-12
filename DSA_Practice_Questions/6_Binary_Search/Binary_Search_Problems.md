@@ -513,11 +513,8 @@ def paint_boards(boards, k):
     k: Number of painters available.
     boards: List containing the lengths of each contiguous board.
     """
-    # Step 1: Define the search space boundaries
-    # Min possible answer: The largest single board (must be completed by someone)
-    low = max(boards)
-    # Max possible answer: One painter paints all the boards sequentially
-    high = sum(boards)
+    low = max(boards)     # Min possible answer: The largest single board (must be completed by someone)
+    high = sum(boards)    # Max possible answer: One painter paints all the boards sequentially
     ans = high
 
     while low <= high:
@@ -526,9 +523,8 @@ def paint_boards(boards, k):
         # Calculate how many painters are required for this time limit
         required_painters = count_painters(boards, mid_time)
 
-        # Condition Check (Style A: Minimize the maximum)
         if required_painters <= k:
-            ans = mid_time        # This time limit works! Save it as a candidate.
+            ans = mid_time        # Save it as a candidate.
             high = mid_time - 1   # Try to find an even smaller maximum time limit.
         else:
             low = mid_time + 1    # Time limit is too strict, we need more painters. Look right.
