@@ -13,39 +13,6 @@ Value:  2 3 1 1 4
 
 From index `0`, you can jump at most `2` positions.
 
-One possible path:
-
-```text
-0 → 1 → 4
-```
-
-So the answer is:
-
-```text
-true
-```
-
-But:
-
-```text
-nums = [3,2,1,0,4]
-```
-
-You eventually get stuck at index `3`:
-
-```text
-0 → 1 → 2 → 3
-            value = 0
-```
-
-You cannot reach index `4`.
-
-Answer:
-
-```text
-false
-```
-
 The key idea is to keep track of the **farthest index reachable so far**.
 
 ```java
@@ -78,31 +45,9 @@ class Solution {
 For:
 
 ```text
-[2,3,1,1,4]
-```
-
-the tracking looks like:
-
-| `i` | `nums[i]` | `i + nums[i]` | `maxReach` |
-|---:|---:|---:|---:|
-| 0 | 2 | 2 | 2 |
-| 1 | 3 | 4 | 4 |
-
-Once:
-
-```text
 maxReach >= lastIndex
 4 >= 4
 ```
-
-we know the answer is `true`.
-
-The important thing is:
-
-```text
-maxReach = maximum index I can reach
-```
-
 **Time:** `O(n)`  
 **Space:** `O(1)`
 
