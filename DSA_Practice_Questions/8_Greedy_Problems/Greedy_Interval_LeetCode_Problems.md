@@ -7,39 +7,7 @@ you can jump from index `i`**.
 
 Return `true` if you can reach the last index, otherwise return `false`.
 
-```
-
-**Time Complexity:** `O(n)`  
-**Space Complexity:** `O(n)` for the result list
-
-
-**Time Complexity:** `O(n log n)`  
-**Space Complexity:** `O(1)` apart from sorting overhead
-
-
-**Time Complexity:** `O(n)`  
-**Space Complexity:** `O(1)`
-
-
-**Time Complexity:** `O(n log n)`  
-**Space Complexity:** `O(n)`
-
-
-**Time Complexity:** `O(n log n)`  
-**Space Complexity:** `O(1)` apart from sorting overhead
-
-
-**Time Complexity:** `O(n log n)`  
-**Space Complexity:** `O(n)` for the result list
-
-
-**Time Complexity:** `O(n)`  
-**Space Complexity:** `O(1)`
-
-
-**Time Complexity:** `O(n)`  
-**Space Complexity:** `O(1)`
- java
+```java
 class Solution {
     public boolean canJump(int[] nums) {
 
@@ -66,6 +34,9 @@ class Solution {
 }
 ```
 
+Time: O(n log n)
+Space: O(n)
+
 ## 2. Jump Game II --- LeetCode 45
 
 You are given a 0-indexed array of integers `nums` of length `n`. You
@@ -76,7 +47,7 @@ from index `i`.
 
 Return the **minimum number of jumps** required to reach `nums[n - 1]`.
 
-``` java
+```java
 class Solution {
     public int jump(int[] nums) {
 
@@ -117,10 +88,10 @@ string valid.
 
 A parentheses string is valid if:
 
--   Every opening `'('` has a matching closing `')'`.
--   A closing `')'` cannot appear before its matching opening `'('`.
+- Every opening `'('` has a matching closing `')'`.
+- A closing `')'` cannot appear before its matching opening `'('`.
 
-``` java
+```java
 class Solution {
     public int minAddToMakeValid(String s) {
 
@@ -153,7 +124,7 @@ Given an array of intervals where `intervals[i] = [starti, endi]`, merge
 all overlapping intervals and return an array of the non-overlapping
 intervals that cover all the intervals in the input.
 
-``` java
+```java
 import java.util.*;
 
 class Solution {
@@ -196,7 +167,7 @@ Given an array of meeting time intervals where
 `intervals[i] = [starti, endi]`, determine whether a person could attend
 **all meetings**.
 
-``` java
+```java
 import java.util.*;
 
 class Solution {
@@ -223,7 +194,7 @@ class Solution {
 Given an array of meeting time intervals, return the **minimum number of
 conference rooms required**.
 
-``` java
+```java
 import java.util.*;
 
 class Solution {
@@ -274,7 +245,7 @@ around the entire circuit clockwise.
 
 If it is impossible, return `-1`.
 
-``` java
+```java
 class Solution {
     public int canCompleteCircuit(int[] gas, int[] cost) {
 
@@ -314,7 +285,7 @@ Given the arrival and departure times of all trains reaching a railway
 station, find the **minimum number of platforms required** so that no
 train has to wait.
 
-``` java
+```java
 import java.util.*;
 
 class Solution {
@@ -366,7 +337,7 @@ resulting intervals are still sorted and non-overlapping.
 
 Merge intervals if necessary.
 
-``` java
+```java
 import java.util.*;
 
 class Solution {
