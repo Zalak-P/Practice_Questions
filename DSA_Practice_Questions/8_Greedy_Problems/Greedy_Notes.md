@@ -11,7 +11,7 @@ Index:  0 1 2 3 4
 Value:  2 3 1 1 4
 ```
 
-From index `0`, you can jump at most `2` positions.
+From index `0`, you can jump at most `2` positions. So keep looking.
 
 The key idea is to keep track of the **farthest index reachable so far**.
 
@@ -48,6 +48,7 @@ For:
 maxReach >= lastIndex
 4 >= 4
 ```
+
 **Time:** `O(n)`  
 **Space:** `O(1)`
 
@@ -56,74 +57,16 @@ maxReach >= lastIndex
 ## 2. Jump Game II — LeetCode 45
 
 Here, reaching the end is guaranteed.
-
-Now the question is:
-
-> What is the **minimum number of jumps** needed?
+Now the question is: What is the **minimum number of jumps** needed?
 
 Example:
 
 ```text
-nums = [2,3,1,1,4]
-```
-
+Input: nums = [2,3,1,1,4]
+Output: 2
 Possible path:
-
-```text
 0 → 1 → 4
 ```
-
-Number of jumps:
-
-```text
-2
-```
-
-The easiest way to understand the greedy solution is to think of **ranges**.
-
-Initially:
-
-```text
-[2,3,1,1,4]
-
- ^
-current jump can explore index 0
-```
-
-From index `0`, we can reach up to index `2`.
-
-So after jump #1, our reachable range becomes:
-
-```text
-indexes 1 ... 2
-```
-
-While scanning that range, determine how far the **next jump** could take us.
-
-At index `1`:
-
-```text
-1 + nums[1]
-= 1 + 3
-= 4
-```
-
-So the next jump can reach the end.
-
-Therefore:
-
-```text
-jump 1: index 0 → range up to 2
-jump 2: choose index 1 → index 4
-```
-
-Answer:
-
-```text
-2
-```
-
-Java:
 
 ```java
 class Solution {
@@ -141,37 +84,14 @@ class Solution {
 
             // Finished current jump's range
             if (i == currentEnd) {
-
                 jumps++;
-
                 // Next range boundary
                 currentEnd = farthest;
             }
         }
-
         return jumps;
     }
 }
-```
-
-For:
-
-```text
-[2,3,1,1,4]
-```
-
-we get:
-
-| `i` | `i + nums[i]` | `farthest` | `currentEnd` | `jumps` |
-|---:|---:|---:|---:|---:|
-| 0 | 2 | 2 | 2 | 1 |
-| 1 | 4 | 4 | 2 | 1 |
-| 2 | 3 | 4 | 4 | 2 |
-
-Answer:
-
-```text
-2
 ```
 
 **Time:** `O(n)`  
@@ -182,8 +102,6 @@ Answer:
 ## 3. Minimum Add to Make Parentheses Valid — LeetCode 921
 
 You are given a string `s` containing only `'('` and `')'`.
-
-In one move, you can insert either `'('` or `')'` anywhere in the string.
 
 Return the **minimum number of parentheses you must add** to make the string valid.
 
