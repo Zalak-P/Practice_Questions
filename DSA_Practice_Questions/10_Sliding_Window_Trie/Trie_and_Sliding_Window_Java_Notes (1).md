@@ -8,146 +8,97 @@
 
 ```java
 class Trie {
-
     static class TrieNode {
-
+        // One child slot for each lowercase letter.
         TrieNode[] children = new TrieNode[26];
-
+        // True only when a complete word ends here.
         boolean isEnd = false;
     }
-
     TrieNode root;
-
     public Trie() {
-
         root = new TrieNode();
     }
-
-
     public void insert(String word) {
-
         TrieNode current = root;
-
         for (char ch : word.toCharArray()) {
-
             int index = ch - 'a';
-
             if (current.children[index] == null) {
-
                 current.children[index] =
                     new TrieNode();
             }
-
             current =
                 current.children[index];
         }
-
         current.isEnd = true;
     }
-
-
     public boolean search(String word) {
-
         TrieNode node =
             searchPrefix(word);
-
         return node != null
             && node.isEnd;
     }
-
-
     public boolean startsWith(String prefix) {
-
         return searchPrefix(prefix) != null;
     }
-
-
     private TrieNode searchPrefix(
         String word
     ) {
-
         TrieNode current = root;
-
         for (char ch : word.toCharArray()) {
-
             int index = ch - 'a';
-
             if (current.children[index] == null) {
                 return null;
             }
-
             current =
                 current.children[index];
         }
-
         return current;
     }
-
-
     public void delete(String word) {
-
         delete(root, word, 0);
     }
-
-
     private boolean delete(
         TrieNode current,
         String word,
         int index
     ) {
-
         if (index == word.length()) {
-
             if (!current.isEnd) {
                 return false;
             }
-
             current.isEnd = false;
-
             return hasNoChildren(current);
         }
-
         int childIndex =
             word.charAt(index) - 'a';
-
         TrieNode child =
             current.children[childIndex];
-
         if (child == null) {
             return false;
         }
-
         boolean shouldDeleteChild =
             delete(
                 child,
                 word,
                 index + 1
             );
-
         if (shouldDeleteChild) {
-
+            // Remove the child only if no stored word needs it.
             current.children[childIndex] =
                 null;
-
             return !current.isEnd
                 && hasNoChildren(current);
         }
-
         return false;
     }
-
-
     private boolean hasNoChildren(
         TrieNode node
     ) {
-
         for (TrieNode child : node.children) {
-
             if (child != null) {
                 return false;
             }
         }
-
         return true;
     }
 }
@@ -164,98 +115,65 @@ class Trie {
 
 ```java
 class Solution {
-
     static class TrieNode {
-
         TrieNode[] children =
             new TrieNode[26];
-
         boolean isEnd;
     }
-
-
     TrieNode root =
         new TrieNode();
-
-
     public String completeString(
         String[] words
     ) {
-
         for (String word : words) {
             insert(word);
         }
-
         String answer = "";
-
         for (String word : words) {
-
             if (allPrefixesExist(word)) {
-
                 if (word.length() >
                     answer.length()) {
-
                     answer = word;
                 }
-
                 else if (
                     word.length() ==
                     answer.length()
                     &&
                     word.compareTo(answer) < 0
                 ) {
-
                     answer = word;
                 }
             }
         }
-
         return answer;
     }
-
-
     private void insert(String word) {
-
         TrieNode current = root;
-
         for (char ch : word.toCharArray()) {
-
             int index = ch - 'a';
-
             if (current.children[index] == null) {
-
                 current.children[index] =
                     new TrieNode();
             }
-
             current =
                 current.children[index];
         }
-
         current.isEnd = true;
     }
-
-
     private boolean allPrefixesExist(
         String word
     ) {
-
         TrieNode current = root;
-
         for (char ch : word.toCharArray()) {
-
             int index = ch - 'a';
-
             current =
                 current.children[index];
-
+            // Every prefix must itself be a complete word.
             if (current == null ||
                 !current.isEnd) {
-
                 return false;
             }
         }
-
         return true;
     }
 }
@@ -272,44 +190,33 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public int lengthOfLongestSubstring(
         String s
     ) {
-
         Set<Character> window =
             new HashSet<>();
-
         int left = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             char ch =
                 s.charAt(right);
-
+            // Shrink until the duplicate leaves the window.
             while (window.contains(ch)) {
-
                 window.remove(
                     s.charAt(left)
                 );
-
                 left++;
             }
-
             window.add(ch);
-
             maxLength =
                 Math.max(
                     maxLength,
                     right - left + 1
                 );
         }
-
         return maxLength;
     }
 }
@@ -324,55 +231,42 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public int lengthOfLongestSubstringTwoDistinct(
         String s
     ) {
-
         Map<Character, Integer> map =
             new HashMap<>();
-
         int left = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             char ch =
                 s.charAt(right);
-
             map.put(
                 ch,
                 map.getOrDefault(ch, 0) + 1
             );
-
+            // Keep at most 2 distinct characters.
             while (map.size() > 2) {
-
                 char leftChar =
                     s.charAt(left);
-
                 map.put(
                     leftChar,
                     map.get(leftChar) - 1
                 );
-
                 if (map.get(leftChar) == 0) {
                     map.remove(leftChar);
                 }
-
                 left++;
             }
-
             maxLength =
                 Math.max(
                     maxLength,
                     right - left + 1
                 );
         }
-
         return maxLength;
     }
 }
@@ -387,56 +281,43 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public int lengthOfLongestSubstringKDistinct(
         String s,
         int k
     ) {
-
         Map<Character, Integer> map =
             new HashMap<>();
-
         int left = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             char ch =
                 s.charAt(right);
-
             map.put(
                 ch,
                 map.getOrDefault(ch, 0) + 1
             );
-
+            // Shrink until the window has at most k distinct characters.
             while (map.size() > k) {
-
                 char leftChar =
                     s.charAt(left);
-
                 map.put(
                     leftChar,
                     map.get(leftChar) - 1
                 );
-
                 if (map.get(leftChar) == 0) {
                     map.remove(leftChar);
                 }
-
                 left++;
             }
-
             maxLength =
                 Math.max(
                     maxLength,
                     right - left + 1
                 );
         }
-
         return maxLength;
     }
 }
@@ -451,60 +332,45 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public int numKLenSubstrNoRepeats(
         String s,
         int k
     ) {
-
         if (k > s.length()) {
             return 0;
         }
-
         Map<Character, Integer> map =
             new HashMap<>();
-
         int left = 0;
         int count = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             char ch =
                 s.charAt(right);
-
             map.put(
                 ch,
                 map.getOrDefault(ch, 0) + 1
             );
-
+            // Keep the window size fixed at k.
             if (right - left + 1 > k) {
-
                 char leftChar =
                     s.charAt(left);
-
                 map.put(
                     leftChar,
                     map.get(leftChar) - 1
                 );
-
                 if (map.get(leftChar) == 0) {
                     map.remove(leftChar);
                 }
-
                 left++;
             }
-
             if (right - left + 1 == k
                 && map.size() == k) {
-
                 count++;
             }
         }
-
         return count;
     }
 }
@@ -519,54 +385,43 @@ class Solution {
 
 ```java
 class Solution {
-
     public int characterReplacement(
         String s,
         int k
     ) {
-
         int[] frequency =
             new int[26];
-
         int left = 0;
         int maxFrequency = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             int index =
                 s.charAt(right) - 'A';
-
             frequency[index]++;
-
             maxFrequency =
                 Math.max(
                     maxFrequency,
                     frequency[index]
                 );
-
+            // Replacements needed = window size - maxFrequency.
             while (
                 right - left + 1
                 - maxFrequency
                 > k
             ) {
-
                 frequency[
                     s.charAt(left) - 'A'
                 ]--;
-
                 left++;
             }
-
             maxLength =
                 Math.max(
                     maxLength,
                     right - left + 1
                 );
         }
-
         return maxLength;
     }
 }
@@ -581,53 +436,41 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public int[] maxSlidingWindow(
         int[] nums,
         int k
     ) {
-
         int[] result =
             new int[nums.length - k + 1];
-
         Deque<Integer> deque =
             new ArrayDeque<>();
-
         int index = 0;
-
         for (int right = 0;
              right < nums.length;
              right++) {
-
+            // Remove smaller values; they cannot be a future maximum.
             while (
                 !deque.isEmpty()
                 &&
                 nums[deque.peekLast()]
                 <= nums[right]
             ) {
-
                 deque.pollLast();
             }
-
             deque.offerLast(right);
-
+            // Remove index that has moved outside the window.
             if (
                 deque.peekFirst()
                 <= right - k
             ) {
-
                 deque.pollFirst();
             }
-
             if (right >= k - 1) {
-
                 result[index++] =
                     nums[deque.peekFirst()];
             }
         }
-
         return result;
     }
 }
@@ -642,54 +485,39 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public String minWindow(
         String s,
         String t
     ) {
-
         if (t.length() > s.length()) {
             return "";
         }
-
         Map<Character, Integer> need =
             new HashMap<>();
-
         for (char ch : t.toCharArray()) {
-
             need.put(
                 ch,
                 need.getOrDefault(ch, 0) + 1
             );
         }
-
         Map<Character, Integer> window =
             new HashMap<>();
-
         int required = need.size();
         int formed = 0;
-
         int left = 0;
-
         int minLength =
             Integer.MAX_VALUE;
-
         int start = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             char ch =
                 s.charAt(right);
-
             window.put(
                 ch,
                 window.getOrDefault(ch, 0) + 1
             );
-
             if (
                 need.containsKey(ch)
                 &&
@@ -699,53 +527,42 @@ class Solution {
                 need.get(ch)
                     .intValue()
             ) {
-
                 formed++;
             }
-
+            // Window is valid; shrink it to find the minimum.
             while (
                 left <= right
                 &&
                 formed == required
             ) {
-
                 if (
                     right - left + 1
                     < minLength
                 ) {
-
                     minLength =
                         right - left + 1;
-
                     start = left;
                 }
-
                 char leftChar =
                     s.charAt(left);
-
                 window.put(
                     leftChar,
                     window.get(leftChar) - 1
                 );
-
                 if (
                     need.containsKey(leftChar)
                     &&
                     window.get(leftChar)
                     < need.get(leftChar)
                 ) {
-
                     formed--;
                 }
-
                 left++;
             }
         }
-
         if (minLength == Integer.MAX_VALUE) {
             return "";
         }
-
         return s.substring(
             start,
             start + minLength
@@ -763,54 +580,40 @@ class Solution {
 
 ```java
 import java.util.*;
-
 class Solution {
-
     public List<Integer> findAnagrams(
         String s,
         String p
     ) {
-
         List<Integer> result =
             new ArrayList<>();
-
         if (p.length() > s.length()) {
             return result;
         }
-
         int[] need =
             new int[26];
-
         int[] window =
             new int[26];
-
         for (char ch : p.toCharArray()) {
-
             need[ch - 'a']++;
         }
-
         int left = 0;
-
         for (int right = 0;
              right < s.length();
              right++) {
-
             window[
                 s.charAt(right) - 'a'
             ]++;
-
+            // Keep window size equal to p.length().
             if (
                 right - left + 1
                 > p.length()
             ) {
-
                 window[
                     s.charAt(left) - 'a'
                 ]--;
-
                 left++;
             }
-
             if (
                 right - left + 1
                 == p.length()
@@ -820,11 +623,9 @@ class Solution {
                     window
                 )
             ) {
-
                 result.add(left);
             }
         }
-
         return result;
     }
 }
@@ -839,40 +640,32 @@ class Solution {
 
 ```java
 class Solution {
-
     public int longestOnes(
         int[] nums,
         int k
     ) {
-
         int left = 0;
         int zeroCount = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < nums.length;
              right++) {
-
             if (nums[right] == 0) {
                 zeroCount++;
             }
-
+            // More than k zeros makes the window invalid.
             while (zeroCount > k) {
-
                 if (nums[left] == 0) {
                     zeroCount--;
                 }
-
                 left++;
             }
-
             maxLength =
                 Math.max(
                     maxLength,
                     right - left + 1
                 );
         }
-
         return maxLength;
     }
 }
@@ -887,39 +680,32 @@ class Solution {
 
 ```java
 class Solution {
-
     public int longestSubarray(
         int[] nums
     ) {
-
         int left = 0;
         int zeroCount = 0;
         int maxLength = 0;
-
         for (int right = 0;
              right < nums.length;
              right++) {
-
             if (nums[right] == 0) {
                 zeroCount++;
             }
-
+            // Keep at most one zero in the window.
             while (zeroCount > 1) {
-
                 if (nums[left] == 0) {
                     zeroCount--;
                 }
-
                 left++;
             }
-
+            // One element must be deleted, so use windowSize - 1.
             maxLength =
                 Math.max(
                     maxLength,
                     right - left
                 );
         }
-
         return maxLength;
     }
 }
