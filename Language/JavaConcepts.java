@@ -71,7 +71,7 @@ class Box<T> {
 // ==========================================
 // MAIN TUTORIAL EXECUTION
 // ==========================================
-public class JavaMasterclass {
+public class JavaConcepts {
 
     public static void main(String[] args) {
         System.out.println("=== STARTING JAVA ROADMAP DEMO ===");
