@@ -1,7 +1,69 @@
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.function.*;
 
-// Immutuable data carrier for our stream source
+public class LambdaDemo {
+    public static void main(String[] args) {
+        System.out.println("=== PART 1: THE 4 MAIN BUILT-IN FUNCTIONS ===");
+
+        // 1. Predicate<T>: Takes 1 input, returns a boolean (Used for testing/filtering) [4]
+        Predicate<Integer> isEven = (num) -> num % 2 == 0;
+        System.out.println("Is 8 even? " + isEven.test(8)); // Output: true
+
+        // 2. Function<T, R>: Takes 1 input 'T', transforms it, returns a result 'R' [4]
+        Function<String, Integer> stringLength = (str) -> str.length();
+        System.out.println("Length of 'Java': " + stringLength.apply("Java")); // Output: 4
+
+        // 3. Consumer<T>: Takes 1 input, performs an action, returns nothing (void) [4]
+        Consumer<String> printGreeting = (name) -> System.out.println("Hello, " + name + "!");
+        printGreeting.accept("Developer"); // Output: Hello, Developer!
+
+        // 4. Supplier<T>: Takes NO inputs, returns a freshly generated value 'T' [4]
+        Supplier<Double> randomValue = () -> Math.random();
+        System.out.println("Random Supplier generated: " + randomValue.get());
+
+
+        System.out.println("\n=== PART 2: LAMBDA SYNTAX VARIATIONS ===");
+
+        // Variation A: Zero Parameters (Requires empty parentheses)
+        Runnable zeroParam = () -> System.out.println("Zero parameter lambda running.");
+        zeroParam.run();
+
+        // Variation B: Single Parameter (Parentheses can be completely omitted!)
+        Consumer<Integer> singleParam = x -> System.out.println("Single param squared: " + (x * x));
+        singleParam.accept(5); // Output: 25
+
+        // Variation C: Multiple Parameters (Requires parentheses around inputs)
+        BiFunction<Integer, Integer, Integer> multiply = (a, b) -> a * b;
+        System.out.println("Multi-param result: " + multiply.apply(4, 5)); // Output: 20
+
+        // Variation D: Multi-line Body (Requires curly braces {} and an explicit 'return' statement)
+        Function<String, String> multiLine = (input) -> {
+            String cleared = input.trim();
+            String upper = cleared.toUpperCase();
+            return upper + "_PROCESSED";
+        };
+        System.out.println("Multi-line result: " + multiLine.apply("   lambda   ")); // Output: LAMBDA_PROCESSED
+
+
+        System.out.println("\n=== PART 3: METHOD REFERENCES (THE LAMBDA SHORTCUT) ===");
+
+        List<String> frameworkList = Arrays.asList("spring", "hibernate", "quarkus");
+
+        // Standard Lambda Syntax:
+        System.out.print("Standard Lambda Print: ");
+        frameworkList.forEach(item -> System.out.print(item + " "));
+        System.out.println();
+
+        // Compressed Method Reference Syntax (Object::instanceMethod)
+        System.out.print("Method Reference Print: ");
+        frameworkList.forEach(System.out::print);
+        System.out.println();
+    }
+}
+
+
+
 record Employee(String name, String department, double salary, int age) {
 }
 
