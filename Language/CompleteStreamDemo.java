@@ -2,7 +2,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.function.*;
 
-public class LambdaDemo {
+public class LambdaStreamsDemo {
     public static void main(String[] args) {
         System.out.println("=== PART 1: THE 4 MAIN BUILT-IN FUNCTIONS ===");
 
@@ -61,7 +61,6 @@ public class LambdaDemo {
         System.out.println();
     }
 }
-
 
 
 record Employee(String name, String department, double salary, int age) {
