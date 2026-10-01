@@ -1058,7 +1058,7 @@ class Solution {
 **Space:** `O(h)` recursion/path space, excluding output  
 **Pattern:** `DFS + Path + Backtracking`
 
-## 17. Flatten Binary Tree to Doubly Linked List
+## 17. Flatten Binary Tree to Doubly Linked List - LC 114
 
 Convert a binary tree into a doubly linked list in inorder order using the same tree nodes.
 
@@ -1066,49 +1066,32 @@ Convert a binary tree into a doubly linked list in inorder order using the same 
 
 ```java
 class Solution {
+    // The platform requires this exact entry-point method name
+    public void flatten(TreeNode root) {
+        TreeNode current = root;
 
-    TreeNode prev = null;
-    TreeNode head = null;
+        while (current != null) {
+            // If there's a left subtree, find its rightmost node
+            if (current.left != null) {
+                TreeNode predecessor = current.left;
+                while (predecessor.right != null) {
+                    predecessor = predecessor.right;
+                }
 
-    public TreeNode binaryTreeToDLL(TreeNode root) {
+                // Connect the original right subtree to the rightmost node of the left subtree
+                predecessor.right = current.right;
 
-        inorder(root);
-
-        return head;
-    }
-
-    private void inorder(TreeNode node) {
-
-        if (node == null) {
-            return;
+                // Move the left subtree to the right side
+                current.right = current.left;
+                current.left = null; // Clear the left pointer
+            }
+            
+            // Move to the next node on the right path
+            current = current.right;
         }
-
-        // LEFT
-        inorder(node.left);
-
-        // NODE
-        if (prev == null) {
-
-            // First node of inorder becomes head
-            head = node;
-        }
-
-        else {
-
-            // Previous -> Current
-            prev.right = node;
-
-            // Current -> Previous
-            node.left = prev;
-        }
-
-        // Move previous pointer
-        prev = node;
-
-        // RIGHT
-        inorder(node.right);
     }
 }
+
 ```
 
 **Time:** `O(n)`  
@@ -1122,122 +1105,57 @@ Fire starts at a target node. In one second, fire spreads to the left child, rig
 ### Java
 
 ```java
-import java.util.*;
-
 class Solution {
+    private int maxDistance = 0;
 
     public int minTime(TreeNode root, int target) {
-
-        // Child -> Parent mapping
-        Map<TreeNode, TreeNode> parentMap = new HashMap<>();
-
-        TreeNode targetNode =
-            createParentMap(root, parentMap, target);
-
-        Queue<TreeNode> queue = new LinkedList<>();
-        Set<TreeNode> visited = new HashSet<>();
-
-        queue.offer(targetNode);
-        visited.add(targetNode);
-
-        int time = 0;
-
-        while (!queue.isEmpty()) {
-
-            int size = queue.size();
-
-            boolean burnedNewNode = false;
-
-            for (int i = 0; i < size; i++) {
-
-                TreeNode node = queue.poll();
-
-                // LEFT
-                if (node.left != null &&
-                    !visited.contains(node.left)) {
-
-                    queue.offer(node.left);
-                    visited.add(node.left);
-
-                    burnedNewNode = true;
-                }
-
-                // RIGHT
-                if (node.right != null &&
-                    !visited.contains(node.right)) {
-
-                    queue.offer(node.right);
-                    visited.add(node.right);
-
-                    burnedNewNode = true;
-                }
-
-                // PARENT
-                TreeNode parent = parentMap.get(node);
-
-                if (parent != null &&
-                    !visited.contains(parent)) {
-
-                    queue.offer(parent);
-                    visited.add(parent);
-
-                    burnedNewNode = true;
-                }
-            }
-
-            // One second passed only if fire spread
-            if (burnedNewNode) {
-                time++;
-            }
-        }
-
-        return time;
+        maxDistance = 0;
+        traverse(root, target);
+        return maxDistance;
     }
 
+    private int traverse(TreeNode node, int target) {
+        if (node == null) return 0;
 
-    private TreeNode createParentMap(
-        TreeNode root,
-        Map<TreeNode, TreeNode> parentMap,
-        int target
-    ) {
-
-        Queue<TreeNode> queue = new LinkedList<>();
-
-        queue.offer(root);
-
-        TreeNode targetNode = null;
-
-        while (!queue.isEmpty()) {
-
-            TreeNode node = queue.poll();
-
-            if (node.val == target) {
-                targetNode = node;
-            }
-
-            if (node.left != null) {
-
-                parentMap.put(node.left, node);
-
-                queue.offer(node.left);
-            }
-
-            if (node.right != null) {
-
-                parentMap.put(node.right, node);
-
-                queue.offer(node.right);
-            }
+        if (node.val == target) {
+            // Found target: find the deepest leaf in its own subtrees
+            calculateDepth(node, 0);
+            return -1; // Negative values indicate target was found below
         }
 
-        return targetNode;
+        int left = traverse(node.left, target);
+        int right = traverse(node.right, target);
+
+        // If target was found in the left subtree
+        if (left < 0) {
+            // Distance from target to current node is |left|
+            calculateDepth(node.right, Math.abs(left));
+            return left - 1; // Bubble up distance (+1 hop away)
+        }
+
+        // If target was found in the right subtree
+        if (right < 0) {
+            calculateDepth(node.left, Math.abs(right));
+            return right - 1;
+        }
+
+        // Target not found in this subtree yet; return normal height
+        return Math.max(left, right) + 1;
+    }
+
+    private void calculateDepth(TreeNode node, int currentDistance) {
+        if (node == null) return;
+        maxDistance = Math.max(maxDistance, currentDistance);
+        calculateDepth(node.left, currentDistance + 1);
+        calculateDepth(node.right, currentDistance + 1);
     }
 }
+
 ```
 
 **Time:** `O(n)`  
-**Space:** `O(n)`  
-**Pattern:** `Parent Mapping + BFS + Visited Set`
+**Space:** `O(h)`  
+**Pattern:** `DFS`
 
 ## 19. Lowest Common Ancestor — LeetCode 236
 
