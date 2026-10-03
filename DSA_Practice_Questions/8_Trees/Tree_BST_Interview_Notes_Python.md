@@ -799,31 +799,42 @@ Fire starts at a target node. In one second, fire spreads to the left child, rig
 
 ```python
 class Solution:
-    def minTime(self, root, target):
-        # Assumes unique values and a target value present in the tree.
-        max_distance = 0
-
-        def traverse(node):
-            nonlocal max_distance
-            if node is None:
+    def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
+        self.max_time = 0
+        
+        def dfs(node):
+            if not node:
                 return 0
-            left = traverse(node.left)
-            right = traverse(node.right)
-            if node.val == target:
-                max_distance = max(max_distance, left, right)
+            
+            left_depth = dfs(node.left)
+            right_depth = dfs(node.right)
+            
+            # Case 1: Current node is the infection start point
+            if node.val == start:
+                self.max_time = max(left_depth, right_depth)
+                # Return a negative number to signal to ancestors 
+                # that the target was found, and start tracking distance.
                 return -1
-            if left < 0:
-                # abs(left) is the target-to-current distance;
-                # right is the height of the opposite subtree.
-                max_distance = max(max_distance, -left + right)
-                return left - 1
-            if right < 0:
-                max_distance = max(max_distance, -right + left)
-                return right - 1
-            return 1 + max(left, right)
+            
+            # Case 2: Target node was found in one of the subtrees
+            if left_depth < 0 or right_depth < 0:
+                # The absolute value tells us how far this node is from 'start'
+                distance = abs(left_depth) if left_depth < 0 else abs(right_depth)
+                
+                # Total time to burn through this ancestor's other side
+                if left_depth < 0:
+                    self.max_time = max(self.max_time, distance + right_depth)
+                else:
+                    self.max_time = max(self.max_time, distance + left_depth)
+                    
+                # Increment distance by 1 as we move up to the next parent
+                return -(distance + 1)
+            
+            # Case 3: Target node not found yet in this subtree
+            return max(left_depth, right_depth) + 1
 
-        traverse(root)
-        return max_distance
+        dfs(root)
+        return self.max_time
 ```
 
 **Time:** `O(n)`  
