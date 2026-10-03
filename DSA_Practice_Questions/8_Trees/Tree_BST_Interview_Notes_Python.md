@@ -287,7 +287,7 @@ class Solution:
             right_height = height(node.right)
             # Diameter counts edges; height counts nodes.
             diameter = max(diameter, left_height + right_height)
-            
+
             return 1 + max(left_height, right_height)
 
         height(root)
@@ -702,31 +702,35 @@ Flatten the tree in place into a preorder singly linked list using the same node
 ### Python
 
 ```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.left = None
+#         self.right = None
 class Solution:
+    def flattenTree(self, node: TreeNode) -> TreeNode:
+        if not node:
+            return None
+        if not node.left and not node.right:
+            return node
+
+        # Recursively flatten the left subtree
+        leftTail = self.flattenTree(node.left)
+
+        # Recursively flatten the right subtree
+        rightTail = self.flattenTree(node.right)
+
+        # If there was a left subtree, we shuffle the connections
+        if leftTail:
+            leftTail.right = node.right
+            node.right = node.left
+            node.left = None
+
+        return rightTail if rightTail else leftTail
 
     def flatten(self, root: TreeNode) -> None:
-        # Handle the null scenario
-        if not root:
-            return None
-
-        node = root
-        while node:
-
-            # If the node has a left child
-            if node.left:
-
-                # Find the rightmost node
-                rightmost = node.left
-                while rightmost.right:
-                    rightmost = rightmost.right
-
-                # rewire the connections
-                rightmost.right = node.right
-                node.right = node.left
-                node.left = None
-
-            # move on to the right side of the tree
-            node = node.right
+        self.flattenTree(root)
 ```
 
 **Time:** `O(n)`  
