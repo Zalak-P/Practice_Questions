@@ -58,23 +58,30 @@ Output:
 ```python
 from collections import deque
 
-class Solution:
-    def levelOrder(self, root):
-        if root is None:
-            return []
-        result = []
-        queue = deque([root])
-        while queue:
-            current_level = []
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                current_level.append(node.val)
-                if node.left is not None:
-                    queue.append(node.left)
-                if node.right is not None:
-                    queue.append(node.right)
-            result.append(current_level)
-        return result
+def level_order(root):
+    if root is None:
+        return []
+
+    queue = deque([root])
+    result = []
+
+    while queue:
+        level_size = len(queue)
+        level = []
+
+        for _ in range(level_size):
+            node = queue.popleft()
+            level.append(node.val)
+
+            if node.left:
+                queue.append(node.left)
+
+            if node.right:
+                queue.append(node.right)
+
+        result.append(level)
+
+    return result
 ```
 
 **Time:** `O(n)`  
@@ -172,8 +179,10 @@ class Solution:
     def maxDepth(self, root):
         if root is None:
             return 0
+
         left_height = self.maxDepth(root.left)
         right_height = self.maxDepth(root.right)
+
         return 1 + max(left_height, right_height)
 ```
 
@@ -192,10 +201,12 @@ class Solution:
     def invertTree(self, root):
         if root is None:
             return None
+
         left = self.invertTree(root.left)
         right = self.invertTree(root.right)
         root.left = right
         root.right = left
+
         return root
 ```
 
@@ -223,6 +234,7 @@ class Solution:
             return False
         if left.val != right.val:
             return False
+
         return (self.isMirror(left.left, right.right)
                 and self.isMirror(left.right, right.left))
 ```
@@ -246,6 +258,7 @@ class Solution:
             return False
         if p.val != q.val:
             return False
+
         return (self.isSameTree(p.left, q.left)
                 and self.isSameTree(p.right, q.right))
 ```
@@ -269,10 +282,12 @@ class Solution:
             nonlocal diameter
             if node is None:
                 return 0
+
             left_height = height(node.left)
             right_height = height(node.right)
             # Diameter counts edges; height counts nodes.
             diameter = max(diameter, left_height + right_height)
+            
             return 1 + max(left_height, right_height)
 
         height(root)
