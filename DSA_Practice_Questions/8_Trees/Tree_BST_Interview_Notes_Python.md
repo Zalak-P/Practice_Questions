@@ -468,36 +468,25 @@ class Solution:
     def topView(self, root):
         if root is None:
             return []
+
         view = {}
+
         # Each tuple stores a node and its horizontal distance (HD).
         queue = deque([(root, 0)])
+
         while queue:
             node, hd = queue.popleft()
+
             # Keep the first node seen at this HD.
             view.setdefault(hd, node.val)
+
             if node.left is not None:
                 queue.append((node.left, hd - 1))
+
             if node.right is not None:
                 queue.append((node.right, hd + 1))
-        return [view[hd] for hd in sorted(view)]
 
-if __name__ == "__main__":
-    #        1
-    #       / \
-    #      2   3
-    #       \ / \
-    #        4 5 6
-    #           \
-    #            7
-    root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(3)
-    root.left.right = TreeNode(4)
-    root.right.left = TreeNode(5)
-    root.right.right = TreeNode(6)
-    root.right.left.right = TreeNode(7)
-    print("Top View:", Solution().topView(root))
-    # Expected: [2, 1, 3, 6]
+        return [view[hd] for hd in sorted(view)]
 ```
 
 **Time:** `O(n + m log m)` for sorting `m` horizontal distances (`m ≤ n`)  
@@ -515,42 +504,28 @@ Return nodes visible when the tree is viewed from the bottom. If two nodes share
 ### Python
 
 ```python
-from collections import deque
-
 class Solution:
     def bottomView(self, root):
         if root is None:
             return []
-        view = {}
-        # Each tuple stores a node and its horizontal distance (HD).
+
+        hashmap = {}
         queue = deque([(root, 0)])
+
         while queue:
             node, hd = queue.popleft()
-            # Overwrite with the last node seen at this HD.
-            view[hd] = node.val
+
+            # Update the bottommost node at this horizontal distance.
+            hashmap[hd] = node.val
+
             if node.left is not None:
                 queue.append((node.left, hd - 1))
+
             if node.right is not None:
                 queue.append((node.right, hd + 1))
-        return [view[hd] for hd in sorted(view)]
 
-if __name__ == "__main__":
-    #        1
-    #       / \
-    #      2   3
-    #       \ / \
-    #        4 5 6
-    #           \
-    #            7
-    root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(3)
-    root.left.right = TreeNode(4)
-    root.right.left = TreeNode(5)
-    root.right.right = TreeNode(6)
-    root.right.left.right = TreeNode(7)
-    print("Bottom View Result:", Solution().bottomView(root))
-    # Expected: [2, 5, 7, 6]
+        result = [hashmap[hd] for hd in sorted(hashmap)]
+        return result
 ```
 
 **Time:** `O(n log n)`  
