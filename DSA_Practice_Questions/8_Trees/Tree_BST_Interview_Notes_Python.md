@@ -795,8 +795,6 @@ replace `previous.right = None` with `previous.right = head` and
 
 Fire starts at a target node. In one second, fire spreads to the left child, right child, and parent.
 
-**Correction:** The DFS below counts every edge, including the edge into an opposite subtree and the distance to an ancestor with no opposite subtree. The original helper missed these cases.
-
 ### Python
 
 ```python
