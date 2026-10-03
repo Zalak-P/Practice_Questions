@@ -751,7 +751,7 @@ returns a non-circular list; the adaptation for 426 is shown afterward.
 
 ```python
 class Solution:
-    def treeToDoublyList(self, root):
+    def binaryTreeToDLL(self, root):
         head = None
         previous = None
 
@@ -759,20 +759,27 @@ class Solution:
             nonlocal head, previous
             if node is None:
                 return
-            # Save the original right subtree before rewiring pointers.
-            original_right = node.right
+
+            # Visit the left subtree before modifying the left pointer.
             inorder(node.left)
-            node.left = previous
+
             if previous is None:
+                # The first node visited becomes the head.
                 head = node
             else:
+                # Link the previous node forward to the current node.
                 previous.right = node
+
+            # Link the current node backward to the previous node.
+            node.left = previous
+
+            # Update previous for the next node in inorder traversal.
             previous = node
-            inorder(original_right)
+
+            # Visit the right subtree.
+            inorder(node.right)
 
         inorder(root)
-        if previous is not None:
-            previous.right = None
         return head
 ```
 
