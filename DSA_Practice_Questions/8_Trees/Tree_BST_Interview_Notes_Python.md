@@ -1,6 +1,5 @@
 # Binary Tree & BST Interview Problems — Python
 
-
 These are independent Python 3 solutions. Each problem uses its own `Solution`
 class; run one solution at a time. Problem 2 uses the standalone function
 `zigzag_level_order(root)`. Other method names match the original platform
@@ -257,7 +256,7 @@ class Solution:
 
 ## 7. Diameter of Binary Tree — [LeetCode 543](https://leetcode.com/problems/diameter-of-binary-tree/)
 
-Given the `root` of a binary tree, return the diameter of the tree. The diameter is the longest path between any two nodes.
+Given the `root` of a binary tree, return the diameter of the tree. The diameter is the longest path between any two nodes. The path does not need to include root node.
 
 ### Python
 
@@ -292,7 +291,7 @@ Given `preorder` and `inorder` traversal arrays, construct the binary tree.
 
 ```text
 Preorder = ROOT → LEFT → RIGHT
-Inorder  = LEFT → ROOT → RIGHT
+Inorder  = LEFT → ROOT → RIGHT (most basic, commnly used)
 ```
 
 ### Python
@@ -300,19 +299,28 @@ Inorder  = LEFT → ROOT → RIGHT
 ```python
 class Solution:
     def buildTree(self, preorder, inorder):
+        inorder_index = {
+            value: index
+            for index, value in enumerate(inorder)
+        }
+
         preorder_index = 0
-        inorder_map = {value: i for i, value in enumerate(inorder)}
 
         def build(left, right):
             nonlocal preorder_index
+
             if left > right:
                 return None
+
             root_value = preorder[preorder_index]
             preorder_index += 1
+
             root = TreeNode(root_value)
-            root_index = inorder_map[root_value]
-            root.left = build(left, root_index - 1)
-            root.right = build(root_index + 1, right)
+            mid = inorder_index[root_value]
+
+            root.left = build(left, mid - 1)
+            root.right = build(mid + 1, right)
+
             return root
 
         return build(0, len(inorder) - 1)
@@ -1220,39 +1228,39 @@ class Solution:
 
 # Quick Revision Table
 
-| Problem                   | Main Trick                            |
-| ------------------------- | ------------------------------------- |
-| Level Order               | BFS + Queue                           |
-| Zigzag                    | BFS + Direction Flag                  |
-| Height                    | `1 + max(left, right)`                |
-| Mirror Tree               | Swap left/right                       |
-| Symmetric Tree            | Cross comparison                      |
-| Identical Tree            | Same-side comparison                  |
-| Diameter                  | Return height, update `left + right`  |
-| Preorder + Inorder Build  | Preorder root + inorder split         |
-| Inorder + Postorder Build | Postorder root + build right first    |
-| Right View                | Last node per level                   |
-| Left View                 | First node per level                  |
-| Top View                  | First node per HD                     |
-| Bottom View               | Last node per HD                      |
-| Vertical Traversal        | Column, then row, then value          |
-| Boundary Traversal        | Root + left + leaves + reversed right |
-| Root-to-Leaf Paths        | DFS + Backtracking                    |
-| Flatten to Linked List    | Preorder + pointer rewiring           |
+| Problem                    | Main Trick                            |
+| -------------------------- | ------------------------------------- |
+| Level Order                | BFS + Queue                           |
+| Zigzag                     | BFS + Direction Flag                  |
+| Height                     | `1 + max(left, right)`                |
+| Mirror Tree                | Swap left/right                       |
+| Symmetric Tree             | Cross comparison                      |
+| Identical Tree             | Same-side comparison                  |
+| Diameter                   | Return height, update `left + right`  |
+| Preorder + Inorder Build   | Preorder root + inorder split         |
+| Inorder + Postorder Build  | Postorder root + build right first    |
+| Right View                 | Last node per level                   |
+| Left View                  | First node per level                  |
+| Top View                   | First node per HD                     |
+| Bottom View                | Last node per HD                      |
+| Vertical Traversal         | Column, then row, then value          |
+| Boundary Traversal         | Root + left + leaves + reversed right |
+| Root-to-Leaf Paths         | DFS + Backtracking                    |
+| Flatten to Linked List     | Preorder + pointer rewiring           |
 | Tree to Doubly Linked List | Inorder + previous pointer            |
-| Burn Tree                 | Postorder + height/target distance    |
-| Binary Tree LCA           | Left result + right result            |
-| Nodes Distance K          | Parent Map + BFS                      |
-| Serialization             | Preorder + `#`                        |
-| Connect Same Level        | BFS + previous                        |
-| Morris Traversal          | Temporary predecessor link            |
-| Path Sum I                | Remaining sum                         |
-| Path Sum II               | DFS + Backtracking                    |
-| Path Sum III              | Prefix Sum + dictionary               |
-| Maximum Path Sum          | Return one side, update both          |
-| BST Kth Smallest          | Inorder = sorted                      |
-| BST LCA                   | Smaller / larger / split              |
-| BST Predecessor           | Largest `< key`                       |
-| BST Successor             | Smallest `> key`                      |
-| Sorted Array → BST        | Middle = root                         |
-| Validate BST              | Min/max allowed range                 |
+| Burn Tree                  | Postorder + height/target distance    |
+| Binary Tree LCA            | Left result + right result            |
+| Nodes Distance K           | Parent Map + BFS                      |
+| Serialization              | Preorder + `#`                        |
+| Connect Same Level         | BFS + previous                        |
+| Morris Traversal           | Temporary predecessor link            |
+| Path Sum I                 | Remaining sum                         |
+| Path Sum II                | DFS + Backtracking                    |
+| Path Sum III               | Prefix Sum + dictionary               |
+| Maximum Path Sum           | Return one side, update both          |
+| BST Kth Smallest           | Inorder = sorted                      |
+| BST LCA                    | Smaller / larger / split              |
+| BST Predecessor            | Largest `< key`                       |
+| BST Successor              | Smallest `> key`                      |
+| Sorted Array → BST         | Middle = root                         |
+| Validate BST               | Min/max allowed range                 |
