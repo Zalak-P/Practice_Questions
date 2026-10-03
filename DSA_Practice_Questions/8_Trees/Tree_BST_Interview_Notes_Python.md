@@ -850,13 +850,27 @@ Find the lowest node that has both `p` and `q` in its subtree.
 ```python
 class Solution:
     def lowestCommonAncestor(self, root, p, q):
-        if root is None or root is p or root is q:
+        # An empty subtree contains neither target.
+        if root is None:
+            return None
+
+        # Found a target; return the actual node.
+        if root is p or root is q:
             return root
+
+        # Search both subtrees.
         left = self.lowestCommonAncestor(root.left, p, q)
         right = self.lowestCommonAncestor(root.right, p, q)
+
+        # Targets were found on opposite sides.
         if left is not None and right is not None:
             return root
-        return left if left is not None else right
+
+        # Pass upward the target or LCA found on one side.
+        if left is not None:
+            return left
+
+        return right
 ```
 
 **Time:** `O(n)`  
