@@ -585,58 +585,61 @@ Return the anti-clockwise boundary traversal: root, left boundary, leaves, right
 
 ```python
 class Solution:
-    def boundary(self, root):
-        if root is None:
-            return []
+    def isLeaf(self, node):
+        return node.left is None and node.right is None
+
+    def addLeaves(self, result, root):
+        if self.isLeaf(root):
+            result.append(root.val)
+        else:
+            if root.left is not None:
+                self.addLeaves(result, root.left)
+
+            if root.right is not None:
+                self.addLeaves(result, root.right)
+
+    def boundaryOfBinaryTree(self, root):
         result = []
 
-        def is_leaf(node):
-            return node.left is None and node.right is None
+        if root is None:
+            return result
 
-        # Root, excluding a leaf root (added by add_leaves).
-        if not is_leaf(root):
+        if not self.isLeaf(root):
             result.append(root.val)
 
-        # Left boundary, excluding leaves.
-        current = root.left
-        while current is not None:
-            if not is_leaf(current):
-                result.append(current.val)
-            current = current.left if current.left is not None else current.right
+        #Part 1: Left boundary, excluding leaves.
+        node = root.left
 
-        def add_leaves(node):
-            if node is None:
-                return
-            if is_leaf(node):
+        while node is not None:
+            if not self.isLeaf(node):
                 result.append(node.val)
-                return
-            add_leaves(node.left)
-            add_leaves(node.right)
 
-        add_leaves(root)
+            if node.left is not None:
+                node = node.left
+            else:
+                node = node.right
 
-        # Right boundary, excluding leaves, in bottom-up order.
-        right_boundary = []
-        current = root.right
-        while current is not None:
-            if not is_leaf(current):
-                right_boundary.append(current.val)
-            current = current.right if current.right is not None else current.left
-        result.extend(reversed(right_boundary))
+        # Part 2: All leaves, from left to right.
+        self.addLeaves(result, root)
+
+        # Part 3: Right boundary, excluding leaves.
+        stack = []
+        node = root.right
+
+        while node is not None:
+            if not self.isLeaf(node):
+                stack.append(node.val)
+
+            if node.right is not None:
+                node = node.right
+            else:
+                node = node.left
+
+        # Add right boundary in reverse order.
+        while stack:
+            result.append(stack.pop())
+
         return result
-
-if __name__ == "__main__":
-    root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(3)
-    root.left.left = TreeNode(4)
-    root.left.right = TreeNode(5)
-    root.right.left = TreeNode(6)
-    root.right.right = TreeNode(7)
-    root.left.right.left = TreeNode(8)
-    root.left.right.right = TreeNode(9)
-    print("Boundary Traversal:", Solution().boundary(root))
-    # Expected: [1, 2, 4, 8, 9, 6, 7, 3]
 ```
 
 **Time:** `O(n)`  
@@ -651,22 +654,24 @@ Return all root-to-leaf paths.
 
 ```python
 class Solution:
-    def binaryTreePaths(self, root):
+    def rootToLeafPaths(self, root):
         result = []
-        path = []
 
-        def dfs(node):
+        def dfs(node, path):
             if node is None:
                 return
-            path.append(str(node.val))
-            if node.left is None and node.right is None:
-                result.append("->".join(path))
-            else:
-                dfs(node.left)
-                dfs(node.right)
-            path.pop()  # Backtrack before visiting another branch.
 
-        dfs(root)
+            path.append(node.val)
+
+            if node.left is None and node.right is None:
+                result.append(path.copy())
+            else:
+                dfs(node.left, path)
+                dfs(node.right, path)
+
+            path.pop()
+
+        dfs(root, [])
         return result
 ```
 
