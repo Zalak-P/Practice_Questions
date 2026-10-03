@@ -539,30 +539,37 @@ Return nodes column by column from left to right.
 ### Python
 
 ```python
-from collections import defaultdict
-import heapq
+from collections import deque
 
 class Solution:
     def verticalTraversal(self, root):
-        # Column -> row -> min-heap of values at that coordinate.
-        columns = defaultdict(lambda: defaultdict(list))
+        if root is None:
+            return []
 
-        def traverse(node, row, col):
-            if node is None:
-                return
-            heapq.heappush(columns[col][row], node.val)
-            traverse(node.left, row + 1, col - 1)
-            traverse(node.right, row + 1, col + 1)
+        hashmap = {}
+        queue = deque([(root, 0, 0)])
 
-        traverse(root, 0, 0)
+        while queue:
+            node, row, col = queue.popleft()
+
+            if col not in hashmap:
+                hashmap[col] = []
+
+            hashmap[col].append((row, node.val))
+
+            if node.left is not None:
+                queue.append((node.left, row + 1, col - 1))
+
+            if node.right is not None:
+                queue.append((node.right, row + 1, col + 1))
+
         result = []
-        for col in sorted(columns):
-            current_column = []
-            for row in sorted(columns[col]):
-                values = columns[col][row]
-                while values:
-                    current_column.append(heapq.heappop(values))
-            result.append(current_column)
+
+        for col in sorted(hashmap):
+            hashmap[col].sort()
+            answer = [value for row, value in hashmap[col]]
+            result.append(answer)
+
         return result
 ```
 
