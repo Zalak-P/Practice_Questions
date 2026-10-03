@@ -534,7 +534,7 @@ class Solution:
 
 ## 14. Vertical Order Traversal - [LeetCode 987](https://leetcode.com/problems/vertical-order-traversal-of-a-binary-tree/)
 
-Return nodes column by column from left to right.
+“I’ll traverse the tree and store each node’s row and value in a hashmap keyed by column. Then I’ll sort the columns, and within each column sort by row first and value second.”
 
 ### Python
 
@@ -575,7 +575,7 @@ class Solution:
 
 **Time:** `O(n log n)`  
 **Space:** `O(n)`  
-**Pattern:** `DFS + Column/Row Maps + Min-Heaps`
+**Pattern:** `DFS + Column/Row Maps OR Min-Heaps`
 
 ## 15. Boundary Traversal of Binary Tree — [LeetCode 545](https://leetcode.com/problems/boundary-of-binary-tree/) — Very Important
 
