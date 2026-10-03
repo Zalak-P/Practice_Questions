@@ -669,6 +669,7 @@ class Solution:
                 dfs(node.left, path)
                 dfs(node.right, path)
 
+            # Undoing the choice
             path.pop()
 
         dfs(root, [])
@@ -683,25 +684,34 @@ class Solution:
 
 Flatten the tree in place into a preorder singly linked list using the same nodes. Every `left` pointer becomes `None`; each `right` pointer points to the next node.
 
-**Correction:** The original code solves [LeetCode 114](https://leetcode.com/problems/flatten-binary-tree-to-linked-list/), rather than an inorder doubly linked list conversion.
-
 ### Python
 
 ```python
 class Solution:
-    def flatten(self, root):
-        current = root
-        while current is not None:
-            if current.left is not None:
-                predecessor = current.left
-                while predecessor.right is not None:
-                    predecessor = predecessor.right
-                # Attach the original right subtree after the left subtree.
-                predecessor.right = current.right
-                current.right = current.left
-                current.left = None
-            current = current.right
-        # Mutates the tree in place; returns None.
+
+    def flatten(self, root: TreeNode) -> None:
+        # Handle the null scenario
+        if not root:
+            return None
+
+        node = root
+        while node:
+
+            # If the node has a left child
+            if node.left:
+
+                # Find the rightmost node
+                rightmost = node.left
+                while rightmost.right:
+                    rightmost = rightmost.right
+
+                # rewire the connections
+                rightmost.right = node.right
+                node.right = node.left
+                node.left = None
+
+            # move on to the right side of the tree
+            node = node.right
 ```
 
 **Time:** `O(n)`  
