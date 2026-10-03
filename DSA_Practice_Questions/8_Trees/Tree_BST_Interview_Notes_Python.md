@@ -347,24 +347,29 @@ Build the `RIGHT` subtree before the `LEFT` subtree because postorder is read ba
 
 ```python
 class Solution:
-    def buildTree(self, inorder, postorder):
-        postorder_index = len(postorder) - 1
-        inorder_map = {value: i for i, value in enumerate(inorder)}
+    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
+        preorder_index = 0
+        inorder_index_map = {
+            value: index for index, value in enumerate(inorder)
+        }
 
-        def build(left, right):
-            nonlocal postorder_index
+        def array_to_tree(left, right):
+            nonlocal preorder_index
+
             if left > right:
                 return None
-            root_value = postorder[postorder_index]
-            postorder_index -= 1
+
+            root_value = preorder[preorder_index]
+            preorder_index += 1
             root = TreeNode(root_value)
-            root_index = inorder_map[root_value]
-            # Read postorder backwards: build the right subtree first.
-            root.right = build(root_index + 1, right)
-            root.left = build(left, root_index - 1)
+
+            mid = inorder_index_map[root_value]
+            root.left = array_to_tree(left, mid - 1)
+            root.right = array_to_tree(mid + 1, right)
+
             return root
 
-        return build(0, len(inorder) - 1)
+        return array_to_tree(0, len(inorder) - 1)
 ```
 
 **Time:** `O(n)`  
@@ -384,18 +389,25 @@ class Solution:
     def rightSideView(self, root):
         if root is None:
             return []
-        result = []
+
         queue = deque([root])
+        result = []
+
         while queue:
             level_size = len(queue)
+
             for i in range(level_size):
                 node = queue.popleft()
+
+                # The last node at this level is visible from the right.
                 if i == level_size - 1:
                     result.append(node.val)
-                if node.left is not None:
+
+                if node.left:
                     queue.append(node.left)
-                if node.right is not None:
+                if node.right:
                     queue.append(node.right)
+
         return result
 ```
 
@@ -412,34 +424,29 @@ Return the nodes visible when the binary tree is viewed from the left side.
 ### Python
 
 ```python
-from collections import deque
+def left_view(root):
+    if root is None:
+        return []
 
-class Solution:
-    def leftView(self, root):
-        if root is None:
-            return []
-        result = []
-        queue = deque([root])
-        while queue:
-            result.append(queue[0].val)
-            for _ in range(len(queue)):
-                node = queue.popleft()
-                if node.left is not None:
-                    queue.append(node.left)
-                if node.right is not None:
-                    queue.append(node.right)
-        return result
+    queue = deque([root])
+    result = []
 
-if __name__ == "__main__":
-    # Levels: [1], [2, 3], [4, 5], [6].
-    root = TreeNode(1)
-    root.left = TreeNode(2)
-    root.right = TreeNode(3)
-    root.left.right = TreeNode(4)
-    root.right.left = TreeNode(5)
-    root.right.left.left = TreeNode(6)
-    print("Left View Result:", Solution().leftView(root))
-    # Expected: [1, 2, 4, 6]
+    while queue:
+        level_size = len(queue)
+
+        for i in range(level_size):
+            node = queue.popleft()
+
+            # First node at this level is visible from the left.
+            if i == 0:
+                result.append(node.val)
+
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+
+    return result
 ```
 
 **Time:** `O(n)`  
