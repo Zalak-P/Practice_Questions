@@ -190,7 +190,7 @@ class Solution:
 **Space:** `O(h)` recursion stack  
 **Pattern:** `DFS + Recursion`
 
-## 4. Mirror Tree / Invert Binary Tree — [LeetCode 226](https://leetcode.com/problems/invert-binary-tree/)
+## 4. Invert Binary Tree — [LeetCode 226](https://leetcode.com/problems/invert-binary-tree/)
 
 Given the `root` of a binary tree, invert the tree and return its root.
 
@@ -328,9 +328,9 @@ class Solution:
                 return None
 
             root_value = preorder[preorder_index]
-            preorder_index += 1
-
             root = TreeNode(root_value)
+
+            preorder_index += 1
             mid = inorder_index[root_value]
 
             root.left = build(left, mid - 1)
@@ -362,29 +362,32 @@ Build the `RIGHT` subtree before the `LEFT` subtree because postorder is read ba
 
 ```python
 class Solution:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> Optional[TreeNode]:
-        preorder_index = 0
-        inorder_index_map = {
-            value: index for index, value in enumerate(inorder)
+    def buildTree(self, inorder, postorder):
+        inorder_index = {
+            value: index
+            for index, value in enumerate(inorder)
         }
 
-        def array_to_tree(left, right):
-            nonlocal preorder_index
+        postorder_index = len(postorder) - 1
+
+        def build(left, right):
+            nonlocal postorder_index
 
             if left > right:
                 return None
 
-            root_value = preorder[preorder_index]
-            preorder_index += 1
+            root_value = postorder[postorder_index]
             root = TreeNode(root_value)
 
-            mid = inorder_index_map[root_value]
-            root.left = array_to_tree(left, mid - 1)
-            root.right = array_to_tree(mid + 1, right)
+            postorder_index -= 1
+            mid = inorder_index[root_value]
+
+            root.right = build(mid + 1, right)
+            root.left = build(left, mid - 1)
 
             return root
 
-        return array_to_tree(0, len(inorder) - 1)
+        return build(0, len(inorder) - 1)
 ```
 
 **Time:** `O(n)`  
@@ -801,35 +804,35 @@ Fire starts at a target node. In one second, fire spreads to the left child, rig
 class Solution:
     def amountOfTime(self, root: Optional[TreeNode], start: int) -> int:
         self.max_time = 0
-        
+
         def dfs(node):
             if not node:
                 return 0
-            
+
             left_depth = dfs(node.left)
             right_depth = dfs(node.right)
-            
+
             # Case 1: Current node is the infection start point
             if node.val == start:
                 self.max_time = max(left_depth, right_depth)
-                # Return a negative number to signal to ancestors 
+                # Return a negative number to signal to ancestors
                 # that the target was found, and start tracking distance.
                 return -1
-            
+
             # Case 2: Target node was found in one of the subtrees
             if left_depth < 0 or right_depth < 0:
                 # The absolute value tells us how far this node is from 'start'
                 distance = abs(left_depth) if left_depth < 0 else abs(right_depth)
-                
+
                 # Total time to burn through this ancestor's other side
                 if left_depth < 0:
                     self.max_time = max(self.max_time, distance + right_depth)
                 else:
                     self.max_time = max(self.max_time, distance + left_depth)
-                    
+
                 # Increment distance by 1 as we move up to the next parent
                 return -(distance + 1)
-            
+
             # Case 3: Target node not found yet in this subtree
             return max(left_depth, right_depth) + 1
 
@@ -888,30 +891,56 @@ from collections import deque
 
 class Solution:
     def distanceK(self, root, target, k):
-        if root is None or target is None or k < 0:
+        if root is None:
             return []
-        parents = {root: None}
+
+        # Map each node to its parent.
+        hashmap = {root: None}
         queue = deque([root])
+
+        # First BFS: record parent connections.
         while queue:
             node = queue.popleft()
-            for child in (node.left, node.right):
-                if child is not None:
-                    parents[child] = node
-                    queue.append(child)
 
+            if node.left is not None:
+                hashmap[node.left] = node
+                queue.append(node.left)
+
+            if node.right is not None:
+                hashmap[node.right] = node
+                queue.append(node.right)
+
+        # Second BFS: explore outward from the target.
         queue = deque([target])
-        visited = {target}
-        distance = 0
+        hashset = {target}
+        count = 0
+
         while queue:
-            if distance == k:
-                return [node.val for node in queue]
-            for _ in range(len(queue)):
+            # All queued nodes are exactly 'count' edges away.
+            if count == k:
+                result = [node.val for node in queue]
+                return result
+
+            level_size = len(queue)
+
+            for _ in range(level_size):
                 node = queue.popleft()
-                for neighbor in (node.left, node.right, parents.get(node)):
-                    if neighbor is not None and neighbor not in visited:
-                        visited.add(neighbor)
+
+                # Explore children and parent.
+                for neighbor in (
+                    node.left,
+                    node.right,
+                    hashmap[node]
+                ):
+                    if neighbor is not None and neighbor not in hashset:
+                        # Mark on enqueue to prevent revisiting.
+                        hashset.add(neighbor)
                         queue.append(neighbor)
-            distance += 1
+
+            # Finished one level: increase distance by one.
+            count += 1
+
+        # No nodes exist at distance k.
         return []
 ```
 
@@ -1037,13 +1066,22 @@ Determine whether the tree has a root-to-leaf path whose values sum to `targetSu
 ```python
 class Solution:
     def hasPathSum(self, root, targetSum):
+        # An empty tree has no root-to-leaf path.
         if root is None:
             return False
-        if root.left is None and root.right is None:
-            return targetSum == root.val
+
+        # Subtract the current node's value.
         remaining = targetSum - root.val
-        return (self.hasPathSum(root.left, remaining)
-                or self.hasPathSum(root.right, remaining))
+
+        # A valid path must end at a leaf.
+        if root.left is None and root.right is None:
+            return remaining == 0
+
+        # Check whether either subtree completes the path.
+        return (
+            self.hasPathSum(root.left, remaining)
+            or self.hasPathSum(root.right, remaining)
+        )
 ```
 
 **Time:** `O(n)`  
@@ -1286,7 +1324,7 @@ class Solution:
 | Level Order                | BFS + Queue                           |
 | Zigzag                     | BFS + Direction Flag                  |
 | Height                     | `1 + max(left, right)`                |
-| Mirror Tree                | Swap left/right                       |
+| Intevert Tree              | Swap left/right                       |
 | Symmetric Tree             | Cross comparison                      |
 | Identical Tree             | Same-side comparison                  |
 | Diameter                   | Return height, update `left + right`  |
