@@ -22,7 +22,7 @@ class Solution:
         return result
 ```
 
-```
+```mermaid
 flowchart TD
     A["dfs(0) → save []"]
     B["dfs(1) → save [1]"]
