@@ -22,6 +22,28 @@ class Solution:
         return result
 ```
 
+```
+flowchart TD
+    A["dfs(0) → save []"]
+    B["dfs(1) → save [1]"]
+    C["dfs(2) → save [2]"]
+    D["dfs(3) → save [3]"]
+    E["dfs(2) → save [1, 2]"]
+    F["dfs(3) → save [1, 3]"]
+    G["dfs(3) → save [2, 3]"]
+    H["dfs(3) → save [1, 2, 3]"]
+
+    A -->|"append 1"| B
+    A -->|"append 2"| C
+    A -->|"append 3"| D
+    B -->|"append 2"| E
+    B -->|"append 3"| F
+    E -->|"append 3"| H
+    C -->|"append 3"| G
+```
+
+DFS visits from left to right, going as deep as possible.
+
 **Time complexity:** O(n × 2ⁿ), including copying subsets; n is the array length.
 
 ## 2. Subsets II
