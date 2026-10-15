@@ -144,19 +144,20 @@ class Solution:
     def combinationSum3(self, k, n):
         result, path = [], []
 
-        def dfs(start, slots, remaining):
-            if slots == 0:
+        def dfs(start, remaining):
+            # Exactly k numbers chosen: check their sum.
+            if len(path) == k:
                 if remaining == 0:
                     result.append(path.copy())
                 return
-            for num in range(start, 11 - slots):
+            for num in range(start, 10):
                 if num > remaining:
                     break
                 path.append(num)
-                dfs(num + 1, slots - 1, remaining - num)
+                dfs(num + 1, remaining - num)
                 path.pop()
 
-        dfs(1, k, n)
+        dfs(1, n)
         return result
 ```
 
