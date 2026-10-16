@@ -179,11 +179,12 @@ class Solution:
         def dfs():
             if len(path) == len(chars):
                 result.append("".join(path))
+                # print(result)
                 return
             for i, char in enumerate(chars):
                 if used[i]:
                     continue
-                if i > 0 and char == chars[i - 1] and not used[i - 1]:
+                if i > 0 and char == chars[i - 1] and used[i - 1] == False:
                     continue
                 used[i] = True
                 path.append(char)
