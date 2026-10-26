@@ -22,28 +22,6 @@ class Solution:
         return result
 ```
 
-```mermaid
-flowchart TD
-    A["dfs(0) → save []"]
-    B["dfs(1) → save [1]"]
-    C["dfs(2) → save [2]"]
-    D["dfs(3) → save [3]"]
-    E["dfs(2) → save [1, 2]"]
-    F["dfs(3) → save [1, 3]"]
-    G["dfs(3) → save [2, 3]"]
-    H["dfs(3) → save [1, 2, 3]"]
-
-    A -->|"append 1"| B
-    A -->|"append 2"| C
-    A -->|"append 3"| D
-    B -->|"append 2"| E
-    B -->|"append 3"| F
-    E -->|"append 3"| H
-    C -->|"append 3"| G
-```
-
-DFS visits from left to right, going as deep as possible.
-
 **Time complexity:** O(n × 2ⁿ), including copying subsets; n is the array length.
 
 ## 2. Subsets II
@@ -144,20 +122,19 @@ class Solution:
     def combinationSum3(self, k, n):
         result, path = [], []
 
-        def dfs(start, remaining):
-            # Exactly k numbers chosen: check their sum.
-            if len(path) == k:
+        def dfs(start, slots, remaining):
+            if slots == 0:
                 if remaining == 0:
                     result.append(path.copy())
                 return
-            for num in range(start, 10):
+            for num in range(start, 11 - slots):
                 if num > remaining:
                     break
                 path.append(num)
-                dfs(num + 1, remaining - num)
+                dfs(num + 1, slots - 1, remaining - num)
                 path.pop()
 
-        dfs(1, n)
+        dfs(1, k, n)
         return result
 ```
 
@@ -179,12 +156,11 @@ class Solution:
         def dfs():
             if len(path) == len(chars):
                 result.append("".join(path))
-                # print(result)
                 return
             for i, char in enumerate(chars):
                 if used[i]:
                     continue
-                if i > 0 and char == chars[i - 1] and used[i - 1] == False:
+                if i > 0 and char == chars[i - 1] and not used[i - 1]:
                     continue
                 used[i] = True
                 path.append(char)
@@ -379,3 +355,283 @@ class Solution:
 ```
 
 **Time complexity:** O(n × Cₙ), including copying strings, where Cₙ = (2n)! / (n! × (n + 1)!) is the nth Catalan number; equivalently O(4ⁿ / √n).
+
+## 12. Reverse a Stack
+
+Reverse the stack using recursion and insertion at the bottom. The Java deque uses its front as the top; the Python list uses its end. The buffer alternative stores popped elements and pushes them back in pop order. “No extra data structure” does not mean O(1) total auxiliary space: recursion uses O(n) stack frames.
+
+[Problem link](https://www.geeksforgeeks.org/problems/reverse-a-stack/1)
+
+```python
+class Solution:
+    def reverseStack(self, stack):
+        def insert_at_bottom(value):
+            if not stack:
+                stack.append(value)
+                return
+            top = stack.pop()
+            insert_at_bottom(value)
+            stack.append(top)
+
+        def reverse():
+            if not stack:
+                return
+            top = stack.pop()
+            reverse()
+            insert_at_bottom(top)
+
+        reverse()
+
+    def reverseWithBuffer(self, stack):
+        buffer = []
+        while stack:
+            buffer.append(stack.pop())
+        for value in buffer:
+            stack.append(value)
+```
+
+**Time complexity:** Recursive: O(n²). Buffer: O(n).
+
+**Space complexity:** Recursive: O(n) call stack. Buffer: O(n) extra storage.
+
+## 13. Tower of Hanoi
+
+Move n disks from rod 1 to rod 3 using rod 2, never placing a larger disk on a smaller disk. Return moves as (source, destination) pairs; n = 0 gives no moves.
+
+[Problem link](https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1)
+
+```python
+class Solution:
+    def towerOfHanoi(self, n):
+        moves = []
+
+        def move(disks, source, destination, auxiliary):
+            if disks == 0:
+                return
+            move(disks - 1, source, auxiliary, destination)
+            moves.append((source, destination))
+            move(disks - 1, auxiliary, destination, source)
+
+        move(n, 1, 3, 2)
+        return moves
+```
+
+**Time complexity:** O(2ⁿ), producing 2ⁿ − 1 moves.
+
+**Space complexity:** O(n) call stack, plus O(2ⁿ) output storage.
+
+## 14. Merge Sort
+
+Sort the input array in place by recursively sorting its halves and merging them through one reusable temporary array. The merge is stable.
+
+[Problem link](https://www.geeksforgeeks.org/problems/merge-sort/1)
+
+```python
+class Solution:
+    def mergeSort(self, nums):
+        temp = [0] * len(nums)
+
+        def sort(left, right):
+            if left >= right:
+                return
+            mid = (left + right) // 2
+            sort(left, mid)
+            sort(mid + 1, right)
+            i, j, k = left, mid + 1, left
+            while i <= mid and j <= right:
+                if nums[i] <= nums[j]:
+                    temp[k] = nums[i]
+                    i += 1
+                else:
+                    temp[k] = nums[j]
+                    j += 1
+                k += 1
+            while i <= mid:
+                temp[k] = nums[i]
+                i += 1
+                k += 1
+            while j <= right:
+                temp[k] = nums[j]
+                j += 1
+                k += 1
+            for k in range(left, right + 1):
+                nums[k] = temp[k]
+
+        sort(0, len(nums) - 1)
+```
+
+**Time complexity:** O(n log n).
+
+**Space complexity:** O(n) temporary array plus O(log n) call stack.
+
+## 15. Quick Sort
+
+Sort the input array in place using the last element as the pivot. Partition smaller values to its left, then recursively sort both sides.
+
+[Problem link](https://www.geeksforgeeks.org/problems/quick-sort/1)
+
+```python
+class Solution:
+    def quickSort(self, nums):
+        def partition(low, high):
+            pivot, boundary = nums[high], low
+            for i in range(low, high):
+                if nums[i] < pivot:
+                    nums[boundary], nums[i] = nums[i], nums[boundary]
+                    boundary += 1
+            nums[boundary], nums[high] = nums[high], nums[boundary]
+            return boundary
+
+        def sort(low, high):
+            if low >= high:
+                return
+            pivot = partition(low, high)
+            sort(low, pivot - 1)
+            sort(pivot + 1, high)
+
+        sort(0, len(nums) - 1)
+```
+
+**Time complexity:** O(n log n) average for random input order; O(n²) worst case, including sorted or all-equal input with this pivot choice.
+
+**Space complexity:** O(log n) average call stack; O(n) worst case.
+
+## 16. Flatten BST to Sorted List
+
+Rearrange existing BST nodes into an ascending right-linked chain. Every left pointer becomes null. Uses recursive inorder traversal; omit TreeNode if supplied by the platform.
+
+[Problem link](https://leetcode.com/problems/increasing-order-search-tree/)
+
+```python
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+class Solution:
+    def increasingBST(self, root):
+        dummy = TreeNode()
+        tail = dummy
+
+        def inorder(node):
+            nonlocal tail
+            if node is None:
+                return
+            inorder(node.left)
+            node.left = None
+            tail.right = node
+            tail = node
+            inorder(node.right)
+
+        inorder(root)
+        tail.right = None
+        return dummy.right
+```
+
+**Time complexity:** O(n), where n is the number of tree nodes.
+
+**Space complexity:** O(h) call stack, where h is tree height; O(n) worst case.
+
+## 17. Flatten a Linked List
+
+Flatten sorted vertical bottom-linked lists connected horizontally by next into one sorted bottom-linked list. Reuse existing nodes and clear horizontal links. This is the sorted-list flattening problem, distinct from multilevel doubly linked-list flattening.
+
+[Problem link](https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1)
+
+```python
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.bottom = None
+
+class Solution:
+    def flatten(self, root):
+        def merge(a, b):
+            dummy = Node(0)
+            tail = dummy
+            while a is not None or b is not None:
+                if b is None or (a is not None and a.data <= b.data):
+                    tail.bottom = a
+                    a = a.bottom
+                else:
+                    tail.bottom = b
+                    b = b.bottom
+                tail = tail.bottom
+                tail.next = None
+            return dummy.bottom
+
+        if root is None or root.next is None:
+            return root
+        right = self.flatten(root.next)
+        root.next = None
+        return merge(root, right)
+```
+
+**Time complexity:** O(N × k) upper bound, where N is the total node count and k is the number of vertical lists; O(N²) worst case.
+
+**Space complexity:** O(k) call stack.
+
+## 18. Permutations II
+
+Return unique permutations of an integer array that may contain duplicates. Sort a copy and skip equal unused candidates at the same recursion depth. This is the array counterpart of String Permutations.
+
+[Problem link](https://leetcode.com/problems/permutations-ii/)
+
+```python
+class Solution:
+    def permuteUnique(self, nums):
+        nums = sorted(nums)
+        used = [False] * len(nums)
+        result, path = [], []
+
+        def dfs():
+            if len(path) == len(nums):
+                result.append(path.copy())
+                return
+            for i, value in enumerate(nums):
+                if used[i]:
+                    continue
+                if i > 0 and value == nums[i - 1] and not used[i - 1]:
+                    continue
+                used[i] = True
+                path.append(value)
+                dfs()
+                path.pop()
+                used[i] = False
+
+        dfs()
+        return result
+```
+
+**Time complexity:** O(n × n!) worst case, including output copies.
+
+**Space complexity:** O(n) auxiliary, excluding output.
+
+## 19. Regular Expression Matching
+
+Match the entire string using a valid pattern: dot matches one character, and star repeats the preceding element zero or more times. Memoized recursion avoids recomputing the same string/pattern index pair.
+
+[Problem link](https://leetcode.com/problems/regular-expression-matching/)
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def isMatch(self, s, p):
+        @lru_cache(None)
+        def match(i, j):
+            if j == len(p):
+                return i == len(s)
+            first = i < len(s) and (p[j] == "." or p[j] == s[i])
+            if j + 1 < len(p) and p[j + 1] == "*":
+                return match(i, j + 2) or (first and match(i + 1, j))
+            return first and match(i + 1, j + 1)
+
+        return match(0, 0)
+```
+
+**Time complexity:** O((m + 1) × (n + 1)), where m and n are the string and pattern lengths.
+
+**Space complexity:** O((m + 1) × (n + 1)) memo, plus O(m + n) call stack.

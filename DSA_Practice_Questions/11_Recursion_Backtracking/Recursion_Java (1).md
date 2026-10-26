@@ -413,3 +413,303 @@ class Solution {
 ```
 
 **Time complexity:** O(n × Cₙ), including copying strings, where Cₙ = (2n)! / (n! × (n + 1)!) is the nth Catalan number; equivalently O(4ⁿ / √n).
+
+## 12. Reverse a Stack
+
+Reverse the stack using recursion and insertion at the bottom. The Java deque uses its front as the top; the Python list uses its end. The buffer alternative stores popped elements and pushes them back in pop order. “No extra data structure” does not mean O(1) total auxiliary space: recursion uses O(n) stack frames.
+
+[Problem link](https://www.geeksforgeeks.org/problems/reverse-a-stack/1)
+
+```java
+import java.util.*;
+
+class Solution {
+    public void reverseStack(Deque<Integer> stack) {
+        if (stack.isEmpty()) return;
+        int top = stack.pop();
+        reverseStack(stack);
+        insertAtBottom(stack, top);
+    }
+
+    private void insertAtBottom(Deque<Integer> stack, int value) {
+        if (stack.isEmpty()) {
+            stack.push(value);
+            return;
+        }
+        int top = stack.pop();
+        insertAtBottom(stack, value);
+        stack.push(top);
+    }
+
+    public void reverseWithBuffer(Deque<Integer> stack) {
+        List<Integer> buffer = new ArrayList<>();
+        while (!stack.isEmpty()) buffer.add(stack.pop());
+        for (int value : buffer) stack.push(value);
+    }
+}
+```
+
+**Time complexity:** Recursive: O(n²). Buffer: O(n).
+
+**Space complexity:** Recursive: O(n) call stack. Buffer: O(n) extra storage.
+
+## 13. Tower of Hanoi
+
+Move n disks from rod 1 to rod 3 using rod 2, never placing a larger disk on a smaller disk. Return moves as (source, destination) pairs; n = 0 gives no moves.
+
+[Problem link](https://www.geeksforgeeks.org/problems/tower-of-hanoi-1587115621/1)
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<int[]> towerOfHanoi(int n) {
+        List<int[]> moves = new ArrayList<>();
+        move(n, 1, 3, 2, moves);
+        return moves;
+    }
+
+    private void move(int n, int from, int to, int auxiliary, List<int[]> moves) {
+        if (n == 0) return;
+        move(n - 1, from, auxiliary, to, moves);
+        moves.add(new int[]{from, to});
+        move(n - 1, auxiliary, to, from, moves);
+    }
+}
+```
+
+**Time complexity:** O(2ⁿ), producing 2ⁿ − 1 moves.
+
+**Space complexity:** O(n) call stack, plus O(2ⁿ) output storage.
+
+## 14. Merge Sort
+
+Sort the input array in place by recursively sorting its halves and merging them through one reusable temporary array. The merge is stable.
+
+[Problem link](https://www.geeksforgeeks.org/problems/merge-sort/1)
+
+```java
+class Solution {
+    public void mergeSort(int[] nums) {
+        sort(nums, new int[nums.length], 0, nums.length - 1);
+    }
+
+    private void sort(int[] a, int[] temp, int left, int right) {
+        if (left >= right) return;
+        int mid = left + (right - left) / 2;
+        sort(a, temp, left, mid);
+        sort(a, temp, mid + 1, right);
+        int i = left, j = mid + 1, k = left;
+        while (i <= mid && j <= right) {
+            if (a[i] <= a[j]) temp[k++] = a[i++];
+            else temp[k++] = a[j++];
+        }
+        while (i <= mid) temp[k++] = a[i++];
+        while (j <= right) temp[k++] = a[j++];
+        for (k = left; k <= right; k++) a[k] = temp[k];
+    }
+}
+```
+
+**Time complexity:** O(n log n).
+
+**Space complexity:** O(n) temporary array plus O(log n) call stack.
+
+## 15. Quick Sort
+
+Sort the input array in place using the last element as the pivot. Partition smaller values to its left, then recursively sort both sides.
+
+[Problem link](https://www.geeksforgeeks.org/problems/quick-sort/1)
+
+```java
+class Solution {
+    public void quickSort(int[] nums) {
+        sort(nums, 0, nums.length - 1);
+    }
+
+    private void sort(int[] a, int low, int high) {
+        if (low >= high) return;
+        int pivot = partition(a, low, high);
+        sort(a, low, pivot - 1);
+        sort(a, pivot + 1, high);
+    }
+
+    private int partition(int[] a, int low, int high) {
+        int pivot = a[high], boundary = low;
+        for (int i = low; i < high; i++) {
+            if (a[i] < pivot) swap(a, boundary++, i);
+        }
+        swap(a, boundary, high);
+        return boundary;
+    }
+
+    private void swap(int[] a, int i, int j) {
+        int temp = a[i];
+        a[i] = a[j];
+        a[j] = temp;
+    }
+}
+```
+
+**Time complexity:** O(n log n) average for random input order; O(n²) worst case, including sorted or all-equal input with this pivot choice.
+
+**Space complexity:** O(log n) average call stack; O(n) worst case.
+
+## 16. Flatten BST to Sorted List
+
+Rearrange existing BST nodes into an ascending right-linked chain. Every left pointer becomes null. Uses recursive inorder traversal; omit TreeNode if supplied by the platform.
+
+[Problem link](https://leetcode.com/problems/increasing-order-search-tree/)
+
+```java
+class TreeNode {
+    int val;
+    TreeNode left, right;
+    TreeNode(int val) { this.val = val; }
+}
+
+class Solution {
+    public TreeNode increasingBST(TreeNode root) {
+        TreeNode dummy = new TreeNode(0);
+        TreeNode[] tail = {dummy};
+        inorder(root, tail);
+        tail[0].right = null;
+        return dummy.right;
+    }
+
+    private void inorder(TreeNode node, TreeNode[] tail) {
+        if (node == null) return;
+        inorder(node.left, tail);
+        node.left = null;
+        tail[0].right = node;
+        tail[0] = node;
+        inorder(node.right, tail);
+    }
+}
+```
+
+**Time complexity:** O(n), where n is the number of tree nodes.
+
+**Space complexity:** O(h) call stack, where h is tree height; O(n) worst case.
+
+## 17. Flatten a Linked List
+
+Flatten sorted vertical bottom-linked lists connected horizontally by next into one sorted bottom-linked list. Reuse existing nodes and clear horizontal links. This is the sorted-list flattening problem, distinct from multilevel doubly linked-list flattening.
+
+[Problem link](https://www.geeksforgeeks.org/problems/flattening-a-linked-list/1)
+
+```java
+class Node {
+    int data;
+    Node next, bottom;
+    Node(int data) { this.data = data; }
+}
+
+class Solution {
+    public Node flatten(Node root) {
+        if (root == null || root.next == null) return root;
+        Node right = flatten(root.next);
+        root.next = null;
+        return merge(root, right);
+    }
+
+    private Node merge(Node a, Node b) {
+        Node dummy = new Node(0), tail = dummy;
+        while (a != null || b != null) {
+            if (b == null || (a != null && a.data <= b.data)) {
+                tail.bottom = a;
+                a = a.bottom;
+            } else {
+                tail.bottom = b;
+                b = b.bottom;
+            }
+            tail = tail.bottom;
+            tail.next = null;
+        }
+        return dummy.bottom;
+    }
+}
+```
+
+**Time complexity:** O(N × k) upper bound, where N is the total node count and k is the number of vertical lists; O(N²) worst case.
+
+**Space complexity:** O(k) call stack.
+
+## 18. Permutations II
+
+Return unique permutations of an integer array that may contain duplicates. Sort a copy and skip equal unused candidates at the same recursion depth. This is the array counterpart of String Permutations.
+
+[Problem link](https://leetcode.com/problems/permutations-ii/)
+
+```java
+import java.util.*;
+
+class Solution {
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        nums = nums.clone();
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<>();
+        dfs(nums, new boolean[nums.length], new ArrayList<>(), result);
+        return result;
+    }
+
+    private void dfs(int[] nums, boolean[] used, List<Integer> path,
+                     List<List<Integer>> result) {
+        if (path.size() == nums.length) {
+            result.add(new ArrayList<>(path));
+            return;
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (used[i]) continue;
+            if (i > 0 && nums[i] == nums[i - 1] && !used[i - 1]) continue;
+            used[i] = true;
+            path.add(nums[i]);
+            dfs(nums, used, path, result);
+            path.remove(path.size() - 1);
+            used[i] = false;
+        }
+    }
+}
+```
+
+**Time complexity:** O(n × n!) worst case, including output copies.
+
+**Space complexity:** O(n) auxiliary, excluding output.
+
+## 19. Regular Expression Matching
+
+Match the entire string using a valid pattern: dot matches one character, and star repeats the preceding element zero or more times. Memoized recursion avoids recomputing the same string/pattern index pair.
+
+[Problem link](https://leetcode.com/problems/regular-expression-matching/)
+
+```java
+class Solution {
+    public boolean isMatch(String s, String p) {
+        Boolean[][] memo = new Boolean[s.length() + 1][p.length() + 1];
+        return match(s, p, 0, 0, memo);
+    }
+
+    private boolean match(String s, String p, int i, int j, Boolean[][] memo) {
+        if (memo[i][j] != null) return memo[i][j];
+        boolean result;
+        if (j == p.length()) {
+            result = i == s.length();
+        } else {
+            boolean first = i < s.length()
+                    && (p.charAt(j) == '.' || p.charAt(j) == s.charAt(i));
+            if (j + 1 < p.length() && p.charAt(j + 1) == '*') {
+                result = match(s, p, i, j + 2, memo)
+                        || (first && match(s, p, i + 1, j, memo));
+            } else {
+                result = first && match(s, p, i + 1, j + 1, memo);
+            }
+        }
+        memo[i][j] = result;
+        return result;
+    }
+}
+```
+
+**Time complexity:** O((m + 1) × (n + 1)), where m and n are the string and pattern lengths.
+
+**Space complexity:** O((m + 1) × (n + 1)) memo, plus O(m + n) call stack.
