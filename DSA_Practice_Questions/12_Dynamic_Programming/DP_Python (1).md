@@ -1,53 +1,56 @@
 # Dynamic Programming — Python
 
-## 1D DP
+## House Robber
 
-### 1. Frog Jump
-
-Reach the last stone with minimum energy. A jump from i to j costs |height[i] − height[j]|; jump one or two positions.
-
-[GeeksforGeeks: Frog Jump](https://www.geeksforgeeks.org/problems/geek-jump/1)
-
-```python
-class Solution:
-    def minCost(self, height):
-        prev2 = prev1 = 0
-        for i in range(1, len(height)):
-            current = prev1 + abs(height[i] - height[i - 1])
-            if i > 1:
-                current = min(current, prev2 + abs(height[i] - height[i - 2]))
-            prev2, prev1 = prev1, current
-        return prev1
-```
-
-**Time complexity:** O(n), where n is the number of stones.
-
-### 2. Frog Jump with X Distance
-
-Minimize the same height-based energy cost when each jump can move 1 through x positions; x ≥ 1.
-
-[GeeksforGeeks: Minimal Cost of Jumps](https://www.geeksforgeeks.org/problems/minimal-cost/1)
-
-```python
-class Solution:
-    def minimizeCost(self, x, height):
-        if not height:
-            return 0
-        dp = [float("inf")] * len(height)
-        dp[0] = 0
-        for i in range(1, len(height)):
-            for jump in range(1, min(x, i) + 1):
-                dp[i] = min(dp[i], dp[i - jump] + abs(height[i] - height[i - jump]))
-        return dp[-1]
-```
-
-**Time complexity:** O(n × min(x, n)), where n is the number of stones.
-
-### 3. House Robber I
+### 1. House Robber I
 
 Maximize money robbed from a line of houses without robbing adjacent houses. At each house, choose between skipping it and taking it with the best total two houses back.
 
 [LeetCode 198](https://leetcode.com/problems/house-robber/)
+
+#### Recursion + Memoization
+
+At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def rob(self, nums):
+        @lru_cache(None)
+        def solve(i):
+            if i >= len(nums):
+                return 0
+            return max(solve(i + 1), nums[i] + solve(i + 2))
+
+        return solve(0)
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n) memo plus O(n) recursion stack.
+
+#### Bottom-Up DP
+
+Fill the DP array from right to left using the same take-or-skip recurrence.
+
+```python
+class Solution:
+    def rob(self, nums):
+        n = len(nums)
+        dp = [0] * (n + 2)
+        for i in range(n - 1, -1, -1):
+            dp[i] = max(dp[i + 1], nums[i] + dp[i + 2])
+        return dp[0]
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n).
+
+#### Constant Space
+
+Keep only the two previous DP values needed for the next decision.
 
 ```python
 class Solution:
@@ -60,11 +63,75 @@ class Solution:
 
 **Time complexity:** O(n), where n is the number of houses.
 
-### 4. House Robber II
+**Space complexity:** O(1).
+
+### 2. House Robber II
 
 Houses form a circle, so the first and last are adjacent. Take the better result from excluding the first house or excluding the last house.
 
 [LeetCode 213](https://leetcode.com/problems/house-robber-ii/)
+
+#### Recursion + Memoization
+
+Solve two linear ranges: exclude the last house or exclude the first. Use a separate memo for each range because its endpoint differs.
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def rob(self, nums):
+        n = len(nums)
+        if n == 0:
+            return 0
+        if n == 1:
+            return nums[0]
+
+        def rob_range(start, end):
+            @lru_cache(None)
+            def solve(i):
+                if i >= end:
+                    return 0
+                return max(solve(i + 1), nums[i] + solve(i + 2))
+
+            return solve(start)
+
+        return max(rob_range(0, n - 1), rob_range(1, n))
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n) memo plus O(n) recursion stack.
+
+#### Bottom-Up DP
+
+Fill the DP array from right to left using the same take-or-skip recurrence.
+
+```python
+class Solution:
+    def rob(self, nums):
+        n = len(nums)
+        if n == 0:
+            return 0
+        if n == 1:
+            return nums[0]
+
+        def rob_range(start, end):
+            length = end - start
+            dp = [0] * (length + 2)
+            for i in range(length - 1, -1, -1):
+                dp[i] = max(dp[i + 1], nums[start + i] + dp[i + 2])
+            return dp[0]
+
+        return max(rob_range(0, n - 1), rob_range(1, n))
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n).
+
+#### Constant Space
+
+Keep only the two previous DP values needed for the next decision.
 
 ```python
 class Solution:
@@ -84,6 +151,51 @@ class Solution:
 ```
 
 **Time complexity:** O(n), where n is the number of houses.
+
+**Space complexity:** O(1).
+
+## 1D DP
+
+### 3. Frog Jump
+
+Reach the last stone with minimum energy. A jump from i to j costs |height[i] − height[j]|; jump one or two positions.
+
+[GeeksforGeeks: Frog Jump](https://www.geeksforgeeks.org/problems/geek-jump/1)
+
+```python
+class Solution:
+    def minCost(self, height):
+        prev2 = prev1 = 0
+        for i in range(1, len(height)):
+            current = prev1 + abs(height[i] - height[i - 1])
+            if i > 1:
+                current = min(current, prev2 + abs(height[i] - height[i - 2]))
+            prev2, prev1 = prev1, current
+        return prev1
+```
+
+**Time complexity:** O(n), where n is the number of stones.
+
+### 4. Frog Jump with X Distance
+
+Minimize the same height-based energy cost when each jump can move 1 through x positions; x ≥ 1.
+
+[GeeksforGeeks: Minimal Cost of Jumps](https://www.geeksforgeeks.org/problems/minimal-cost/1)
+
+```python
+class Solution:
+    def minimizeCost(self, x, height):
+        if not height:
+            return 0
+        dp = [float("inf")] * len(height)
+        dp[0] = 0
+        for i in range(1, len(height)):
+            for jump in range(1, min(x, i) + 1):
+                dp[i] = min(dp[i], dp[i - jump] + abs(height[i] - height[i - jump]))
+        return dp[-1]
+```
+
+**Time complexity:** O(n × min(x, n)), where n is the number of stones.
 
 ### 5. Decode Ways
 

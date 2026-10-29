@@ -1,8 +1,188 @@
 # Dynamic Programming — Java
 
+## House Robber
+
+### 1. House Robber I
+
+Maximize money robbed from a line of houses without robbing adjacent houses. At each house, choose between skipping it and taking it with the best total two houses back.
+
+[LeetCode 198](https://leetcode.com/problems/house-robber/)
+
+#### Recursion + Memoization
+
+At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
+
+```java
+import java.util.*;
+
+class Solution {
+    public int rob(int[] nums) {
+        int[] memo = new int[nums.length];
+        Arrays.fill(memo, -1);
+        return solve(nums, 0, memo);
+    }
+
+    private int solve(int[] nums, int i, int[] memo) {
+        if (i >= nums.length) return 0;
+        if (memo[i] != -1) return memo[i];
+        memo[i] = Math.max(solve(nums, i + 1, memo),
+                nums[i] + solve(nums, i + 2, memo));
+        return memo[i];
+    }
+}
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n) memo plus O(n) recursion stack.
+
+#### Bottom-Up DP
+
+Fill the DP array from right to left using the same take-or-skip recurrence.
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        int[] dp = new int[n + 2];
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = Math.max(dp[i + 1], nums[i] + dp[i + 2]);
+        }
+        return dp[0];
+    }
+}
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n).
+
+#### Constant Space
+
+Keep only the two previous DP values needed for the next decision.
+
+```java
+import java.util.*;
+
+class Solution {
+    public int rob(int[] nums) {
+        int prev2 = 0, prev1 = 0;
+        for (int money : nums) {
+            int current = Math.max(prev1, prev2 + money);
+            prev2 = prev1;
+            prev1 = current;
+        }
+        return prev1;
+    }
+}
+```
+
+**Time complexity:** O(n), where n is the number of houses.
+
+**Space complexity:** O(1).
+
+### 2. House Robber II
+
+Houses form a circle, so the first and last are adjacent. Take the better result from excluding the first house or excluding the last house.
+
+[LeetCode 213](https://leetcode.com/problems/house-robber-ii/)
+
+#### Recursion + Memoization
+
+Solve two linear ranges: exclude the last house or exclude the first. Use a separate memo for each range because its endpoint differs.
+
+```java
+import java.util.*;
+
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+        return Math.max(robRange(nums, 0, n - 1), robRange(nums, 1, n));
+    }
+
+    private int robRange(int[] nums, int start, int end) {
+        int[] memo = new int[nums.length];
+        Arrays.fill(memo, -1);
+        return solve(nums, start, end, memo);
+    }
+
+    private int solve(int[] nums, int i, int end, int[] memo) {
+        if (i >= end) return 0;
+        if (memo[i] != -1) return memo[i];
+        memo[i] = Math.max(solve(nums, i + 1, end, memo),
+                nums[i] + solve(nums, i + 2, end, memo));
+        return memo[i];
+    }
+}
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n) memo plus O(n) recursion stack.
+
+#### Bottom-Up DP
+
+Fill the DP array from right to left using the same take-or-skip recurrence.
+
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n == 0) return 0;
+        if (n == 1) return nums[0];
+        return Math.max(robRange(nums, 0, n - 1), robRange(nums, 1, n));
+    }
+
+    private int robRange(int[] nums, int start, int end) {
+        int length = end - start;
+        int[] dp = new int[length + 2];
+        for (int i = length - 1; i >= 0; i--) {
+            dp[i] = Math.max(dp[i + 1], nums[start + i] + dp[i + 2]);
+        }
+        return dp[0];
+    }
+}
+```
+
+**Time complexity:** O(n).
+
+**Space complexity:** O(n).
+
+#### Constant Space
+
+Keep only the two previous DP values needed for the next decision.
+
+```java
+import java.util.*;
+
+class Solution {
+    public int rob(int[] nums) {
+        if (nums.length == 0) return 0;
+        if (nums.length == 1) return nums[0];
+        return Math.max(robRange(nums, 0, nums.length - 1), robRange(nums, 1, nums.length));
+    }
+
+    private int robRange(int[] nums, int start, int end) {
+        int prev2 = 0, prev1 = 0;
+        for (int i = start; i < end; i++) {
+            int current = Math.max(prev1, prev2 + nums[i]);
+            prev2 = prev1;
+            prev1 = current;
+        }
+        return prev1;
+    }
+}
+```
+
+**Time complexity:** O(n), where n is the number of houses.
+
+**Space complexity:** O(1).
+
 ## 1D DP
 
-### 1. Frog Jump
+### 3. Frog Jump
 
 Reach the last stone with minimum energy. A jump from i to j costs |height[i] − height[j]|; jump one or two positions.
 
@@ -27,7 +207,7 @@ class Solution {
 
 **Time complexity:** O(n), where n is the number of stones.
 
-### 2. Frog Jump with X Distance
+### 4. Frog Jump with X Distance
 
 Minimize the same height-based energy cost when each jump can move 1 through x positions; x ≥ 1.
 
@@ -54,60 +234,6 @@ class Solution {
 ```
 
 **Time complexity:** O(n × min(x, n)), where n is the number of stones.
-
-### 3. House Robber I
-
-Maximize money robbed from a line of houses without robbing adjacent houses. At each house, choose between skipping it and taking it with the best total two houses back.
-
-[LeetCode 198](https://leetcode.com/problems/house-robber/)
-
-```java
-import java.util.*;
-
-class Solution {
-    public int rob(int[] nums) {
-        int prev2 = 0, prev1 = 0;
-        for (int money : nums) {
-            int current = Math.max(prev1, prev2 + money);
-            prev2 = prev1;
-            prev1 = current;
-        }
-        return prev1;
-    }
-}
-```
-
-**Time complexity:** O(n), where n is the number of houses.
-
-### 4. House Robber II
-
-Houses form a circle, so the first and last are adjacent. Take the better result from excluding the first house or excluding the last house.
-
-[LeetCode 213](https://leetcode.com/problems/house-robber-ii/)
-
-```java
-import java.util.*;
-
-class Solution {
-    public int rob(int[] nums) {
-        if (nums.length == 0) return 0;
-        if (nums.length == 1) return nums[0];
-        return Math.max(robRange(nums, 0, nums.length - 1), robRange(nums, 1, nums.length));
-    }
-
-    private int robRange(int[] nums, int start, int end) {
-        int prev2 = 0, prev1 = 0;
-        for (int i = start; i < end; i++) {
-            int current = Math.max(prev1, prev2 + nums[i]);
-            prev2 = prev1;
-            prev1 = current;
-        }
-        return prev1;
-    }
-}
-```
-
-**Time complexity:** O(n), where n is the number of houses.
 
 ### 5. Decode Ways
 
