@@ -33,7 +33,6 @@ class Solution:
 ```
 
 **Time complexity:** O(n).
-
 **Space complexity:** O(n) memo plus O(n) recursion stack.
 
 ### Bottom-Up DP
@@ -60,7 +59,6 @@ class Solution:
 ```
 
 **Time complexity:** O(n).
-
 **Space complexity:** O(n).
 
 ### Constant Space
@@ -77,16 +75,15 @@ class Solution:
 ```
 
 **Time complexity:** O(n), where n is the number of houses.
-
 **Space complexity:** O(1).
 
-### 2. House Robber II
+## 2. House Robber II
 
 Houses form a circle, so the first and last are adjacent. Take the better result from excluding the first house or excluding the last house.
 
 [LeetCode 213](https://leetcode.com/problems/house-robber-ii/)
 
-#### Recursion + Memoization
+### Recursion + Memoization
 
 Solve two linear ranges: exclude the last house or exclude the first. Use a separate memo for each range because its endpoint differs.
 
@@ -120,10 +117,9 @@ class Solution:
 ```
 
 **Time complexity:** O(n).
-
 **Space complexity:** O(n) memo plus O(n) recursion stack.
 
-#### Bottom-Up DP
+### Bottom-Up DP
 
 Fill the DP array from right to left using the same take-or-skip recurrence.
 
@@ -148,10 +144,9 @@ class Solution:
 ```
 
 **Time complexity:** O(n).
-
 **Space complexity:** O(n).
 
-#### Constant Space
+### Constant Space
 
 Keep only the two previous DP values needed for the next decision.
 
@@ -175,9 +170,7 @@ class Solution:
 **Time complexity:** O(n), where n is the number of houses.
 **Space complexity:** O(1).
 
-## 1D DP
-
-### 3. Frog Jump
+## 3. Frog Jump
 
 Reach the last stone with minimum energy. A jump from i to j costs |height[i] − height[j]|; jump one or two positions.
 
@@ -202,7 +195,7 @@ class Solution:
 
 **Time complexity:** O(n), where n is the number of stones.
 
-### 4. Frog Jump with X Distance
+## 4. Frog Jump with X Distance
 
 Minimize the same height-based energy cost when each jump can move 1 through x positions; x ≥ 1.
 
@@ -228,7 +221,7 @@ class Solution:
 
 **Time complexity:** O(n × min(x, n)), where n is the number of stones.
 
-### 5. Decode Ways
+## 5. Decode Ways
 
 Count decodings of a digit string using 1 → A through 26 → Z. A zero cannot be decoded alone.
 
@@ -311,13 +304,13 @@ class Solution:
 
 ## Grid DP
 
-### 6. Unique Paths I
+## 6. Unique Paths I
 
 [LeetCode 62](https://leetcode.com/problems/unique-paths/)
 
 The robot starts at the top-left corner of an `m × n` grid and can move only **right or down**. Return the number of paths to the bottom-right corner.
 
-## 2D DP
+### 2D DP
 
 `dp[row][col]` stores the number of paths to reach that cell. Each cell can be reached from above or from the left.
 
@@ -336,7 +329,7 @@ class Solution:
 **Time:** O(m × n)  
 **Space:** O(m × n)
 
-## 1D DP
+### 1D DP
 
 Reuse one row because each cell needs only the value above it and to its left.
 
@@ -358,17 +351,15 @@ class Solution:
 **Time:** O(m × n)  
 **Space:** O(n)
 
-## Constant-space Math Solution
+### Constant-space Math Solution
 
 This solution uses **combinatorics, not DP**.
-
 Every path requires:
 
 - `m - 1` down moves.
 - `n - 1` right moves.
 - `m + n - 2` total moves.
-
-Choose the positions of the down moves among all moves: **Paths = C(m + n - 2, m - 1)**
+  Choose the positions of the down moves among all moves: **Paths = C(m + n - 2, m - 1)**
 
 ```python
 class Solution:
@@ -386,14 +377,18 @@ class Solution:
 **Time:** O(min(m, n))  
 **Space:** O(1) auxiliary variables
 
-### 7. Unique Paths II
+## 7. Unique Paths II
+
 The robot starts at the top-left corner and can move only **right or down**.
+
 - `0` = open cell.
 - `1` = obstacle.
 - Return the number of paths to the bottom-right corner.
 
-## 2D DP
+### 2D DP
+
 `dp[row][col]` stores the number of paths to reach that cell.
+
 - An obstacle has zero paths.
 - An open cell receives paths from above and from the left.
 
@@ -425,9 +420,10 @@ class Solution:
 **Time:** O(m × n)  
 **Space:** O(m × n)
 
-## 1D DP
+### 1D DP
 
 Reuse one row.
+
 - `dp[col]` holds the paths from above before the update.
 - `dp[col - 1]` holds the paths from the left.
 - Reset `dp[col]` to zero when an obstacle is encountered.
@@ -454,9 +450,10 @@ class Solution:
 **Time:** O(m × n)  
 **Space:** O(n)
 
-## Constant Extra Space — In-place DP
+### Constant Extra Space — In-place DP
 
 Store the path counts directly in the input grid. Unlike Unique Paths I, the simple combinatorics formula does not handle obstacles.
+
 ```python
 class Solution:
     def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
@@ -482,49 +479,198 @@ class Solution:
 
 ## Subsequence and Knapsack DP
 
-### 8. Subset Sum to Target
+## 8. Subset Sum to Target
+GFG - https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1
 
-Check whether a subset of nonnegative integers sums to target. Descending sum updates ensure each array position is used at most once.
+Given an array of positive integers `arr` and a target `sum`, return `True` if a subset adds up to the target. Otherwise, return `False`. Each element can be used at most once.
+**Example:** `arr = [3, 34, 4, 12, 5, 2]`, `sum = 9`  
+**Output:** `True` — the subset `[4, 5]` adds up to `9`.
 
-[GeeksforGeeks: Subset Sum](https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1)
+### Memoization
+At each index, either skip the number or take it.
 
 ```python
+from functools import lru_cache
+
 class Solution:
-    def isSubsetSum(self, nums, target):
-        dp = [False] * (target + 1)
-        dp[0] = True
-        for num in nums:
-            for s in range(target, num - 1, -1):
-                dp[s] = dp[s] or dp[s - num]
-        return dp[target]
+    def isSubsetSum(self, arr, sum):
+        @lru_cache(None)
+        def solve(i, remaining):
+            if remaining == 0:
+                return True
+
+            if i == len(arr):
+                return False
+
+            skip = solve(i + 1, remaining)
+
+            take = False
+            if arr[i] <= remaining:
+                take = solve(i + 1, remaining - arr[i])
+
+            return skip or take
+
+        return solve(0, sum)
 ```
+**Time:** O(n × (sum + 1))  
+**Space:** O(n × (sum + 1)), including memoization and recursion.
 
-**Time complexity:** O(n × (target + 1)), where n is the array length.
-
-### 9. Equal Subset Partition
-
-Check whether a nonnegative array can be divided into two subsets with equal sums. An odd total is impossible; otherwise find a subset with half the total.
-
-[LeetCode 416](https://leetcode.com/problems/partition-equal-subset-sum/)
+### 2D DP
+`dp[i][s]` indicates whether a subset of the first `i` elements can make sum `s`. Sum `0` is always possible by choosing the empty subset.
 
 ```python
 class Solution:
-    def canPartition(self, nums):
+    def isSubsetSum(self, arr, sum):
+        n = len(arr)
+        dp = [[False] * (sum + 1) for _ in range(n + 1)]
+
+        for i in range(n + 1):
+            dp[i][0] = True
+
+        for i in range(1, n + 1):
+            num = arr[i - 1]
+
+            for s in range(1, sum + 1):
+                skip = dp[i - 1][s]
+
+                take = False
+                if num <= s:
+                    take = dp[i - 1][s - num]
+
+                dp[i][s] = skip or take
+
+        return dp[n][sum]
+```
+**Time:** O(n × (sum + 1))  
+**Space:** O(n × (sum + 1))
+
+### Space-optimized DP
+`dp[s]` indicates whether sum `s` can be formed using the elements processed so far. Loop backward so each element is used at most once.
+
+```python
+class Solution:
+    def isSubsetSum(self, arr, sum):
+        dp = [False] * (sum + 1)
+        dp[0] = True
+
+        for num in arr:
+            for s in range(sum, num - 1, -1):
+                dp[s] = dp[s] or dp[s - num]
+
+        return dp[sum]
+```
+**Time:** O(n × (sum + 1))  
+**Space:** O(sum + 1)
+
+## 9. Equal Subset Partition
+[LeetCode 416 — Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
+Return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+**Input:** nums = [1, 5, 11, 5]  
+**Output:** True
+**Input:** nums = [1, 2, 3, 5]  
+**Output:** False
+
+### Memoization
+
+```python
+from functools import lru_cache
+from typing import List
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
         total = sum(nums)
-        if total % 2:
+
+        if total % 2 != 0:
             return False
+
         target = total // 2
+
+        @lru_cache(None)
+        def solve(i, remaining):
+            if remaining == 0:
+                return True
+
+            if i == len(nums):
+                return False
+
+            skip = solve(i + 1, remaining)
+
+            take = False
+            if nums[i] <= remaining:
+                take = solve(i + 1, remaining - nums[i])
+
+            return skip or take
+
+        return solve(0, target)
+```
+**Time:** O(n × (target + 1))  
+**Space:** O(n × (target + 1))
+
+### Full 2D DP
+
+```python
+from typing import List
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+        n = len(nums)
+
+        dp = [[False] * (target + 1) for _ in range(n + 1)]
+
+        for i in range(n + 1):
+            dp[i][0] = True
+
+        for i in range(1, n + 1):
+            num = nums[i - 1]
+
+            for s in range(1, target + 1):
+                skip = dp[i - 1][s]
+
+                take = False
+                if num <= s:
+                    take = dp[i - 1][s - num]
+
+                dp[i][s] = skip or take
+
+        return dp[n][target]
+```
+**Time:** O(n × (target + 1))  
+**Space:** O(n × (target + 1))
+
+### Space-optimized DP
+
+```python
+from typing import List
+
+class Solution:
+    def canPartition(self, nums: List[int]) -> bool:
+        total = sum(nums)
+
+        if total % 2 != 0:
+            return False
+
+        target = total // 2
+
         dp = [False] * (target + 1)
         dp[0] = True
+
         for num in nums:
             for s in range(target, num - 1, -1):
                 dp[s] = dp[s] or dp[s - num]
+
         return dp[target]
 ```
+**Time:** O(n × (target + 1))  
+**Space:** O(target + 1)
 
-**Time complexity:** O(n × (S + 1)), where S is the total sum.
 
-### 10. Minimum Partition Difference
+## 10. Minimum Partition Difference
 
 Split a nonnegative array into two subsets of any sizes, minimizing the absolute difference of their sums. Find the largest reachable sum no greater than half the total.
 
