@@ -6,7 +6,7 @@ Maximize money robbed from a line of houses without robbing adjacent houses. At 
 
 [LeetCode 198](https://leetcode.com/problems/house-robber/)
 
-Recursion + Memoization - At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
+**Recursion + Memoization:**  At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
 
 ```python
 class Solution:
