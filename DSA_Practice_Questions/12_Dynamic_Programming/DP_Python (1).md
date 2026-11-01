@@ -1,14 +1,12 @@
 # Dynamic Programming — Python
 
-## House Robber
-
-### 1. House Robber I
+## 1. House Robber I
 
 Maximize money robbed from a line of houses without robbing adjacent houses. At each house, choose between skipping it and taking it with the best total two houses back.
 
 [LeetCode 198](https://leetcode.com/problems/house-robber/)
 
-#### Recursion + Memoization
+### Recursion + Memoization
 
 At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
 
@@ -38,7 +36,7 @@ class Solution:
 
 **Space complexity:** O(n) memo plus O(n) recursion stack.
 
-#### Bottom-Up DP
+### Bottom-Up DP
 
 Fill the DP array from right to left using the same take-or-skip recurrence.
 
@@ -65,7 +63,7 @@ class Solution:
 
 **Space complexity:** O(n).
 
-#### Constant Space
+### Constant Space
 
 Keep only the two previous DP values needed for the next decision.
 
