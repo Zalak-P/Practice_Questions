@@ -13,17 +13,25 @@ Maximize money robbed from a line of houses without robbing adjacent houses. At 
 At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
 
 ```python
-from functools import lru_cache
-
 class Solution:
-    def rob(self, nums):
-        @lru_cache(None)
-        def solve(i):
-            if i >= len(nums):
-                return 0
-            return max(solve(i + 1), nums[i] + solve(i + 2))
+    def __init__(self):
+        self.memo = {}
 
-        return solve(0)
+    def rob(self, nums: List[int]) -> int:
+        self.memo = {}
+        return self.robFrom(0, nums)
+
+    def robFrom(self, i, nums):
+        # No more houses left to examine.
+        if i >= len(nums):
+            return 0
+
+        if i in self.memo:
+            return self.memo[i]
+
+        ans = max(self.robFrom(i + 1, nums), self.robFrom(i + 2, nums) + nums[i])
+        self.memo[i] = ans
+        return ans
 ```
 
 **Time complexity:** O(n).
@@ -36,11 +44,20 @@ Fill the DP array from right to left using the same take-or-skip recurrence.
 
 ```python
 class Solution:
-    def rob(self, nums):
-        n = len(nums)
-        dp = [0] * (n + 2)
-        for i in range(n - 1, -1, -1):
-            dp[i] = max(dp[i + 1], nums[i] + dp[i + 2])
+    def rob(self, nums: List[int]) -> int:
+        if not nums:
+            return 0
+
+        dp = [None for _ in range(len(nums) + 1)]
+        N = len(nums)
+
+        # Base case initialization.
+        dp[N], dp[N - 1] = 0, nums[N - 1]
+
+        # DP table.
+        for i in range(N - 2, -1, -1):
+            dp[i] = max(dp[i + 1], dp[i + 2] + nums[i])
+
         return dp[0]
 ```
 
@@ -76,26 +93,32 @@ Houses form a circle, so the first and last are adjacent. Take the better result
 Solve two linear ranges: exclude the last house or exclude the first. Use a separate memo for each range because its endpoint differs.
 
 ```python
-from functools import lru_cache
-
 class Solution:
-    def rob(self, nums):
-        n = len(nums)
-        if n == 0:
-            return 0
-        if n == 1:
+    def __init__(self):
+        self.memo = {}
+
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
             return nums[0]
+        self.memo = {}
+        exclude_last = self.robFrom(0, nums[:-1])
 
-        def rob_range(start, end):
-            @lru_cache(None)
-            def solve(i):
-                if i >= end:
-                    return 0
-                return max(solve(i + 1), nums[i] + solve(i + 2))
+        self.memo = {}
+        exclude_first = self.robFrom(0, nums[1:])
 
-            return solve(start)
+        return max(exclude_last, exclude_first)
 
-        return max(rob_range(0, n - 1), rob_range(1, n))
+    def robFrom(self, i, nums):
+        if i >= len(nums):
+            return 0
+
+        if i in self.memo:
+            return self.memo[i]
+
+        ans = max(self.robFrom(i + 1, nums), self.robFrom(i + 2, nums) + nums[i])
+
+        self.memo[i] = ans
+        return ans
 ```
 
 **Time complexity:** O(n).
@@ -108,21 +131,22 @@ Fill the DP array from right to left using the same take-or-skip recurrence.
 
 ```python
 class Solution:
-    def rob(self, nums):
-        n = len(nums)
-        if n == 0:
-            return 0
-        if n == 1:
+    def rob(self, nums: List[int]) -> int:
+        if len(nums) == 1:
             return nums[0]
 
-        def rob_range(start, end):
-            length = end - start
-            dp = [0] * (length + 2)
-            for i in range(length - 1, -1, -1):
-                dp[i] = max(dp[i + 1], nums[start + i] + dp[i + 2])
-            return dp[0]
+        return max(self.robFrom(nums[:-1]),  # Exclude last house
+            self.robFrom(nums[1:])    # Exclude first house
+        )
 
-        return max(rob_range(0, n - 1), rob_range(1, n))
+    def robFrom(self, nums):
+        n = len(nums)
+        dp = [0] * (n + 2)
+
+        for i in range(n - 1, -1, -1):
+            dp[i] = max(dp[i + 1], nums[i] + dp[i + 2])
+
+        return dp[0]
 ```
 
 **Time complexity:** O(n).
@@ -151,7 +175,6 @@ class Solution:
 ```
 
 **Time complexity:** O(n), where n is the number of houses.
-
 **Space complexity:** O(1).
 
 ## 1D DP
@@ -167,10 +190,15 @@ class Solution:
     def minCost(self, height):
         prev2 = prev1 = 0
         for i in range(1, len(height)):
-            current = prev1 + abs(height[i] - height[i - 1])
+            one_step = prev1 + abs(heights[i] - heights[i - 1])
+
+            two_steps = float('inf')
             if i > 1:
-                current = min(current, prev2 + abs(height[i] - height[i - 2]))
+                two_steps = prev2 + abs(heights[i] - heights[i - 2])
+
+            current = min(one_step, two_steps)
             prev2, prev1 = prev1, current
+
         return prev1
 ```
 
@@ -185,14 +213,19 @@ Minimize the same height-based energy cost when each jump can move 1 through x p
 ```python
 class Solution:
     def minimizeCost(self, x, height):
-        if not height:
+        n = len(heights)
+        if n == 0:
             return 0
-        dp = [float("inf")] * len(height)
+
+        dp = [float('inf')] * n
         dp[0] = 0
-        for i in range(1, len(height)):
+
+        for i in range(1, n):
             for jump in range(1, min(x, i) + 1):
-                dp[i] = min(dp[i], dp[i - jump] + abs(height[i] - height[i - jump]))
-        return dp[-1]
+                energy = (dp[i - jump] + abs(heights[i] - heights[i - jump]))
+                dp[i] = min(dp[i], energy)
+
+        return dp[n - 1]
 ```
 
 **Time complexity:** O(n × min(x, n)), where n is the number of stones.
@@ -201,67 +234,253 @@ class Solution:
 
 Count decodings of a digit string using 1 → A through 26 → Z. A zero cannot be decoded alone.
 
-[LeetCode 91](https://leetcode.com/problems/decode-ways/) · [NeetCode](https://neetcode.io/problems/decode-ways)
+[LeetCode 91](https://leetcode.com/problems/decode-ways/)
 
 ```python
 class Solution:
-    def numDecodings(self, s):
-        if not s:
+
+    @lru_cache(maxsize=None)
+    def numDecodings(self, index, s) -> int:
+        # If you reach the end of the string, Return 1 for success.
+        if index == len(s):
+            return 1
+
+        # If the string starts with a zero, it can't be decoded
+        if s[index] == "0":
             return 0
-        prev2, prev1 = 1, int(s[0] != "0")
-        for i in range(1, len(s)):
-            current = prev1 if s[i] != "0" else 0
-            if 10 <= int(s[i - 1:i + 1]) <= 26:
-                current += prev2
-            prev2, prev1 = prev1, current
-        return prev1
+
+        if index == len(s) - 1:
+            return 1
+
+        answer = self.numDecodings(index + 1, s)
+        if int(s[index : index + 2]) <= 26:
+            answer += self.numDecodings(index + 2, s)
+
+        return answer
+
+    def numDecodings(self, s: str) -> int:
+        return self.numDecodings(0, s)
 ```
 
-**Time complexity:** O(n), where n is the string length.
+```python
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        dp = [0 for _ in range(len(s) + 1)]
+        dp[0] = 1
+        # Ways to decode a string of size 1 is 1. Unless the string is '0'. '0' doesn't have a single digit decode.
+        dp[1] = 0 if s[0] == "0" else 1
+
+        for i in range(2, len(dp)):
+
+            # Check if successful single digit decode is possible.
+            if s[i - 1] != "0":
+                dp[i] = dp[i - 1]
+
+            # Check if successful two digit decode is possible.
+            two_digit = int(s[i - 2 : i])
+            if two_digit >= 10 and two_digit <= 26:
+                dp[i] += dp[i - 2]
+
+        return dp[len(s)]
+```
+
+**Time complexity:** O(n), where n is the number of houses.
+**Space complexity:** O(n).
+
+```python
+class Solution:
+    def numDecodings(self, s: str) -> int:
+        if s[0] == "0":
+            return 0
+
+        two_back = 1
+        one_back = 1
+        for i in range(1, len(s)):
+            current = 0
+            if s[i] != "0":
+                current = one_back
+            two_digit = int(s[i - 1 : i + 1])
+            if two_digit >= 10 and two_digit <= 26:
+                current += two_back
+            two_back = one_back
+            one_back = current
+
+        return one_back
+```
+
+**Time complexity:** O(n), where n is the number of houses.
+**Space complexity:** O(1).
 
 ## Grid DP
 
 ### 6. Unique Paths I
 
-Count paths from the top-left to bottom-right of an m × n grid, moving only right or down.
-
 [LeetCode 62](https://leetcode.com/problems/unique-paths/)
 
+The robot starts at the top-left corner of an `m × n` grid and can move only **right or down**. Return the number of paths to the bottom-right corner.
+
+## 2D DP
+
+`dp[row][col]` stores the number of paths to reach that cell. Each cell can be reached from above or from the left.
+
 ```python
 class Solution:
-    def uniquePaths(self, m, n):
-        dp = [1] * n
-        for r in range(1, m):
-            for c in range(1, n):
-                dp[c] += dp[c - 1]
-        return dp[-1]
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [[1] * n for _ in range(m)]
+
+        for row in range(1, m):
+            for col in range(1, n):
+                dp[row][col] = dp[row - 1][col] + dp[row][col - 1]
+
+        return dp[m - 1][n - 1]
 ```
 
-**Time complexity:** O(m × n).
+**Time:** O(m × n)  
+**Space:** O(m × n)
+
+## 1D DP
+
+Reuse one row because each cell needs only the value above it and to its left.
+
+- `dp[col]`: paths from above, before the update.
+- `dp[col - 1]`: paths from the left, already updated for the current row.
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        dp = [1] * n
+
+        for row in range(1, m):
+            for col in range(1, n):
+                dp[col] = dp[col] + dp[col - 1]
+
+        return dp[n - 1]
+```
+
+**Time:** O(m × n)  
+**Space:** O(n)
+
+## Constant-space Math Solution
+
+This solution uses **combinatorics, not DP**.
+
+Every path requires:
+
+- `m - 1` down moves.
+- `n - 1` right moves.
+- `m + n - 2` total moves.
+
+Choose the positions of the down moves among all moves: **Paths = C(m + n - 2, m - 1)**
+
+```python
+class Solution:
+    def uniquePaths(self, m: int, n: int) -> int:
+        total_moves = m + n - 2
+        k = min(m - 1, n - 1)
+        result = 1
+
+        for i in range(1, k + 1):
+            result = result * (total_moves - i + 1) // i
+
+        return result
+```
+
+**Time:** O(min(m, n))  
+**Space:** O(1) auxiliary variables
 
 ### 7. Unique Paths II
+The robot starts at the top-left corner and can move only **right or down**.
+- `0` = open cell.
+- `1` = obstacle.
+- Return the number of paths to the bottom-right corner.
 
-Count right/down paths through a grid where 1 is an obstacle and 0 is open. An obstacle resets the number of paths at that cell to zero.
-
-[LeetCode 63](https://leetcode.com/problems/unique-paths-ii/)
+## 2D DP
+`dp[row][col]` stores the number of paths to reach that cell.
+- An obstacle has zero paths.
+- An open cell receives paths from above and from the left.
 
 ```python
 class Solution:
-    def uniquePathsWithObstacles(self, grid):
-        if not grid or not grid[0]:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+        dp = [[0] * n for _ in range(m)]
+
+        if obstacleGrid[0][0] == 1:
             return 0
-        dp = [0] * len(grid[0])
-        dp[0] = 1
-        for row in grid:
-            for c, cell in enumerate(row):
-                if cell == 1:
-                    dp[c] = 0
-                elif c > 0:
-                    dp[c] += dp[c - 1]
-        return dp[-1]
+
+        dp[0][0] = 1
+
+        for row in range(m):
+            for col in range(n):
+                if obstacleGrid[row][col] == 1:
+                    dp[row][col] = 0
+                else:
+                    if row > 0:
+                        dp[row][col] += dp[row - 1][col]
+                    if col > 0:
+                        dp[row][col] += dp[row][col - 1]
+
+        return dp[m - 1][n - 1]
 ```
 
-**Time complexity:** O(m × n), where m and n are the grid dimensions.
+**Time:** O(m × n)  
+**Space:** O(m × n)
+
+## 1D DP
+
+Reuse one row.
+- `dp[col]` holds the paths from above before the update.
+- `dp[col - 1]` holds the paths from the left.
+- Reset `dp[col]` to zero when an obstacle is encountered.
+
+```python
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+
+        dp = [0] * n
+        dp[0] = 1
+
+        for row in range(m):
+            for col in range(n):
+                if obstacleGrid[row][col] == 1:
+                    dp[col] = 0
+                elif col > 0:
+                    dp[col] += dp[col - 1]
+
+        return dp[n - 1]
+```
+
+**Time:** O(m × n)  
+**Space:** O(n)
+
+## Constant Extra Space — In-place DP
+
+Store the path counts directly in the input grid. Unlike Unique Paths I, the simple combinatorics formula does not handle obstacles.
+```python
+class Solution:
+    def uniquePathsWithObstacles(self, obstacleGrid: List[List[int]]) -> int:
+        m = len(obstacleGrid)
+        n = len(obstacleGrid[0])
+
+        for row in range(m):
+            for col in range(n):
+                if obstacleGrid[row][col] == 1:
+                    obstacleGrid[row][col] = 0
+                elif row == 0 and col == 0:
+                    obstacleGrid[row][col] = 1
+                else:
+                    above = obstacleGrid[row - 1][col] if row > 0 else 0
+                    left = obstacleGrid[row][col - 1] if col > 0 else 0
+                    obstacleGrid[row][col] = above + left
+
+        return obstacleGrid[m - 1][n - 1]
+```
+
+**Time:** O(m × n)  
+**Extra Space:** O(1)
 
 ## Subsequence and Knapsack DP
 
