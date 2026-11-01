@@ -6,7 +6,7 @@ Maximize money robbed from a line of houses without robbing adjacent houses. At 
 
 [LeetCode 198](https://leetcode.com/problems/house-robber/)
 
-### Recursion + Memoization
+#### Recursion + Memoization
 
 At each index, compare skipping the house with taking it and continuing two positions ahead. Cache the answer for each index.
 
@@ -480,6 +480,7 @@ class Solution:
 ## Subsequence and Knapsack DP
 
 ## 8. Subset Sum to Target
+
 GFG - https://www.geeksforgeeks.org/problems/subset-sum-problem-1611555638/1
 
 Given an array of positive integers `arr` and a target `sum`, return `True` if a subset adds up to the target. Otherwise, return `False`. Each element can be used at most once.
@@ -487,6 +488,7 @@ Given an array of positive integers `arr` and a target `sum`, return `True` if a
 **Output:** `True` — the subset `[4, 5]` adds up to `9`.
 
 ### Memoization
+
 At each index, either skip the number or take it.
 
 ```python
@@ -512,10 +514,12 @@ class Solution:
 
         return solve(0, sum)
 ```
+
 **Time:** O(n × (sum + 1))  
 **Space:** O(n × (sum + 1)), including memoization and recursion.
 
 ### 2D DP
+
 `dp[i][s]` indicates whether a subset of the first `i` elements can make sum `s`. Sum `0` is always possible by choosing the empty subset.
 
 ```python
@@ -541,10 +545,12 @@ class Solution:
 
         return dp[n][sum]
 ```
+
 **Time:** O(n × (sum + 1))  
 **Space:** O(n × (sum + 1))
 
 ### Space-optimized DP
+
 `dp[s]` indicates whether sum `s` can be formed using the elements processed so far. Loop backward so each element is used at most once.
 
 ```python
@@ -559,10 +565,12 @@ class Solution:
 
         return dp[sum]
 ```
+
 **Time:** O(n × (sum + 1))  
 **Space:** O(sum + 1)
 
 ## 9. Equal Subset Partition
+
 [LeetCode 416 — Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
 Return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
 **Input:** nums = [1, 5, 11, 5]  
@@ -603,6 +611,7 @@ class Solution:
 
         return solve(0, target)
 ```
+
 **Time:** O(n × (target + 1))  
 **Space:** O(n × (target + 1))
 
@@ -640,6 +649,7 @@ class Solution:
 
         return dp[n][target]
 ```
+
 **Time:** O(n × (target + 1))  
 **Space:** O(n × (target + 1))
 
@@ -666,9 +676,9 @@ class Solution:
 
         return dp[target]
 ```
+
 **Time:** O(n × (target + 1))  
 **Space:** O(target + 1)
-
 
 ## 10. Minimum Partition Difference
 
