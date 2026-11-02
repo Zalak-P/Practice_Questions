@@ -252,7 +252,7 @@ class Solution:
     def numDecodings(self, s: str) -> int:
         return self.numDecodings(0, s)
 ```
-
+### DP
 ```python
 class Solution:
     def numDecodings(self, s: str) -> int:
@@ -277,6 +277,8 @@ class Solution:
 
 **Time complexity:** O(n), where n is the number of houses.
 **Space complexity:** O(n).
+
+### Constant Space 
 
 ```python
 class Solution:
@@ -571,7 +573,8 @@ class Solution:
 
 ## 9. Equal Subset Partition
 
-[LeetCode 416 — Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/)
+[LeetCode 416](https://leetcode.com/problems/partition-equal-subset-sum/)
+
 Return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
 **Input:** nums = [1, 5, 11, 5]  
 **Output:** True
@@ -615,7 +618,7 @@ class Solution:
 **Time:** O(n × (target + 1))  
 **Space:** O(n × (target + 1))
 
-### Full 2D DP
+### 2D DP
 
 ```python
 from typing import List
@@ -686,24 +689,35 @@ Split a nonnegative array into two subsets of any sizes, minimizing the absolute
 
 [GeeksforGeeks: Minimum Partition Difference](https://www.geeksforgeeks.org/problems/minimum-sum-partition3317/1)
 
+- If one subset sums to `s`, the other sums to `total - s`.
+- Their difference is `abs(total - 2 * s)`.
+- Find the **largest achievable sum at or below `total // 2`** to minimize the difference.
+- An odd total can still produce a valid answer; do not return early.
+- In space-optimized DP, loop **backward** so each element is used at most once.
+
 ```python
 class Solution:
-    def minDifference(self, nums):
-        total = sum(nums)
-        half = total // 2
-        dp = [False] * (half + 1)
+    def minDifference(self, arr):
+        total = sum(arr)
+        target = total // 2
+
+        dp = [False] * (target + 1)
         dp[0] = True
-        for num in nums:
-            for s in range(half, num - 1, -1):
+
+        for num in arr:
+            for s in range(target, num - 1, -1):
                 dp[s] = dp[s] or dp[s - num]
-        for s in range(half, -1, -1):
+
+        for s in range(target, -1, -1):
             if dp[s]:
                 return total - 2 * s
 ```
 
-**Time complexity:** O(n × (S + 1)), where S is the total sum.
+The complexity is **pseudo-polynomial** because it depends on the numeric sum.
+**Time:** O(n × (target + 1))  
+**Space:** O(target + 1)
 
-### 11. Count Subsets with Sum K
+## 11. Count Subsets with Sum K
 
 Count subsets of nonnegative integers totaling k; equal-valued elements at different indices are distinct choices. Zeros correctly double existing counts. Return an exact count, without a modulus.
 
@@ -720,9 +734,10 @@ class Solution:
         return dp[k]
 ```
 
-**Time complexity:** O(n × (k + 1)) DP updates; exact-integer additions cost O(b) for b-bit counts.
+**Time:** O(n × (k + 1))  
+**Space:** O(k + 1)
 
-### 12. Count Partitions with Difference
+## 12. Count Partitions with Difference
 
 Count assignments to labeled subsets S1 and S2 such that sum(S1) − sum(S2) = d, for nonnegative values and d ≥ 0. Count subsets totaling (total − d) / 2; return an exact count.
 
@@ -730,22 +745,28 @@ Count assignments to labeled subsets S1 and S2 such that sum(S1) − sum(S2) = d
 
 ```python
 class Solution:
-    def countPartitions(self, nums, d):
-        total = sum(nums)
-        if d > total or (total - d) % 2:
+    def countPartitions(self, arr, d):
+        total = sum(arr)
+
+        if total < d or (total - d) % 2 != 0:
             return 0
+
         target = (total - d) // 2
+
         dp = [0] * (target + 1)
         dp[0] = 1
-        for num in nums:
+
+        for num in arr:
             for s in range(target, num - 1, -1):
                 dp[s] += dp[s - num]
+
         return dp[target]
 ```
 
 **Time complexity:** O(n × (T + 1)) DP updates, where T = (total − d) / 2; exact-integer additions cost O(b) for b-bit counts.
+**Space:** O(target + 1)
 
-### 13. Target Sum
+## 13. Target Sum
 
 Assign + or − to every nonnegative number so the expression equals target. Count subsets assigned minus signs, whose sum must be (total − target) / 2.
 
@@ -753,81 +774,245 @@ Assign + or − to every nonnegative number so the expression equals target. Cou
 
 ```python
 class Solution:
-    def findTargetSumWays(self, nums, target):
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
         total = sum(nums)
-        if abs(target) > total or (total - target) % 2:
+
+        if abs(target) > total or (total + target) % 2 != 0:
             return 0
-        required = (total - target) // 2
-        dp = [0] * (required + 1)
+
+        subset_sum = (total + target) // 2
+
+        dp = [0] * (subset_sum + 1)
         dp[0] = 1
+
         for num in nums:
-            for s in range(required, num - 1, -1):
+            for s in range(subset_sum, num - 1, -1):
                 dp[s] += dp[s - num]
-        return dp[required]
+
+        return dp[subset_sum]
+
 ```
 
-**Time complexity:** O(n × (T + 1)), where T = (total − target) / 2.
+**Time:** O(n × (subset_sum + 1))  
+**Space:** O(subset_sum + 1)
 
-### 14. Minimum Coins
+## 14. Minimum Coins
 
 Find the fewest coins needed to form amount using unlimited positive-denomination coins. Return −1 when impossible.
 
 [LeetCode 322](https://leetcode.com/problems/coin-change/)
 
+## 14. Minimum Coins
+
+[LeetCode 322 — Coin Change](https://leetcode.com/problems/coin-change/)
+
+**Input:** coins = [1, 2, 5], amount = 11  
+**Output:** 3
+
+**Input:** coins = [2], amount = 3  
+**Output:** -1
+
+**Input:** coins = [1], amount = 0  
+**Output:** 0
+
+### Recursion + Memo
+
 ```python
+from functools import lru_cache
+from typing import List
+
 class Solution:
-    def coinChange(self, coins, amount):
-        dp = [amount + 1] * (amount + 1)
-        dp[0] = 0
-        for total in range(1, amount + 1):
-            for coin in coins:
-                if coin <= total:
-                    dp[total] = min(dp[total], 1 + dp[total - coin])
-        return dp[amount] if dp[amount] <= amount else -1
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        @lru_cache(None)
+        def solve(i, remaining):
+            if remaining == 0:
+                return 0
+
+            if i == len(coins):
+                return float('inf')
+
+            skip = solve(i + 1, remaining)
+
+            take = float('inf')
+            if coins[i] <= remaining:
+                take = 1 + solve(i, remaining - coins[i])
+
+            return min(skip, take)
+
+        answer = solve(0, amount)
+        return -1 if answer == float('inf') else answer
 ```
 
-**Time complexity:** O(c × amount + amount), where c is the number of denominations.
+**Time:** O(n × (amount + 1))  
+**Space:** O(n × (amount + 1) + n + amount)
 
-### 15. Coin Change II
+### 2D DP
+
+```python
+from typing import List
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        n = len(coins)
+        dp = [[float('inf')] * (amount + 1) for _ in range(n + 1)]
+
+        for i in range(n + 1):
+            dp[i][0] = 0
+
+        for i in range(1, n + 1):
+            coin = coins[i - 1]
+
+            for s in range(1, amount + 1):
+                skip = dp[i - 1][s]
+
+                take = float('inf')
+                if coin <= s:
+                    take = 1 + dp[i][s - coin]
+
+                dp[i][s] = min(skip, take)
+
+        answer = dp[n][amount]
+        return -1 if answer == float('inf') else answer
+```
+
+**Time:** O(n × (amount + 1))  
+**Space:** O((n + 1) × (amount + 1))
+
+### Space-optimized DP
+
+```python
+from typing import List
+
+class Solution:
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0
+
+        for coin in coins:
+            for s in range(coin, amount + 1):
+                dp[s] = min(dp[s], 1 + dp[s - coin])
+
+        answer = dp[amount]
+        return -1 if answer == float('inf') else answer
+```
+
+**Time:** O(n × (amount + 1))  
+**Space:** O(amount + 1)
+
+## 15. Coin Change II
 
 Count unordered combinations forming amount using unlimited coins of distinct positive denominations. Process coins outside the sum loop to avoid counting different orders separately.
 
 [LeetCode 518](https://leetcode.com/problems/coin-change-ii/)
 
 ```python
+from typing import List
+
 class Solution:
-    def change(self, amount, coins):
+    def change(self, amount: int, coins: List[int]) -> int:
         dp = [0] * (amount + 1)
         dp[0] = 1
+
         for coin in coins:
             for total in range(coin, amount + 1):
                 dp[total] += dp[total - coin]
+
         return dp[amount]
 ```
 
-**Time complexity:** O(c × (amount + 1)) DP updates; exact-integer additions cost O(b) for b-bit counts. Java uses BigInteger to protect intermediate counts; the problem guarantees the final answer fits int.
+**Time:** O(n × (amount + 1))  
+**Space:** O(amount + 1)
 
-### 16. Unbounded Knapsack
+## 16. Unbounded Knapsack
 
 Maximize value within capacity using unlimited copies of items with positive weights and nonnegative values. Ascending capacity updates allow reusing the current item.
 
-[GeeksforGeeks: Unbounded Knapsack](https://www.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1)
+[GeeksforGeeks — Knapsack with Duplicate Items](https://www.geeksforgeeks.org/problems/knapsack-with-duplicate-items4201/1)
+
+**Input:** val = [10, 40, 50, 70], wt = [1, 3, 4, 5], capacity = 8  
+**Output:** 110
+
+**Input:** val = [10, 30], wt = [5, 10], capacity = 4  
+**Output:** 0
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def knapSack(self, val, wt, capacity):
+        @lru_cache(None)
+        def solve(i, remaining):
+            if i == len(wt) or remaining == 0:
+                return 0
+
+            skip = solve(i + 1, remaining)
+
+            take = 0
+            if wt[i] <= remaining:
+                take = val[i] + solve(i, remaining - wt[i])
+
+            return max(skip, take)
+
+        return solve(0, capacity)
+```
+
+**Time:** O(n × (capacity + 1))  
+**Space:** O(n × (capacity + 1) + n + capacity)
+
+### 2D DP
 
 ```python
 class Solution:
-    def knapSack(self, values, weights, capacity):
+    def knapSack(self, val, wt, capacity):
+        n = len(wt)
+        dp = [[0] * (capacity + 1) for _ in range(n + 1)]
+
+        for i in range(1, n + 1):
+            weight = wt[i - 1]
+            value = val[i - 1]
+
+            for cap in range(1, capacity + 1):
+                skip = dp[i - 1][cap]
+
+                take = 0
+                if weight <= cap:
+                    take = value + dp[i][cap - weight]
+
+                dp[i][cap] = max(skip, take)
+
+        return dp[n][capacity]
+```
+
+**Time:** O(n × (capacity + 1))  
+**Space:** O((n + 1) × (capacity + 1))
+
+### Space-optimized DP
+
+```python
+class Solution:
+    def knapSack(self, val, wt, capacity):
         dp = [0] * (capacity + 1)
-        for value, weight in zip(values, weights):
-            for c in range(weight, capacity + 1):
-                dp[c] = max(dp[c], value + dp[c - weight])
+
+        for i in range(len(wt)):
+            for cap in range(wt[i], capacity + 1):
+                dp[cap] = max(dp[cap], val[i] + dp[cap - wt[i]])
+
         return dp[capacity]
 ```
 
-**Time complexity:** O(n × (W + 1)), where n is the number of item types and W is capacity.
+**Time:** O(n × (capacity + 1))  
+**Space:** O(capacity + 1)
 
-### 17. Rod Cutting
+## 17. Rod Cutting
 
 Maximize revenue by cutting a rod of length n. price[i − 1] is the price of a piece of length i; prices are nonnegative and each length can be reused.
+**Input:** price = [1, 5, 8, 9, 10, 17, 17, 20]  
+**Output:** 22
+
+**Input:** price = [3, 5, 8, 9, 10, 17, 17, 20]  
+**Output:** 24
 
 [GeeksforGeeks: Rod Cutting](https://www.geeksforgeeks.org/problems/rod-cutting0840/1)
 
@@ -835,161 +1020,568 @@ Maximize revenue by cutting a rod of length n. price[i − 1] is the price of a 
 class Solution:
     def cutRod(self, price):
         n = len(price)
-        dp = [0] * (n + 1)
+        dp = [float('-inf')] * (n + 1)
+        dp[0] = 0
+
         for length in range(1, n + 1):
-            for cut in range(1, length + 1):
-                dp[length] = max(dp[length], price[cut - 1] + dp[length - cut])
+            for remaining in range(length, n + 1):
+                dp[remaining] = max(dp[remaining], price[length - 1] + dp[remaining - length])
+
         return dp[n]
 ```
 
-**Time complexity:** O(n²), where n is the rod length.
+**Time:** O(n²)  
+**Space:** O(n)
 
 ## Stock DP
 
-### 18. Buy and Sell Stock I
+## 18. Buy and Sell Stock I, II, III, IV, V
 
 Maximize profit using at most one buy followed by one sell. Track the lowest price seen before each sale.
 
+## 18. Buy and Sell Stock I, II, III, IV, V
+
+### Stock I — One Transaction
+
 [LeetCode 121](https://leetcode.com/problems/best-time-to-buy-and-sell-stock/)
+
+**Input:** prices = [7, 1, 5, 3, 6, 4]  
+**Output:** 5
+
+#### Constant Space
 
 ```python
 class Solution:
     def maxProfit(self, prices):
-        minimum, best = float("inf"), 0
+        minimum_price = float('inf')
+        profit = 0
+
         for price in prices:
-            minimum = min(minimum, price)
-            best = max(best, price - minimum)
-        return best
+            minimum_price = min(minimum_price, price)
+            profit = max(profit, price - minimum_price)
+
+        return profit
 ```
 
-**Time complexity:** O(n), where n is the number of days.
+**Time:** O(n)  
+**Space:** O(1)
 
-### 19. Buy and Sell Stock II
+---
 
-Maximize profit with unlimited transactions while holding at most one share. Track the best profit while holding a share and while holding none.
+### Stock II — Unlimited Transactions
 
 [LeetCode 122](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-ii/)
 
+**Input:** prices = [7, 1, 5, 3, 6, 4]  
+**Output:** 7
+
+#### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def maxProfit(self, prices):
+        @lru_cache(None)
+        def solve(i, holding):
+            if i == len(prices):
+                return float('-inf') if holding else 0
+
+            if holding:
+                return max(solve(i + 1, 1), prices[i] + solve(i + 1, 0))
+
+            return max(solve(i + 1, 0), -prices[i] + solve(i + 1, 1))
+
+        return solve(0, 0)
+```
+
+**Time:** O(n)  
+**Space:** O(n)
+
+#### Full 2D DP
+
 ```python
 class Solution:
     def maxProfit(self, prices):
-        if not prices:
-            return 0
-        cash, hold = 0, -prices[0]
-        for i in range(1, len(prices)):
-            cash, hold = max(cash, hold + prices[i]), max(hold, cash - prices[i])
-        return cash
+        n = len(prices)
+        dp = [[0, float('-inf')] for _ in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
+            dp[i][0] = max(dp[i + 1][0], -prices[i] + dp[i + 1][1])
+            dp[i][1] = max(dp[i + 1][1], prices[i] + dp[i + 1][0])
+
+        return dp[0][0]
 ```
 
-**Time complexity:** O(n), where n is the number of days.
+**Time:** O(n)  
+**Space:** O(n)
 
-### 20. Buy and Sell Stock III
+#### Space-optimized DP
 
-Maximize profit with at most two completed transactions and at most one share held. A sale consumes one transaction.
+```python
+class Solution:
+    def maxProfit(self, prices):
+        next_free = 0
+        next_holding = float('-inf')
+
+        for i in range(len(prices) - 1, -1, -1):
+            current_free = max(next_free, -prices[i] + next_holding)
+            current_holding = max(next_holding, prices[i] + next_free)
+            next_free, next_holding = current_free, current_holding
+
+        return next_free
+```
+
+**Time:** O(n)  
+**Space:** O(1)
+
+#### Important Pointers
+
+- Unlimited transactions are allowed, but you can hold only one share at a time.
+- `holding = 0`: buy or skip. `holding = 1`: sell or skip.
+- Buying subtracts the price; selling adds it.
+- Adding every positive adjacent price difference also solves this variant.
+
+---
+
+### Stock III — At Most Two Transactions
 
 [LeetCode 123](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iii/)
 
+**Input:** prices = [3, 3, 5, 0, 0, 3, 1, 4]  
+**Output:** 6
+
+#### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def maxProfit(self, prices):
+        @lru_cache(None)
+        def solve(i, holding, remaining):
+            if i == len(prices) or remaining == 0:
+                return float('-inf') if holding else 0
+
+            if holding:
+                return max(solve(i + 1, 1, remaining), prices[i] + solve(i + 1, 0, remaining - 1))
+
+            return max(solve(i + 1, 0, remaining), -prices[i] + solve(i + 1, 1, remaining))
+
+        return solve(0, 0, 2)
+```
+
+**Time:** O(n)  
+**Space:** O(n)
+
+#### Full 3D DP
+
 ```python
 class Solution:
     def maxProfit(self, prices):
-        k = 2
-        next_day = [[0] * (k + 1) for _ in range(2)]
-        for price in reversed(prices):
-            current = [[0] * (k + 1) for _ in range(2)]
-            for remaining in range(1, k + 1):
-                # State 0: no share; state 1: holding a share.
-                current[0][remaining] = max(next_day[0][remaining], -price + next_day[1][remaining])
-                current[1][remaining] = max(next_day[1][remaining], price + next_day[0][remaining - 1])
-            next_day = current
-        return next_day[0][k]
+        n = len(prices)
+        dp = [[[0] * 3, [float('-inf')] * 3] for _ in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
+            for remaining in range(1, 3):
+                dp[i][0][remaining] = max(dp[i + 1][0][remaining], -prices[i] + dp[i + 1][1][remaining])
+                dp[i][1][remaining] = max(dp[i + 1][1][remaining], prices[i] + dp[i + 1][0][remaining - 1])
+
+        return dp[0][0][2]
 ```
 
-**Time complexity:** O(n), since the transaction limit is fixed at 2.
+**Time:** O(n)  
+**Space:** O(n)
 
-### 21. Buy and Sell Stock IV
+#### Space-optimized DP
 
-Maximize profit with at most k completed transactions and at most one share held. For k ≥ n / 2, use the unlimited-transactions shortcut.
+```python
+class Solution:
+    def maxProfit(self, prices):
+        next_dp = [[0] * 3, [float('-inf')] * 3]
+
+        for i in range(len(prices) - 1, -1, -1):
+            current = [[0] * 3, [float('-inf')] * 3]
+
+            for remaining in range(1, 3):
+                current[0][remaining] = max(next_dp[0][remaining], -prices[i] + next_dp[1][remaining])
+                current[1][remaining] = max(next_dp[1][remaining], prices[i] + next_dp[0][remaining - 1])
+
+            next_dp = current
+
+        return next_dp[0][2]
+```
+
+**Time:** O(n)  
+**Space:** O(1)
+
+#### Important Pointers
+
+- At most two complete transactions are allowed.
+- Decrease `remaining` when selling.
+- The optimized table has a fixed size, so its space is O(1).
+
+---
+
+### Stock IV — At Most K Transactions
 
 [LeetCode 188](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-iv/)
+
+**Input:** k = 2, prices = [3, 2, 6, 5, 0, 3]  
+**Output:** 7
+
+#### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def maxProfit(self, k, prices):
+        @lru_cache(None)
+        def solve(i, holding, remaining):
+            if i == len(prices) or remaining == 0:
+                return float('-inf') if holding else 0
+
+            if holding:
+                return max(solve(i + 1, 1, remaining), prices[i] + solve(i + 1, 0, remaining - 1))
+
+            return max(solve(i + 1, 0, remaining), -prices[i] + solve(i + 1, 1, remaining))
+
+        return solve(0, 0, k)
+```
+
+**Time:** O(n × (k + 1))  
+**Space:** O((n + 1) × (k + 1))
+
+#### Full 3D DP
 
 ```python
 class Solution:
     def maxProfit(self, k, prices):
-        if k == 0 or len(prices) < 2:
-            return 0
-        if k >= len(prices) // 2:
-            return sum(max(0, prices[i] - prices[i - 1]) for i in range(1, len(prices)))
-        next_day = [[0] * (k + 1) for _ in range(2)]
-        for price in reversed(prices):
-            current = [[0] * (k + 1) for _ in range(2)]
+        n = len(prices)
+        dp = [[[0] * (k + 1), [float('-inf')] * (k + 1)] for _ in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
             for remaining in range(1, k + 1):
-                # State 0: no share; state 1: holding a share.
-                current[0][remaining] = max(next_day[0][remaining], -price + next_day[1][remaining])
-                current[1][remaining] = max(next_day[1][remaining], price + next_day[0][remaining - 1])
-            next_day = current
-        return next_day[0][k]
+                dp[i][0][remaining] = max(dp[i + 1][0][remaining], -prices[i] + dp[i + 1][1][remaining])
+                dp[i][1][remaining] = max(dp[i + 1][1][remaining], prices[i] + dp[i + 1][0][remaining - 1])
+
+        return dp[0][0][k]
 ```
 
-**Time complexity:** O(n × k) in the limited-transactions case; O(n) when k ≥ n / 2.
+**Time:** O(n × (k + 1))  
+**Space:** O((n + 1) × (k + 1))
 
-## LCS and String DP
-
-### 22. Longest Common Subsequence — Length
-
-Find the longest sequence appearing in both strings in the same order; characters need not be adjacent. dp[i][j] stores the LCS length for the first i and j characters. Match: 1 + diagonal; mismatch: max(top, left).
-
-[LeetCode 1143](https://leetcode.com/problems/longest-common-subsequence/)
+#### Space-optimized DP
 
 ```python
 class Solution:
-    def longestCommonSubsequence(self, a, b):
-        m, n = len(a), len(b)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if a[i - 1] == b[j - 1]:
-                    dp[i][j] = 1 + dp[i - 1][j - 1]
-                else:
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
-        return dp[m][n]
+    def maxProfit(self, k, prices):
+        next_dp = [[0] * (k + 1), [float('-inf')] * (k + 1)]
+
+        for i in range(len(prices) - 1, -1, -1):
+            current = [[0] * (k + 1), [float('-inf')] * (k + 1)]
+
+            for remaining in range(1, k + 1):
+                current[0][remaining] = max(next_dp[0][remaining], -prices[i] + next_dp[1][remaining])
+                current[1][remaining] = max(next_dp[1][remaining], prices[i] + next_dp[0][remaining - 1])
+
+            next_dp = current
+
+        return next_dp[0][k]
 ```
 
-**Time complexity:** O((m + 1) × (n + 1)), where m and n are the string lengths.
+**Time:** O(n × (k + 1))  
+**Space:** O(k + 1)
 
-### 23. Longest Common Subsequence — Printing
+#### Important Pointers
+
+- This generalizes Stock III from two transactions to `k`.
+- Decrease the transaction count when selling.
+- If `k >= len(prices) // 2`, use Stock II to achieve O(n) time.
+- The optimized solution uses O(k) space, not constant space.
+
+---
+
+### Stock V — With Cooldown
+
+[LeetCode 309](https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/)
+
+**Input:** prices = [1, 2, 3, 0, 2]  
+**Output:** 3
+
+#### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def maxProfit(self, prices):
+        @lru_cache(None)
+        def solve(i, holding):
+            if i >= len(prices):
+                return float('-inf') if holding else 0
+
+            if holding:
+                return max(solve(i + 1, 1), prices[i] + solve(i + 2, 0))
+
+            return max(solve(i + 1, 0), -prices[i] + solve(i + 1, 1))
+
+        return solve(0, 0)
+```
+
+**Time:** O(n)  
+**Space:** O(n)
+
+#### Full 2D DP
+
+```python
+class Solution:
+    def maxProfit(self, prices):
+        n = len(prices)
+        dp = [[0, float('-inf')] for _ in range(n + 2)]
+
+        for i in range(n - 1, -1, -1):
+            dp[i][0] = max(dp[i + 1][0], -prices[i] + dp[i + 1][1])
+            dp[i][1] = max(dp[i + 1][1], prices[i] + dp[i + 2][0])
+
+        return dp[0][0]
+```
+
+**Time:** O(n)  
+**Space:** O(n)
+
+#### Space-optimized DP
+
+```python
+class Solution:
+    def maxProfit(self, prices):
+        next_free = 0
+        next_holding = float('-inf')
+        next2_free = 0
+
+        for i in range(len(prices) - 1, -1, -1):
+            current_free = max(next_free, -prices[i] + next_holding)
+            current_holding = max(next_holding, prices[i] + next2_free)
+
+            next2_free = next_free
+            next_free, next_holding = current_free, current_holding
+
+        return next_free
+```
+
+**Time:** O(n)  
+**Space:** O(1)
+
+#### Important Pointers
+
+- Here, Stock V means the cooldown variant.
+- After selling, you cannot buy on the next day.
+- Selling moves to day `i + 2`; buying and skipping move to day `i + 1`.
+- In all DP versions, negative infinity marks an invalid terminal state where a share remains unsold.
+- For long arrays, use iterative DP to avoid Python's recursion depth limit.
+
+## LCS and String DP
+
+## 19. Longest Common Subsequence — Length
+
+Find the longest sequence appearing in both strings in the same order; characters need not be adjacent.
+[LeetCode 1143](https://leetcode.com/problems/longest-common-subsequence/)
+
+**Input:** text1 = "abcde", text2 = "ace"  
+**Output:** 3
+
+**Input:** text1 = "abc", text2 = "def"  
+**Output:** 0
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def longestCommonSubsequence(self, text1, text2):
+        @lru_cache(None)
+        def solve(i, j):
+            if i == len(text1) or j == len(text2):
+                return 0
+
+            if text1[i] == text2[j]:
+                return 1 + solve(i + 1, j + 1)
+
+            return max(solve(i + 1, j), solve(i, j + 1))
+
+        return solve(0, 0)
+```
+
+**Time:** O(m × n)  
+**Space:** O(m × n + m + n)
+
+### Full 2D DP
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1, text2):
+        m, n = len(text1), len(text2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    dp[i][j] = 1 + dp[i + 1][j + 1]
+                else:
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j + 1])
+
+        return dp[0][0]
+```
+
+**Time:** O(m × n)  
+**Space:** O((m + 1) × (n + 1))
+
+### Space-optimized DP
+
+```python
+class Solution:
+    def longestCommonSubsequence(self, text1, text2):
+        if len(text1) < len(text2):
+            text1, text2 = text2, text1
+
+        m, n = len(text1), len(text2)
+        next_row = [0] * (n + 1)
+
+        for i in range(m - 1, -1, -1):
+            current = [0] * (n + 1)
+
+            for j in range(n - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    current[j] = 1 + next_row[j + 1]
+                else:
+                    current[j] = max(next_row[j], current[j + 1])
+
+            next_row = current
+
+        return next_row[0]
+```
+
+**Time:** O(m × n)  
+**Space:** O(min(m, n) + 1)
+
+## 20. Longest Common Subsequence — Printing
 
 Reconstruct and return one LCS by walking backward through the DP table. On a match, take that character; otherwise move toward the larger neighboring value.
 
 [GeeksforGeeks: Printing LCS](https://www.geeksforgeeks.org/dsa/printing-longest-common-subsequence/)
 
+**Input:** text1 = "abcde", text2 = "ace"  
+**Output:** "ace"
+
+**Input:** text1 = "abc", text2 = "def"  
+**Output:** ""
+
+### Recursion + Memo
+
 ```python
+from functools import lru_cache
+
 class Solution:
-    def printLCS(self, a, b):
-        m, n = len(a), len(b)
-        dp = [[0] * (n + 1) for _ in range(m + 1)]
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if a[i - 1] == b[j - 1]:
-                    dp[i][j] = 1 + dp[i - 1][j - 1]
-                else:
-                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    def printLCS(self, text1, text2):
+        m, n = len(text1), len(text2)
+
+        @lru_cache(None)
+        def solve(i, j):
+            if i == m or j == n:
+                return 0
+
+            if text1[i] == text2[j]:
+                return 1 + solve(i + 1, j + 1)
+
+            return max(solve(i + 1, j), solve(i, j + 1))
+
+        solve(0, 0)
+        i = j = 0
         result = []
-        i, j = m, n
-        while i > 0 and j > 0:
-            if a[i - 1] == b[j - 1]:
-                result.append(a[i - 1])
-                i -= 1
-                j -= 1
-            elif dp[i - 1][j] >= dp[i][j - 1]:
-                i -= 1
+
+        while i < m and j < n:
+            if text1[i] == text2[j]:
+                result.append(text1[i])
+                i += 1
+                j += 1
+            elif solve(i + 1, j) >= solve(i, j + 1):
+                i += 1
             else:
-                j -= 1
-        return "".join(reversed(result))
+                j += 1
+
+        return ''.join(result)
 ```
 
-**Time complexity:** O((m + 1) × (n + 1)); reconstruction takes O(m + n).
+**Time:** O(m × n + m + n)  
+**Space:** O(m × n + m + n)
 
-### 24. Longest Common Substring
+### Full 2D DP
+
+```python
+class Solution:
+    def printLCS(self, text1, text2):
+        m, n = len(text1), len(text2)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    dp[i][j] = 1 + dp[i + 1][j + 1]
+                else:
+                    dp[i][j] = max(dp[i + 1][j], dp[i][j + 1])
+
+        i = j = 0
+        result = []
+
+        while i < m and j < n:
+            if text1[i] == text2[j]:
+                result.append(text1[i])
+                i += 1
+                j += 1
+            elif dp[i + 1][j] >= dp[i][j + 1]:
+                i += 1
+            else:
+                j += 1
+
+        return ''.join(result)
+```
+
+**Time:** O(m × n + m + n)  
+**Space:** O((m + 1) × (n + 1))
+
+### Space-optimized DP — Store Subsequences
+
+```python
+class Solution:
+    def printLCS(self, text1, text2):
+        if len(text1) < len(text2):
+            text1, text2 = text2, text1
+
+        m, n = len(text1), len(text2)
+        next_row = [''] * (n + 1)
+
+        for i in range(m - 1, -1, -1):
+            current = [''] * (n + 1)
+
+            for j in range(n - 1, -1, -1):
+                if text1[i] == text2[j]:
+                    current[j] = text1[i] + next_row[j + 1]
+                else:
+                    current[j] = max(next_row[j], current[j + 1], key=len)
+
+            next_row = current
+
+        return next_row[0]
+```
+
+**Time:** O(m × n × (L + 1))  
+**Space:** O((min(m, n) + 1) × (L + 1))
+
+Here, `L` is the length of the LCS. String concatenation copies characters.
+
+## 21. Longest Common Substring
 
 Return the length of the longest contiguous string shared by both inputs. dp[i][j] is the matching suffix length ending at those positions; reset it to zero on a mismatch.
 
@@ -1010,189 +1602,584 @@ class Solution:
 
 **Time complexity:** O((m + 1) × (n + 1)), where m and n are the string lengths.
 
-### 25. Longest Palindromic Subsequence
+## 22. Longest Palindromic Subsequence
 
-Return the length of the longest subsequence reading the same forward and backward. Matching interval endpoints contribute two; otherwise skip either endpoint.
+[LeetCode 516 — Longest Palindromic Subsequence](https://leetcode.com/problems/longest-palindromic-subsequence/)
 
-[LeetCode 516](https://leetcode.com/problems/longest-palindromic-subsequence/)
+**Input:** s = "bbbab"  
+**Output:** 4
+
+**Input:** s = "cbbd"  
+**Output:** 2
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def longestPalindromeSubseq(self, s):
+        @lru_cache(None)
+        def solve(i, j):
+            if i > j:
+                return 0
+
+            if i == j:
+                return 1
+
+            if s[i] == s[j]:
+                return 2 + solve(i + 1, j - 1)
+
+            return max(solve(i + 1, j), solve(i, j - 1))
+
+        return solve(0, len(s) - 1)
+```
+
+**Time:** O(n²)  
+**Space:** O(n²)
+
+### Full 2D DP
 
 ```python
 class Solution:
     def longestPalindromeSubseq(self, s):
         n = len(s)
+
         if n == 0:
             return 0
+
         dp = [[0] * n for _ in range(n)]
+
         for i in range(n - 1, -1, -1):
             dp[i][i] = 1
+
             for j in range(i + 1, n):
                 if s[i] == s[j]:
                     dp[i][j] = 2 + dp[i + 1][j - 1]
                 else:
                     dp[i][j] = max(dp[i + 1][j], dp[i][j - 1])
-        return dp[0][-1]
+
+        return dp[0][n - 1]
 ```
 
-**Time complexity:** O(n²), where n is the string length.
+**Time:** O(n²)  
+**Space:** O(n²)
 
-### 26. Edit Distance
+### Space-optimized DP
 
-Return the minimum insertions, deletions, and replacements needed to transform word1 into word2. Matching characters require no edit; otherwise take 1 + min(insert, delete, replace).
+```python
+class Solution:
+    def longestPalindromeSubseq(self, s):
+        n = len(s)
 
-[LeetCode 72](https://leetcode.com/problems/edit-distance/)
+        if n == 0:
+            return 0
+
+        dp = [0] * n
+
+        for i in range(n - 1, -1, -1):
+            diagonal = 0
+            dp[i] = 1
+
+            for j in range(i + 1, n):
+                old_value = dp[j]
+
+                if s[i] == s[j]:
+                    dp[j] = 2 + diagonal
+                else:
+                    dp[j] = max(dp[j], dp[j - 1])
+
+                diagonal = old_value
+
+        return dp[n - 1]
+```
+
+**Time:** O(n²)  
+**Space:** O(n)
+
+### Important Pointers
+
+- A subsequence does not need to be contiguous.
+- Matching endpoints contribute `2`; a single middle character contributes `1`.
+- `diagonal` preserves the previous row's `dp[i + 1][j - 1]`.
+- The length also equals the LCS length of `s` and its reverse.
+
+---
+
+## 23. Edit Distance
+
+[LeetCode 72 — Edit Distance](https://leetcode.com/problems/edit-distance/)
+
+**Input:** word1 = "horse", word2 = "ros"  
+**Output:** 3
+
+**Input:** word1 = "intention", word2 = "execution"  
+**Output:** 5
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def minDistance(self, word1, word2):
+        m, n = len(word1), len(word2)
+
+        @lru_cache(None)
+        def solve(i, j):
+            if i == m:
+                return n - j
+
+            if j == n:
+                return m - i
+
+            if word1[i] == word2[j]:
+                return solve(i + 1, j + 1)
+
+            return 1 + min(solve(i, j + 1), solve(i + 1, j), solve(i + 1, j + 1))
+
+        return solve(0, 0)
+```
+
+**Time:** O((m + 1) × (n + 1))  
+**Space:** O((m + 1) × (n + 1))
+
+### Full 2D DP
 
 ```python
 class Solution:
     def minDistance(self, word1, word2):
         m, n = len(word1), len(word2)
         dp = [[0] * (n + 1) for _ in range(m + 1)]
+
         for i in range(m + 1):
-            dp[i][0] = i
+            dp[i][n] = m - i
+
         for j in range(n + 1):
-            dp[0][j] = j
-        for i in range(1, m + 1):
-            for j in range(1, n + 1):
-                if word1[i - 1] == word2[j - 1]:
-                    dp[i][j] = dp[i - 1][j - 1]
+            dp[m][j] = n - j
+
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if word1[i] == word2[j]:
+                    dp[i][j] = dp[i + 1][j + 1]
                 else:
-                    dp[i][j] = 1 + min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1])
-        return dp[m][n]
+                    dp[i][j] = 1 + min(dp[i][j + 1], dp[i + 1][j], dp[i + 1][j + 1])
+
+        return dp[0][0]
 ```
 
-**Time complexity:** O((m + 1) × (n + 1)), where m and n are the string lengths.
+**Time:** O((m + 1) × (n + 1))  
+**Space:** O((m + 1) × (n + 1))
+
+### Space-optimized DP
+
+```python
+class Solution:
+    def minDistance(self, word1, word2):
+        if len(word1) < len(word2):
+            word1, word2 = word2, word1
+
+        m, n = len(word1), len(word2)
+        next_row = [n - j for j in range(n + 1)]
+
+        for i in range(m - 1, -1, -1):
+            current = [0] * (n + 1)
+            current[n] = m - i
+
+            for j in range(n - 1, -1, -1):
+                if word1[i] == word2[j]:
+                    current[j] = next_row[j + 1]
+                else:
+                    current[j] = 1 + min(current[j + 1], next_row[j], next_row[j + 1])
+
+            next_row = current
+
+        return next_row[0]
+```
+
+**Time:** O((m + 1) × (n + 1))  
+**Space:** O(min(m, n) + 1)
+
+### Important Pointers
+
+- Allowed operations are **insert, delete, and replace**.
+- Each operation costs `1`; matching characters cost `0`.
+- Insert: `(i, j + 1)`.
+- Delete: `(i + 1, j)`.
+- Replace: `(i + 1, j + 1)`.
+- If one string is exhausted, insert or delete all remaining characters.
+- For long strings, use iterative DP to avoid Python's recursion depth limit.
+
+---
 
 ## LIS DP
 
-### 27. Longest Increasing Subsequence — Length
+## 24. Longest Increasing Subsequence — Length
 
-Find the longest strictly increasing subsequence. dp[i] is the best length ending at index i; extend from earlier indices with smaller values.
+[LeetCode 300 — Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)
 
-[LeetCode 300](https://leetcode.com/problems/longest-increasing-subsequence/)
+**Input:** nums = [10, 9, 2, 5, 3, 7, 101, 18]  
+**Output:** 4
+
+**Input:** nums = [7, 7, 7, 7]  
+**Output:** 1
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def lengthOfLIS(self, nums):
+        @lru_cache(None)
+        def solve(i, previous):
+            if i == len(nums):
+                return 0
+
+            if previous == -1 or nums[i] > nums[previous]:
+                return max(solve(i + 1, previous), 1 + solve(i + 1, i))
+
+            return solve(i + 1, previous)
+
+        return solve(0, -1)
+```
+
+**Time:** O(n²)  
+**Space:** O(n²)
+
+### Full 2D DP
+
+```python
+class Solution:
+    def lengthOfLIS(self, nums):
+        n = len(nums)
+        dp = [[0] * (n + 1) for _ in range(n + 1)]
+
+        for i in range(n - 1, -1, -1):
+            for previous in range(i - 1, -2, -1):
+                if previous == -1 or nums[i] > nums[previous]:
+                    dp[i][previous + 1] = max(dp[i + 1][previous + 1], 1 + dp[i + 1][i + 1])
+                else:
+                    dp[i][previous + 1] = dp[i + 1][previous + 1]
+
+        return dp[0][0]
+```
+
+**Time:** O(n²)  
+**Space:** O(n²)
+
+### 1D DP
 
 ```python
 class Solution:
     def lengthOfLIS(self, nums):
         dp = [1] * len(nums)
+
         for i in range(len(nums)):
             for j in range(i):
                 if nums[j] < nums[i]:
-                    dp[i] = max(dp[i], dp[j] + 1)
+                    dp[i] = max(dp[i], 1 + dp[j])
+
         return max(dp, default=0)
 ```
 
-**Time complexity:** O(n²), where n is the array length.
+**Time:** O(n²)  
+**Space:** O(n)
 
-### 28. Longest Increasing Subsequence — Printing
+### Binary Search
 
-Reconstruct and return one strictly increasing subsequence of maximum length. Store a parent index whenever a longer subsequence is found.
+```python
+from bisect import bisect_left
 
-[GeeksforGeeks: Printing LIS](https://www.geeksforgeeks.org/dsa/construction-of-longest-increasing-subsequence-using-dynamic-programming/)
+class Solution:
+    def lengthOfLIS(self, nums):
+        tails = []
+
+        for num in nums:
+            i = bisect_left(tails, num)
+
+            if i == len(tails):
+                tails.append(num)
+            else:
+                tails[i] = num
+
+        return len(tails)
+```
+
+**Time:** O(n log n)  
+**Space:** O(n)
+
+### Important Pointers
+
+- The subsequence must be **strictly increasing**; equal values do not extend it.
+- In 2D DP, `previous + 1` maps index `-1` to column `0`.
+- In 1D DP, `dp[i]` is the LIS length ending at index `i`.
+- The answer is the maximum DP value, not necessarily the last value.
+- `bisect_left` replaces the first tail greater than or equal to the current number.
+- The final `tails` list is not necessarily an actual subsequence.
+
+---
+
+## 25. Longest Increasing Subsequence — Printing
+
+[GeeksforGeeks — Printing Longest Increasing Subsequence](https://www.geeksforgeeks.org/problems/printing-longest-increasing-subsequence/1)
+
+**Input:** nums = [10, 9, 2, 5, 3, 7, 101, 18]  
+**Output:** [2, 5, 7, 101]
+
+**Input:** nums = [7, 7, 7]  
+**Output:** [7]
+
+### DP + Parent Tracking
 
 ```python
 class Solution:
     def printLIS(self, nums):
         n = len(nums)
+
         if n == 0:
             return []
-        dp, parent = [1] * n, [-1] * n
-        end = 0
+
+        dp = [1] * n
+        parent = list(range(n))
+        best_index = 0
+
         for i in range(n):
             for j in range(i):
                 if nums[j] < nums[i] and dp[j] + 1 > dp[i]:
                     dp[i] = dp[j] + 1
                     parent[i] = j
-            if dp[i] > dp[end]:
-                end = i
+
+            if dp[i] > dp[best_index]:
+                best_index = i
+
         result = []
-        while end != -1:
-            result.append(nums[end])
-            end = parent[end]
+
+        while parent[best_index] != best_index:
+            result.append(nums[best_index])
+            best_index = parent[best_index]
+
+        result.append(nums[best_index])
         return result[::-1]
 ```
 
-**Time complexity:** O(n²), including O(n) reconstruction.
+**Time:** O(n²)  
+**Space:** O(n)
+
+### Important Pointers
+
+- `parent[i]` stores the previous index in the chosen subsequence ending at `i`.
+- Update the parent only when the LIS length improves.
+- Reconstruct from the index with the largest DP value, then reverse the result.
+- Multiple valid LIS results may exist; this returns one.
+- This does not guarantee a lexicographically smallest LIS.
+- The method returns a list; use `print(result)` if console output is required.
+
+---
 
 ## Rectangles and Squares
 
-### 29. Largest Histogram Rectangle
+## Largest Histogram Rectangle
 
-Return the largest rectangle under unit-width histogram bars. Use an increasing stack of indices; popping a bar identifies its available width. This is a monotonic-stack problem.
+[LeetCode 84 — Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/)
 
-[LeetCode 84](https://leetcode.com/problems/largest-rectangle-in-histogram/)
+**Input:** heights = [2, 1, 5, 6, 2, 3]  
+**Output:** 10
+
+**Input:** heights = [2, 4]  
+**Output:** 4
+
+### Monotonic Stack
 
 ```python
 class Solution:
     def largestRectangleArea(self, heights):
         stack = []
-        best = 0
-        for i in range(len(heights) + 1):
-            current = heights[i] if i < len(heights) else 0
-            while stack and heights[stack[-1]] >= current:
+        answer = 0
+        n = len(heights)
+
+        for i in range(n + 1):
+            current_height = heights[i] if i < n else 0
+
+            while stack and heights[stack[-1]] >= current_height:
                 height = heights[stack.pop()]
                 left = stack[-1] if stack else -1
-                best = max(best, height * (i - left - 1))
-            if i < len(heights):
+                answer = max(answer, height * (i - left - 1))
+
+            if i < n:
                 stack.append(i)
-        return best
+
+        return answer
 ```
 
-**Time complexity:** O(n), since each bar is pushed and popped at most once.
+**Time:** O(n)  
+**Space:** O(n)
 
-### 30. Maximal Rectangle of Ones
+### Important Pointers
 
-Return the largest all-1 rectangle in a character matrix containing "0" and "1". Accumulate vertical heights row by row and solve the histogram problem at each row.
+- Use a monotonic stack of indices with strictly increasing heights.
+- A shorter or equal bar triggers evaluation of bars popped from the stack.
+- After popping, `i` is the right boundary and the new stack top is the left boundary.
+- Rectangle width is `i - left - 1`.
+- The final virtual bar of height `0` processes remaining bars.
+- Every index is pushed and popped at most once.
 
-[LeetCode 85](https://leetcode.com/problems/maximal-rectangle/)
+---
+
+## Maximal Rectangle of Ones
+
+[LeetCode 85 — Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
+
+**Input:**
+matrix = [
+    ["1", "0", "1", "0", "0"],
+    ["1", "0", "1", "1", "1"],
+    ["1", "1", "1", "1", "1"],
+    ["1", "0", "0", "1", "0"]
+]
+
+**Output:** 6
+
+### Histogram + Monotonic Stack
 
 ```python
 class Solution:
     def maximalRectangle(self, matrix):
         if not matrix or not matrix[0]:
             return 0
-        heights = [0] * len(matrix[0])
-        best = 0
-        for row in matrix:
-            for c, cell in enumerate(row):
-                heights[c] = heights[c] + 1 if cell == "1" else 0
-            best = max(best, self.largestRectangleArea(heights))
-        return best
 
-    def largestRectangleArea(self, heights):
-        stack = []
-        best = 0
-        for i in range(len(heights) + 1):
-            current = heights[i] if i < len(heights) else 0
-            while stack and heights[stack[-1]] >= current:
-                height = heights[stack.pop()]
-                left = stack[-1] if stack else -1
-                best = max(best, height * (i - left - 1))
-            if i < len(heights):
-                stack.append(i)
-        return best
+        n = len(matrix[0])
+        heights = [0] * n
+        answer = 0
+
+        for row in matrix:
+            for col in range(n):
+                heights[col] = heights[col] + 1 if row[col] == '1' else 0
+
+            stack = []
+
+            for i in range(n + 1):
+                current_height = heights[i] if i < n else 0
+
+                while stack and heights[stack[-1]] >= current_height:
+                    height = heights[stack.pop()]
+                    left = stack[-1] if stack else -1
+                    answer = max(answer, height * (i - left - 1))
+
+                if i < n:
+                    stack.append(i)
+
+        return answer
 ```
 
-**Time complexity:** O(m × n), where m and n are the matrix dimensions.
+**Time:** O(rows × cols)  
+**Space:** O(cols)
 
-### 31. Count All-One Squares
+### Important Pointers
 
-Count every all-1 square in an integer binary matrix. dp[r][c] is the largest square ending at that cell; its value also counts the squares ending there.
+- Each row becomes the bottom of a histogram.
+- A `'1'` increases the column height; a `'0'` resets it to zero.
+- Apply Largest Histogram Rectangle to every row.
+- Return the largest **area**, not the height or width.
+- LeetCode supplies string cells. For integer cells, compare with `1`.
 
-[LeetCode 1277](https://leetcode.com/problems/count-square-submatrices-with-all-ones/)
+---
+
+## Count All-One Squares
+
+[LeetCode 1277 — Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones/)
+
+**Input:**
+matrix = [
+    [0, 1, 1, 1],
+    [1, 1, 1, 1],
+    [0, 1, 1, 1]
+]
+
+**Output:** 15
+
+### Recursion + Memo
+
+```python
+from functools import lru_cache
+
+class Solution:
+    def countSquares(self, matrix):
+        if not matrix or not matrix[0]:
+            return 0
+
+        m, n = len(matrix), len(matrix[0])
+
+        @lru_cache(None)
+        def solve(i, j):
+            if i == m or j == n or matrix[i][j] == 0:
+                return 0
+
+            return 1 + min(solve(i + 1, j), solve(i, j + 1), solve(i + 1, j + 1))
+
+        return sum(solve(i, j) for i in range(m) for j in range(n))
+```
+
+**Time:** O(m × n)  
+**Space:** O(m × n + m + n)
+
+### Full 2D DP
 
 ```python
 class Solution:
     def countSquares(self, matrix):
         if not matrix or not matrix[0]:
             return 0
+
         m, n = len(matrix), len(matrix[0])
         dp = [[0] * (n + 1) for _ in range(m + 1)]
-        total = 0
-        for r in range(1, m + 1):
-            for c in range(1, n + 1):
-                if matrix[r - 1][c - 1] == 1:
-                    dp[r][c] = 1 + min(dp[r - 1][c - 1], dp[r - 1][c], dp[r][c - 1])
-                    total += dp[r][c]
-        return total
+        answer = 0
+
+        for i in range(m - 1, -1, -1):
+            for j in range(n - 1, -1, -1):
+                if matrix[i][j] == 1:
+                    dp[i][j] = 1 + min(dp[i + 1][j], dp[i][j + 1], dp[i + 1][j + 1])
+                    answer += dp[i][j]
+
+        return answer
 ```
 
-**Time complexity:** O(m × n), where m and n are the matrix dimensions.
+**Time:** O(m × n)  
+**Space:** O((m + 1) × (n + 1))
+
+### Space-optimized DP
+
+```python
+class Solution:
+    def countSquares(self, matrix):
+        if not matrix or not matrix[0]:
+            return 0
+
+        m, n = len(matrix), len(matrix[0])
+        next_row = [0] * (n + 1)
+        answer = 0
+
+        for i in range(m - 1, -1, -1):
+            current = [0] * (n + 1)
+
+            for j in range(n - 1, -1, -1):
+                if matrix[i][j] == 1:
+                    current[j] = 1 + min(next_row[j], current[j + 1], next_row[j + 1])
+                    answer += current[j]
+
+            next_row = current
+
+        return answer
+```
+
+**Time:** O(m × n)  
+**Space:** O(n)
+
+### Important Pointers
+
+- Cells are integers `0` and `1`.
+- Each state stores the largest all-one square starting at that cell.
+- Use the minimum of the right, down, and diagonal states to extend a square.
+- A state value of `3` contributes three squares: sizes `1 × 1`, `2 × 2`, and `3 × 3`.
+- Sum all state values to count every square.
+- Taking only the maximum state finds the largest square's side length, not the total count.
