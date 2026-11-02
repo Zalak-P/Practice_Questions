@@ -1,10 +1,10 @@
 # Graphs — Java
 
-V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Space excludes input storage unless stated. Examples use language-neutral notation. Grids are nonempty unless the method handles empty input explicitly.
+V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Recursive alternatives can exceed Python recursion limits or Java stack depth on long paths; use the iterative alternative where supplied.
 
 ## 1. BFS, DFS, and connected components
 
-### 1. BFS Traversal of a Graph
+### 1. ★ BFS Traversal of a Graph
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1)
 
@@ -50,7 +50,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list.
 
-### 2. DFS Traversal of a Graph
+### 2. ★ DFS Traversal of a Graph
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1)
 
@@ -101,7 +101,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list.
 
-### 3. Find if Path Exists in Graph — 1971
+### 3. ★ Find if Path Exists in Graph — 1971
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-graph/)
 
@@ -151,7 +151,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the constructed adjacency list.
 
-### 4. Number of Connected Components in an Undirected Graph — 323
+### 4. ★ Number of Connected Components in an Undirected Graph — 323
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 
@@ -205,7 +205,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the constructed adjacency list.
 
-### 5. Clone Graph — 133
+### 5. ★ Clone Graph — 133
 
 [LeetCode/GFG Link](https://leetcode.com/problems/clone-graph/)
 
@@ -256,7 +256,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V) auxiliary for the map and queue, plus O(V + E) for the cloned output graph.
 
-### 6. Keys and Rooms — 841
+### 6. ★ Keys and Rooms — 841
 
 [LeetCode/GFG Link](https://leetcode.com/problems/keys-and-rooms/)
 
@@ -301,7 +301,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input; E is the total number of keys.
 
-### 7. Number of Provinces — 547
+### 7. ★ Number of Provinces — 547
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-provinces/)
 
@@ -370,7 +370,7 @@ class Solution {
 
 ## 2. Grid traversal
 
-### 8. Number of Islands — 200
+### 8. ★ Number of Islands — 200
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands/)
 
@@ -421,7 +421,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the DFS stack.
 
-### 9. Flood Fill — 733
+### 9. ★ Flood Fill — 733
 
 [LeetCode/GFG Link](https://leetcode.com/problems/flood-fill/)
 
@@ -468,7 +468,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the DFS stack.
 
-### 10. Max Area of Island — 695
+### 10. ★ Max Area of Island — 695
 
 [LeetCode/GFG Link](https://leetcode.com/problems/max-area-of-island/)
 
@@ -521,7 +521,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the DFS stack.
 
-### 11. Surrounded Regions — 130
+### 11. ★ Surrounded Regions — 130
 
 [LeetCode/GFG Link](https://leetcode.com/problems/surrounded-regions/)
 
@@ -574,7 +574,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the BFS queue.
 
-### 12. Pacific Atlantic Water Flow — 417
+### 12. ★ Pacific Atlantic Water Flow — 417
 
 [LeetCode/GFG Link](https://leetcode.com/problems/pacific-atlantic-water-flow/)
 
@@ -639,7 +639,7 @@ class Solution {
 
 ## 3. Multi-source BFS
 
-### 13. Rotting Oranges — 994
+### 13. ★ Rotting Oranges — 994
 
 [LeetCode/GFG Link](https://leetcode.com/problems/rotting-oranges/)
 
@@ -693,7 +693,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the BFS queue.
 
-### 14. 01 Matrix — 542
+### 14. ★ 01 Matrix — 542
 
 [LeetCode/GFG Link](https://leetcode.com/problems/01-matrix/)
 
@@ -746,7 +746,7 @@ class Solution {
 - **Time:** O(R × C)
 - **Space:** O(R × C), including the distance matrix and BFS queue.
 
-### 15. Shortest Bridge — 934
+### 15. ★ Shortest Bridge — 934
 
 [LeetCode/GFG Link](https://leetcode.com/problems/shortest-bridge/)
 
@@ -820,7 +820,7 @@ class Solution {
 
 ## 4. Cycle detection
 
-### 16. Detect Cycle in an Undirected Graph — BFS and DFS
+### 16. ★ Detect Cycle in an Undirected Graph — BFS and DFS
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1)
 
@@ -910,7 +910,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list; O(V) traversal storage for either variant.
 
-### 17. Detect Cycle in a Directed Graph — DFS
+### 17. ★ Detect Cycle in a Directed Graph — DFS
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
 
@@ -965,7 +965,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E)
 
-### 18. Detect Cycle in a Directed Graph — Kahn’s Algorithm
+### 18. ★ Detect Cycle in a Directed Graph — Kahn’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
 
@@ -1011,7 +1011,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 19. Course Schedule — 207
+### 19. ★ Course Schedule — 207
 
 [LeetCode/GFG Link](https://leetcode.com/problems/course-schedule/)
 
@@ -1057,7 +1057,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 20. Find Eventual Safe States — 802
+### 20. ★ Find Eventual Safe States — 802
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-eventual-safe-states/)
 
@@ -1105,7 +1105,7 @@ class Solution {
 
 ## 5. Bipartite graphs
 
-### 21. Is Graph Bipartite? — 785
+### 21. ★ Is Graph Bipartite? — 785
 
 [LeetCode/GFG Link](https://leetcode.com/problems/is-graph-bipartite/)
 
@@ -1179,7 +1179,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list; includes recursion stack for DFS.
 
-### 22. Possible Bipartition — 886
+### 22. ★ Possible Bipartition — 886
 
 [LeetCode/GFG Link](https://leetcode.com/problems/possible-bipartition/)
 
@@ -1234,7 +1234,7 @@ class Solution {
 
 ## 6. Topological sorting and dependencies
 
-### 23. Topological Sort — DFS
+### 23. ★ Topological Sort — DFS
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/topological-sort/1)
 
@@ -1292,7 +1292,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E)
 
-### 24. Topological Sort — Kahn’s Algorithm
+### 24. ★ Topological Sort — Kahn’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/topological-sort/1)
 
@@ -1338,7 +1338,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 25. Course Schedule II — 210
+### 25. ★ Course Schedule II — 210
 
 [LeetCode/GFG Link](https://leetcode.com/problems/course-schedule-ii/)
 
@@ -1384,7 +1384,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 26. Alien Dictionary — 269
+### 26. ★ Alien Dictionary — 269
 
 [LeetCode/GFG Link](https://leetcode.com/problems/alien-dictionary/)
 
@@ -1444,7 +1444,7 @@ class Solution {
 - **Time:** O(S + A + E), where S is total input characters, A distinct letters, and E distinct ordering constraints.
 - **Space:** O(A + E), excluding input word storage.
 
-### 27. Find All Possible Recipes from Given Supplies — 2115
+### 27. ★ Find All Possible Recipes from Given Supplies — 2115
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)
 
@@ -1497,7 +1497,7 @@ class Solution {
 
 ## 7. Unweighted shortest paths and state-based BFS
 
-### 28. Shortest Path in an Undirected Graph with Unit Weights
+### 28. ★ Shortest Path in an Undirected Graph with Unit Weights
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/dsa/shortest-path-in-undirected-graph-having-unit-distance/)
 
@@ -1547,7 +1547,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 29. Shortest Path in Binary Matrix — 1091
+### 29. ★ Shortest Path in Binary Matrix — 1091
 
 [LeetCode/GFG Link](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
 
@@ -1596,7 +1596,7 @@ class Solution {
 - **Time:** O(n²)
 - **Space:** O(n²) for the BFS queue.
 
-### 30. Word Ladder — 127
+### 30. ★ Word Ladder — 127
 
 [LeetCode/GFG Link](https://leetcode.com/problems/word-ladder/)
 
@@ -1650,7 +1650,7 @@ class Solution {
 - **Time:** O((N + 1) × 26 × L²), including string construction/hashing; N = dictionary size.
 - **Space:** O((N + 1) × L), for dictionary/queue strings of length L; N = dictionary size.
 
-### 31. Open the Lock — 752
+### 31. ★ Open the Lock — 752
 
 [LeetCode/GFG Link](https://leetcode.com/problems/open-the-lock/)
 
@@ -1703,7 +1703,7 @@ class Solution {
 - **Time:** O(D + 10⁴ × 8) for four fixed digits; D = number of deadends.
 - **Space:** O(D + 10⁴) for fixed four-digit states; D = deadends.
 
-### 32. Snakes and Ladders — 909
+### 32. ★ Snakes and Ladders — 909
 
 [LeetCode/GFG Link](https://leetcode.com/problems/snakes-and-ladders/)
 
@@ -1754,7 +1754,7 @@ class Solution {
 
 ## 8. Weighted shortest paths
 
-### 33. Dijkstra’s Algorithm
+### 33. ★ Dijkstra’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
 
@@ -1811,7 +1811,7 @@ class Solution {
 - **Time:** O(V + E log(E + 2)) with a heap that can retain outdated entries.
 - **Space:** O(V + E), including the adjacency list and heap with outdated entries.
 
-### 34. Network Delay Time — 743
+### 34. ★ Network Delay Time — 743
 
 [LeetCode/GFG Link](https://leetcode.com/problems/network-delay-time/)
 
@@ -1870,7 +1870,7 @@ class Solution {
 - **Time:** O(V + E log(E + 2))
 - **Space:** O(V + E), including the adjacency list and heap.
 
-### 35. Path With Minimum Effort — 1631
+### 35. ★ Path With Minimum Effort — 1631
 
 [LeetCode/GFG Link](https://leetcode.com/problems/path-with-minimum-effort/)
 
@@ -1923,7 +1923,7 @@ class Solution {
 - **Time:** O(RC log(RC + 1))
 - **Space:** O(R × C) for distances and the heap (a grid has O(R × C) edges).
 
-### 36. Cheapest Flights Within K Stops — 787
+### 36. ★ Cheapest Flights Within K Stops — 787
 
 [LeetCode/GFG Link](https://leetcode.com/problems/cheapest-flights-within-k-stops/)
 
@@ -1965,7 +1965,7 @@ class Solution {
 - **Time:** O((k + 1) × (V + E))
 - **Space:** O(V) for two distance arrays.
 
-### 37. Bellman–Ford Algorithm
+### 37. ★ Bellman–Ford Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1)
 
@@ -2013,7 +2013,7 @@ class Solution {
 - **Time:** O(V + VE)
 - **Space:** O(V), excluding the input edge list.
 
-### 38. Negative Cycle Detection
+### 38. ★ Negative Cycle Detection
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/negative-weight-cycle3504/1)
 
@@ -2053,7 +2053,7 @@ class Solution {
 - **Time:** O(V + VE)
 - **Space:** O(V), excluding the input edge list.
 
-### 39. Floyd–Warshall Algorithm
+### 39. ★ Floyd–Warshall Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/implementing-floyd-warshall2042/1)
 
@@ -2090,7 +2090,7 @@ class Solution {
 - **Time:** O(V³)
 - **Space:** O(1) auxiliary; the O(V²) input distance matrix is updated in place.
 
-### 40. Find the City With the Smallest Number of Neighbors at a Threshold Distance — 1334
+### 40. ★ Find the City With the Smallest Number of Neighbors at a Threshold Distance — 1334
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/)
 
@@ -2139,7 +2139,7 @@ class Solution {
 - **Time:** O(n³ + E)
 - **Space:** O(n²).
 
-### 41. Shortest Path in a Directed Acyclic Graph
+### 41. ★ Shortest Path in a Directed Acyclic Graph
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1)
 
@@ -2193,7 +2193,7 @@ class Solution {
 
 ## 9. Disjoint Set Union — Union-Find
 
-### 42. Implement DSU — Path Compression and Union by Size
+### 42. ★ Implement DSU — Path Compression and Union by Size
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/disjoint-set-union-find/1)
 
@@ -2249,7 +2249,7 @@ class DSU {
 - **Time:** O(n) initialization; O(α(n)) amortized per find/union, where α is the inverse Ackermann function.
 - **Space:** O(n) for parent and size arrays.
 
-### 43. Redundant Connection — 684
+### 43. ★ Redundant Connection — 684
 
 [LeetCode/GFG Link](https://leetcode.com/problems/redundant-connection/)
 
@@ -2314,7 +2314,7 @@ class Solution {
 - **Time:** O(n × α(n))
 - **Space:** O(n) for DSU.
 
-### 44. Number of Operations to Make Network Connected — 1319
+### 44. ★ Number of Operations to Make Network Connected — 1319
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-operations-to-make-network-connected/)
 
@@ -2380,7 +2380,7 @@ class Solution {
 - **Time:** O(V + E × α(V))
 - **Space:** O(V) for DSU.
 
-### 45. Accounts Merge — 721
+### 45. ★ Accounts Merge — 721
 
 [LeetCode/GFG Link](https://leetcode.com/problems/accounts-merge/)
 
@@ -2467,7 +2467,7 @@ class Solution {
 - **Time:** O(A + M × (L + α(A)) + U log(U + 1) × L), where A = accounts, M = email occurrences, U = unique emails, L = maximum email length.
 - **Space:** O(A + M + U × L), including temporary email lists and output; sorting can also use linear temporary storage.
 
-### 46. Most Stones Removed with Same Row or Column — 947
+### 46. ★ Most Stones Removed with Same Row or Column — 947
 
 [LeetCode/GFG Link](https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/)
 
@@ -2543,7 +2543,7 @@ class Solution {
 
 ## 10. Minimum spanning tree
 
-### 47. Kruskal’s Algorithm
+### 47. ★ Kruskal’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree-kruskals-algorithm/1)
 
@@ -2613,7 +2613,7 @@ class Solution {
 - **Time:** O(V + E log(E + 2) + E × α(V))
 - **Space:** O(V + E), including DSU and the sorted edge copy.
 
-### 48. Prim’s Algorithm
+### 48. ★ Prim’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
 
@@ -2662,7 +2662,7 @@ class Solution {
 - **Time:** O(V + E log(E + 2))
 - **Space:** O(V + E), including the adjacency list and heap.
 
-### 49. Min Cost to Connect All Points — 1584
+### 49. ★ Min Cost to Connect All Points — 1584
 
 [LeetCode/GFG Link](https://leetcode.com/problems/min-cost-to-connect-all-points/)
 
@@ -2715,7 +2715,7 @@ class Solution {
 
 ## 11. Strongly connected components and connectivity
 
-### 50. Kosaraju’s Algorithm
+### 50. ★ Kosaraju’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1)
 
@@ -2795,7 +2795,7 @@ class Solution {
 - **Time:** O(V + E)
 - **Space:** O(V + E), including both adjacency lists.
 
-### 51. Critical Connections in a Network — 1192
+### 51. ★ Critical Connections in a Network — 1192
 
 [LeetCode/GFG Link](https://leetcode.com/problems/critical-connections-in-a-network/)
 
@@ -2870,7 +2870,7 @@ class Solution {
 
 ## 12. Other important graph patterns
 
-### 52. Evaluate Division — 399
+### 52. ★ Evaluate Division — 399
 
 [LeetCode/GFG Link](https://leetcode.com/problems/evaluate-division/)
 
@@ -2929,7 +2929,7 @@ class Solution {
 - **Time:** O(V + E + Q(V + E)) expected map/set operations; Q = queries. Variable-name hashing additionally depends on string length.
 - **Space:** O(V + E) auxiliary, plus O(Q) output.
 
-### 53. All Paths From Source to Target — 797
+### 53. ★ All Paths From Source to Target — 797
 
 [LeetCode/GFG Link](https://leetcode.com/problems/all-paths-from-source-to-target/)
 
@@ -2971,7 +2971,7 @@ class Solution {
 - **Time:** O(V × 2^V) worst case, including path copies; the number of paths can be exponential.
 - **Space:** O(V) auxiliary for the path and recursion, plus O(V × 2^V) worst-case output.
 
-### 54. Longest Increasing Path in a Matrix — 329
+### 54. ★ Longest Increasing Path in a Matrix — 329
 
 [LeetCode/GFG Link](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/)
 
