@@ -1,9 +1,5 @@
 # Dynamic Programming — Java
 
-Each Java block is an independent `Solution` class. Copy one block at a time. Java 8+ syntax is used.
-
-Counting helpers use `long` where appropriate; counts must fit in 64 bits. Apply a modulus only when required by the problem. Recursion can overflow the Java stack on large inputs.
-
 ## 1. House Robber I
 
 [Problem link](https://leetcode.com/problems/house-robber/)
