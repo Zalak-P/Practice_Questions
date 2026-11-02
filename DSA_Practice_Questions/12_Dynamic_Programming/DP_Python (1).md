@@ -252,7 +252,9 @@ class Solution:
     def numDecodings(self, s: str) -> int:
         return self.numDecodings(0, s)
 ```
+
 ### DP
+
 ```python
 class Solution:
     def numDecodings(self, s: str) -> int:
@@ -278,7 +280,7 @@ class Solution:
 **Time complexity:** O(n), where n is the number of houses.
 **Space complexity:** O(n).
 
-### Constant Space 
+### Constant Space
 
 ```python
 class Solution:
@@ -1979,7 +1981,7 @@ class Solution:
 
 ## Rectangles and Squares
 
-## Largest Histogram Rectangle
+## 26. Largest Histogram Rectangle
 
 [LeetCode 84 — Largest Rectangle in Histogram](https://leetcode.com/problems/largest-rectangle-in-histogram/)
 
@@ -2026,16 +2028,16 @@ class Solution:
 
 ---
 
-## Maximal Rectangle of Ones
+## 27. Maximal Rectangle of Ones
 
 [LeetCode 85 — Maximal Rectangle](https://leetcode.com/problems/maximal-rectangle/)
 
 **Input:**
 matrix = [
-    ["1", "0", "1", "0", "0"],
-    ["1", "0", "1", "1", "1"],
-    ["1", "1", "1", "1", "1"],
-    ["1", "0", "0", "1", "0"]
+["1", "0", "1", "0", "0"],
+["1", "0", "1", "1", "1"],
+["1", "1", "1", "1", "1"],
+["1", "0", "0", "1", "0"]
 ]
 
 **Output:** 6
@@ -2085,15 +2087,15 @@ class Solution:
 
 ---
 
-## Count All-One Squares
+## 28. Count All-One Squares
 
 [LeetCode 1277 — Count Square Submatrices with All Ones](https://leetcode.com/problems/count-square-submatrices-with-all-ones/)
 
 **Input:**
 matrix = [
-    [0, 1, 1, 1],
-    [1, 1, 1, 1],
-    [0, 1, 1, 1]
+[0, 1, 1, 1],
+[1, 1, 1, 1],
+[0, 1, 1, 1]
 ]
 
 **Output:** 15
