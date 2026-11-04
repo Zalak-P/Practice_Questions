@@ -8,7 +8,7 @@ V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann funct
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1)
 
-Visit vertices reachable from vertex 0 in breadth-first order. Input: adjacency list; an empty graph returns an empty list.
+BFS visits nodes level by level, using a queue. Mark each node visited when adding it to the queue to prevent duplicates.
 
 **Input/Output**
 
@@ -20,23 +20,25 @@ Output: [0,1,2,3]
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
     def bfs(self, adj):
         if not adj:
             return []
-        seen = {0}
+
+        visited = {0}
         queue = deque([0])
-        order = []
+        result = []
+
         while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                if v not in seen:
-                    seen.add(v)
-                    queue.append(v)
-        return order
+            node = queue.popleft()
+            result.append(node)
+
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+
+        return result
 ```
 
 **Time Space Complexity**
@@ -48,7 +50,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1)
 
-Visit vertices reachable from vertex 0 in depth-first order, following adjacency-list order. Use explicit stack frames.
+DFS explores one branch as deeply as possible before backtracking. Start from vertex 0 and follow adjacency-list order.
 
 **Input/Output**
 
@@ -62,27 +64,35 @@ Output: [0,1,3,2]
 ```python
 class Solution:
     def dfs(self, adj):
-        if not adj:
-            return []
-        seen = {0}
-        order = [0]
-        stack = [(0, iter(adj[0]))]
-        while stack:
-            u, neighbors = stack[-1]
-            v = next(neighbors, None)
-            if v is None:
-                stack.pop()
-            elif v not in seen:
-                seen.add(v)
-                order.append(v)
-                stack.append((v, iter(adj[v])))
-        return order
+        visited = set()
+        result = []
+
+        def traverse(node):
+            visited.add(node)
+            result.append(node)
+
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    traverse(neighbor)
+
+        if adj:
+            traverse(0)
+
+        return result
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V), excluding the input adjacency list.
+- **Time:**
+- Each vertex is visited at most once: O(V).
+- Each visited vertex scans its adjacency list. Across the graph, that is E entries for a directed graph, or 2E for an undirected graph so ~ O(E).
+- Assuming average O(1) set operations, total time is O(V + E).
+- The neighbor loop scans only its node’s neighbors.
+- **Space:**
+- Visited can contain V vertices: O(V).
+- A graph can produce V active recursive calls: O(V).
+- result can contain V vertices: O(V) output space.
+- Auxiliary space is O(V). Including the output, it remains O(V).
 
 ### 3. ★ Find if Path Exists in Graph — 1971
 
@@ -128,7 +138,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
 
-Count connected components, including isolated vertices, in an undirected graph. LeetCode 323 is Premium.
+Count connected components, including isolated vertices, in an undirected graph.
 
 **Input/Output**
 
@@ -142,25 +152,26 @@ Output: 2
 ```python
 class Solution:
     def countComponents(self, n, edges):
-        adj = [[] for _ in range(n)]
+        graph = [[] for _ in range(n)]
         for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
-        seen = set()
-        count = 0
-        for start in range(n):
-            if start in seen:
-                continue
-            count += 1
-            seen.add(start)
-            stack = [start]
-            while stack:
-                u = stack.pop()
-                for v in adj[u]:
-                    if v not in seen:
-                        seen.add(v)
-                        stack.append(v)
-        return count
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = set()
+
+        def dfs(node):
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    dfs(neighbor)
+
+        components = 0
+        for node in range(n):
+            if node not in visited:
+                components += 1
+                dfs(node)
+
+        return components
 ```
 
 **Time Space Complexity**
@@ -172,7 +183,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/clone-graph/)
 
-Deep-copy the connected component reachable from node. The Node definition is included; use the judge-provided definition on LeetCode.
+Given a node in a connected undirected graph, return a deep copy of the graph. Every cloned node must be a new object with the same value and corresponding cloned neighbors.
 
 **Input/Output**
 
@@ -195,16 +206,22 @@ class Solution:
     def cloneGraph(self, node):
         if node is None:
             return None
-        copies = {node: Node(node.val)}
-        queue = deque([node])
-        while queue:
-            u = queue.popleft()
-            for v in u.neighbors:
-                if v not in copies:
-                    copies[v] = Node(v.val)
-                    queue.append(v)
-                copies[u].neighbors.append(copies[v])
-        return copies[node]
+
+        copies = {}
+
+        def dfs(original):
+            if original in copies:
+                return copies[original]
+
+            clone = Node(original.val)
+            copies[original] = clone
+
+            for neighbor in original.neighbors:
+                clone.neighbors.append(dfs(neighbor))
+
+            return clone
+
+        return dfs(node)
 ```
 
 **Time Space Complexity**
@@ -230,15 +247,16 @@ Output: true
 ```python
 class Solution:
     def canVisitAllRooms(self, rooms):
-        seen = {0}
-        stack = [0]
-        while stack:
-            room = stack.pop()
+        visited = set()
+
+        def dfs(room):
+            visited.add(room)
             for key in rooms[room]:
-                if key not in seen:
-                    seen.add(key)
-                    stack.append(key)
-        return len(seen) == len(rooms)
+                if key not in visited:
+                    dfs(key)
+
+        dfs(0)
+        return len(visited) == len(rooms)
 ```
 
 **Time Space Complexity**
@@ -262,37 +280,24 @@ Output: 2
 **Code**
 
 ```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
 class Solution:
     def findCircleNum(self, isConnected):
         n = len(isConnected)
-        dsu = DSU(n)
-        count = n
-        for i in range(n):
-            for j in range(i + 1, n):
-                if isConnected[i][j] and dsu.union(i, j):
-                    count -= 1
-        return count
+        visited = set()
+
+        def dfs(city):
+            visited.add(city)
+            for neighbor in range(n):
+                if isConnected[city][neighbor] == 1 and neighbor not in visited:
+                    dfs(neighbor)
+
+        provinces = 0
+        for city in range(n):
+            if city not in visited:
+                provinces += 1
+                dfs(city)
+
+        return provinces
 ```
 
 **Time Space Complexity**
