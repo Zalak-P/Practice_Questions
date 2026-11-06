@@ -2,7 +2,7 @@
 
 V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Recursive alternatives can exceed Python recursion limits or Java stack depth on long paths; use the iterative alternative where supplied.
 
-## 1. BFS, DFS, and connected components
+## BFS and connected components
 
 ### 1. ★ BFS Traversal of a Graph
 
@@ -46,55 +46,7 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list.
 
-### 2. ★ DFS Traversal of a Graph
-
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1)
-
-DFS explores one branch as deeply as possible before backtracking. Start from vertex 0 and follow adjacency-list order.
-
-**Input/Output**
-
-```text
-Input: adj = [[1,2],[0,3],[0],[1]]
-Output: [0,1,3,2]
-```
-
-**Code**
-
-```python
-class Solution:
-    def dfs(self, adj):
-        visited = set()
-        result = []
-
-        def traverse(node):
-            visited.add(node)
-            result.append(node)
-
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    traverse(neighbor)
-
-        if adj:
-            traverse(0)
-
-        return result
-```
-
-**Time Space Complexity**
-
-- **Time:**
-- Each vertex is visited at most once: O(V).
-- Each visited vertex scans its adjacency list. Across the graph, that is E entries for a directed graph, or 2E for an undirected graph so ~ O(E).
-- Assuming average O(1) set operations, total time is O(V + E).
-- The neighbor loop scans only its node’s neighbors.
-- **Space:**
-- Visited can contain V vertices: O(V).
-- A graph can produce V active recursive calls: O(V).
-- result can contain V vertices: O(V) output space.
-- Auxiliary space is O(V). Including the output, it remains O(V).
-
-### 3. ★ Find if Path Exists in Graph — 1971
+### 2. ★ Find if Path Exists in Graph — 1971
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-graph/)
 
@@ -134,52 +86,7 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the constructed adjacency list.
 
-### 4. ★ Number of Connected Components in an Undirected Graph — 323
-
-[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
-
-Count connected components, including isolated vertices, in an undirected graph.
-
-**Input/Output**
-
-```text
-Input: n = 5, edges = [[0,1],[1,2],[3,4]]
-Output: 2
-```
-
-**Code**
-
-```python
-class Solution:
-    def countComponents(self, n, edges):
-        graph = [[] for _ in range(n)]
-        for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
-
-        visited = set()
-
-        def dfs(node):
-            visited.add(node)
-            for neighbor in graph[node]:
-                if neighbor not in visited:
-                    dfs(neighbor)
-
-        components = 0
-        for node in range(n):
-            if node not in visited:
-                components += 1
-                dfs(node)
-
-        return components
-```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E)
-- **Space:** O(V + E), including the constructed adjacency list.
-
-### 5. ★ Clone Graph — 133
+### 3. ★ Clone Graph — 133
 
 [LeetCode/GFG Link](https://leetcode.com/problems/clone-graph/)
 
@@ -197,31 +104,26 @@ Output: A new graph with adjacency list [[2],[1]], sharing no nodes with the inp
 ```python
 from collections import deque
 
-class Node:
-    def __init__(self, val=0, neighbors=None):
-        self.val = val
-        self.neighbors = [] if neighbors is None else neighbors
-
+# Node is provided by LeetCode.
 class Solution:
     def cloneGraph(self, node):
         if node is None:
             return None
 
-        copies = {}
+        copies = {node: Node(node.val)}
+        queue = deque([node])
 
-        def dfs(original):
-            if original in copies:
-                return copies[original]
-
-            clone = Node(original.val)
-            copies[original] = clone
+        while queue:
+            original = queue.popleft()
 
             for neighbor in original.neighbors:
-                clone.neighbors.append(dfs(neighbor))
+                if neighbor not in copies:
+                    copies[neighbor] = Node(neighbor.val)
+                    queue.append(neighbor)
 
-            return clone
+                copies[original].neighbors.append(copies[neighbor])
 
-        return dfs(node)
+        return copies[node]
 ```
 
 **Time Space Complexity**
@@ -229,7 +131,7 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V) auxiliary for the map and queue, plus O(V + E) for the cloned output graph.
 
-### 6. ★ Keys and Rooms — 841
+### 4. ★ Keys and Rooms — 841
 
 [LeetCode/GFG Link](https://leetcode.com/problems/keys-and-rooms/)
 
@@ -247,15 +149,16 @@ Output: true
 ```python
 class Solution:
     def canVisitAllRooms(self, rooms):
-        visited = set()
+        queue = deque([0])
+        visited = {0}
 
-        def dfs(room):
-            visited.add(room)
+        while queue:
+            room = queue.popleft()
             for key in rooms[room]:
                 if key not in visited:
-                    dfs(key)
+                    visited.add(key)
+                    queue.append(key)
 
-        dfs(0)
         return len(visited) == len(rooms)
 ```
 
@@ -264,7 +167,58 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input; E is the total number of keys.
 
-### 7. ★ Number of Provinces — 547
+### 5. ★ Number of Connected Components in an Undirected Graph — 323
+
+[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+
+Count connected components, including isolated vertices, in an undirected graph.
+
+**Input/Output**
+
+```text
+Input: n = 5, edges = [[0,1],[1,2],[3,4]]
+Output: 2
+```
+
+**Code**
+
+```python
+from collections import deque
+
+class Solution:
+    def countComponents(self, n, edges):
+        graph = [[] for _ in range(n)]
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        visited = set()
+        components = 0
+
+        for start in range(n):
+            if start in visited:
+                continue
+
+            components += 1
+            queue = deque([start])
+            visited.add(start)
+
+            while queue:
+                node = queue.popleft()
+                for neighbor in graph[node]:
+                    if neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append(neighbor)
+
+        return components
+```
+
+**Time Space Complexity**
+
+- **Time:** O(V + E)
+- **Space:** O(V + E), including the constructed adjacency list.
+
+### 6. ★ Number of Provinces — 547
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-provinces/)
 
@@ -280,22 +234,28 @@ Output: 2
 **Code**
 
 ```python
+from collections import deque
+
 class Solution:
     def findCircleNum(self, isConnected):
         n = len(isConnected)
         visited = set()
-
-        def dfs(city):
-            visited.add(city)
-            for neighbor in range(n):
-                if isConnected[city][neighbor] == 1 and neighbor not in visited:
-                    dfs(neighbor)
-
         provinces = 0
-        for city in range(n):
-            if city not in visited:
-                provinces += 1
-                dfs(city)
+
+        for start in range(n):
+            if start in visited:
+                continue
+
+            provinces += 1
+            queue = deque([start])
+            visited.add(start)
+
+            while queue:
+                city = queue.popleft()
+                for neighbor in range(n):
+                    if isConnected[city][neighbor] == 1 and neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append(neighbor)
 
         return provinces
 ```
@@ -305,226 +265,7 @@ class Solution:
 - **Time:** O(n² × α(n))
 - **Space:** O(n) auxiliary for DSU; the input matrix is excluded.
 
-## 2. Grid traversal
-
-### 8. ★ Number of Islands — 200
-
-[LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands/)
-
-Count 4-directionally connected groups of '1' cells in a nonempty grid. Visited land is changed to '0'.
-
-**Input/Output**
-
-```text
-Input: grid = [["1","1","0"],["0","0","1"]]
-Output: 2
-```
-›
-**Code**›
-
-```python
-class Solution:
-    def numIslands(self, grid):
-        rows, cols = len(grid), len(grid[0])
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != "1":
-                return
-            grid[r][c] = "0"
-            dfs(r + 1, c)
-            dfs(r - 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
-
-        islands = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == "1":
-                    islands += 1
-                    dfs(r, c)
-
-        return islands
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the DFS stack.
-
-### 9. ★ Flood Fill — 733
-
-[LeetCode/GFG Link](https://leetcode.com/problems/flood-fill/)
-
-Recolor the 4-connected component containing (sr, sc) in a nonempty image. Updates the image in place.
-
-**Input/Output**
-
-```text
-Input: image = [[1,1],[1,0]], sr = 0, sc = 0, color = 2
-Output: [[2,2],[2,0]]
-```
-
-**Code**
-
-```python
-class Solution:
-    def floodFill(self, image, sr, sc, color):
-        old = image[sr][sc]
-        if old == color:
-            return image
-        rows, cols = len(image), len(image[0])
-        image[sr][sc] = color
-        stack = [(sr, sc)]
-        while stack:
-            r, c = stack.pop()
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and image[x][y] == old:
-                    image[x][y] = color
-                    stack.append((x, y))
-        return image
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the DFS stack.
-
-### 10. ★ Max Area of Island — 695
-
-[LeetCode/GFG Link](https://leetcode.com/problems/max-area-of-island/)
-
-Return the largest 4-connected area of 1s in a nonempty binary grid. Visited land is changed to 0.
-
-**Input/Output**
-
-```text
-Input: grid = [[1,1,0],[1,0,1]]
-Output: 3
-```
-
-**Code**
-
-```python
-class Solution:
-    def maxAreaOfIsland(self, grid):
-        rows, cols = len(grid), len(grid[0])
-        best = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] != 1:
-                    continue
-                grid[r][c] = 0
-                stack = [(r, c)]
-                area = 0
-                while stack:
-                    x, y = stack.pop()
-                    area += 1
-                    for dx, dy in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                        nx, ny = x + dx, y + dy
-                        if 0 <= nx < rows and 0 <= ny < cols and grid[nx][ny] == 1:
-                            grid[nx][ny] = 0
-                            stack.append((nx, ny))
-                best = max(best, area)
-        return best
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the DFS stack.
-
-### 11. ★ Surrounded Regions — 130
-
-[LeetCode/GFG Link](https://leetcode.com/problems/surrounded-regions/)
-
-Flip enclosed 'O' regions to 'X' in place. First preserve all 'O' cells connected to the boundary of the nonempty board.
-
-**Input/Output**
-
-```text
-Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","X","X"],["X","O","X","X"]]
-Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]; no return value
-```
-
-**Code**
-
-```python
-from collections import deque
-
-class Solution:
-    def solve(self, board):
-        rows, cols = len(board), len(board[0])
-        queue = deque()
-        for r in range(rows):
-            for c in range(cols):
-                if (r in (0, rows - 1) or c in (0, cols - 1)) and board[r][c] == 'O':
-                    board[r][c] = '#'
-                    queue.append((r, c))
-        while queue:
-            r, c = queue.popleft()
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and board[x][y] == 'O':
-                    board[x][y] = '#'
-                    queue.append((x, y))
-        for r in range(rows):
-            for c in range(cols):
-                board[r][c] = 'O' if board[r][c] == '#' else 'X'
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the BFS queue.
-
-### 12. ★ Pacific Atlantic Water Flow — 417
-
-[LeetCode/GFG Link](https://leetcode.com/problems/pacific-atlantic-water-flow/)
-
-Find cells from which water reaches both oceans. Search backward from ocean boundaries to equal or higher cells in the nonempty height grid.
-
-**Input/Output**
-
-```text
-Input: heights = [[1,2],[4,3]]
-Output: [[0,1],[1,0],[1,1]] (any order)
-```
-
-**Code**
-
-```python
-from collections import deque
-
-class Solution:
-    def pacificAtlantic(self, heights):
-        rows, cols = len(heights), len(heights[0])
-        def reach(starts):
-            seen = set(starts)
-            queue = deque(seen)
-            while queue:
-                r, c = queue.popleft()
-                for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    x, y = r + dr, c + dc
-                    if (0 <= x < rows and 0 <= y < cols and (x, y) not in seen
-                            and heights[x][y] >= heights[r][c]):
-                        seen.add((x, y))
-                        queue.append((x, y))
-            return seen
-        pacific = reach([(0, c) for c in range(cols)] + [(r, 0) for r in range(rows)])
-        atlantic = reach([(rows - 1, c) for c in range(cols)] + [(r, cols - 1) for r in range(rows)])
-        return [[r, c] for r in range(rows) for c in range(cols)
-                if (r, c) in pacific and (r, c) in atlantic]
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the two reachable sets/arrays and BFS queues.
-
-## 3. Multi-source BFS
-
-### 13. ★ Rotting Oranges — 994
+### 7. ★ Rotting Oranges — 994
 
 [LeetCode/GFG Link](https://leetcode.com/problems/rotting-oranges/)
 
@@ -572,7 +313,7 @@ class Solution:
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the BFS queue.
 
-### 14. ★ 01 Matrix — 542
+### 8. ★ 01 Matrix — 542
 
 [LeetCode/GFG Link](https://leetcode.com/problems/01-matrix/)
 
@@ -615,7 +356,7 @@ class Solution:
 - **Time:** O(R × C)
 - **Space:** O(R × C), including the distance matrix and BFS queue.
 
-### 15. ★ Shortest Bridge — 934
+### 9. ★ Shortest Bridge — 934
 
 [LeetCode/GFG Link](https://leetcode.com/problems/shortest-bridge/)
 
@@ -669,13 +410,258 @@ class Solution:
 - **Time:** O(R × C)
 - **Space:** O(R × C) for the DFS stack and BFS queue.
 
-## 4. Cycle detection
+### 10. ★ DFS Traversal of a Graph
+
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1)
+
+DFS explores one branch as deeply as possible before backtracking. Start from vertex 0 and follow adjacency-list order.
+
+**Input/Output**
+
+```text
+Input: adj = [[1,2],[0,3],[0],[1]]
+Output: [0,1,3,2]
+```
+
+**Code**
+
+```python
+class Solution:
+    def dfs(self, adj):
+        visited = set()
+        result = []
+
+        def traverse(node):
+            visited.add(node)
+            result.append(node)
+
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    traverse(neighbor)
+
+        if adj:
+            traverse(0)
+
+        return result
+```
+
+**Time Space Complexity**
+
+- **Time:**
+- Each vertex is visited at most once: O(V).
+- Each visited vertex scans its adjacency list. Across the graph, that is E entries for a directed graph, or 2E for an undirected graph so ~ O(E).
+- Assuming average O(1) set operations, total time is O(V + E).
+- The neighbor loop scans only its node’s neighbors.
+- **Space:**
+- Visited can contain V vertices: O(V).
+- A graph can produce V active recursive calls: O(V).
+- result can contain V vertices: O(V) output space.
+- Auxiliary space is O(V). Including the output, it remains O(V).
+
+## Grid traversal
+
+### 11. ★ Number of Islands — 200
+
+[LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands/)
+
+Count 4-directionally connected groups of '1' cells in a nonempty grid. Visited land is changed to '0'.
+
+**Input/Output**
+
+```text
+Input: grid = [["1","1","0"],["0","0","1"]]
+Output: 2
+```
+
+**Code**
+
+```python
+class Solution:
+    def numIslands(self, grid):
+        rows, cols = len(grid), len(grid[0])
+
+        def dfs(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != "1":
+                return
+            grid[r][c] = "0"
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+
+        islands = 0
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == "1":
+                    islands += 1
+                    dfs(r, c)
+
+        return islands
+```
+
+**Time Space Complexity**
+
+- **Time:** O(R × C)
+- **Space:** O(R × C) for the DFS stack.
+
+### 12. ★ Flood Fill — 733
+
+[LeetCode/GFG Link](https://leetcode.com/problems/flood-fill/)
+
+Recolor the 4-connected component containing (sr, sc) in a nonempty image. Updates the image in place.
+
+**Input/Output**
+
+```text
+Input: image = [[1,1],[1,0]], sr = 0, sc = 0, color = 2
+Output: [[2,2],[2,0]]
+```
+
+**Code**
+
+```python
+class Solution:
+    def floodFill(self, image, sr, sc, color):
+        rows, cols = len(image), len(image[0])
+        original = image[sr][sc]
+        if original == color: return image
+
+        def dfs(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols or image[r][c] != original: return
+            image[r][c] = color
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+
+        dfs(sr, sc)
+        return image
+```
+
+**Time Space Complexity**
+
+- **Time:** O(R × C)
+- **Space:** O(R × C) for the DFS stack.
+
+### 13. ★ Max Area of Island — 695
+
+[LeetCode/GFG Link](https://leetcode.com/problems/max-area-of-island/)
+
+Return the largest 4-connected area of 1s in a nonempty binary grid. Visited land is changed to 0.
+
+**Input/Output**
+
+```text
+Input: grid = [[1,1,0],[1,0,1]]
+Output: 3
+```
+
+**Code**
+
+```python
+class Solution:
+    def maxAreaOfIsland(self, grid):
+        rows, cols = len(grid), len(grid[0])
+
+        def dfs(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == 0: return 0
+            grid[r][c] = 0
+            return 1 + dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
+
+        max_area = 0
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 1: max_area = max(max_area, dfs(r, c))
+        return max_area
+```
+
+**Time Space Complexity**
+
+- **Time:** O(R × C)
+- **Space:** O(R × C) for the DFS stack.
+
+### 14. ★ Surrounded Regions — 130
+
+[LeetCode/GFG Link](https://leetcode.com/problems/surrounded-regions/)
+
+Flip enclosed 'O' regions to 'X' in place. First preserve all 'O' cells connected to the boundary of the nonempty board.
+
+**Input/Output**
+
+```text
+Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","X","X"],["X","O","X","X"]]
+Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]; no return value
+```
+
+**Code**
+
+```python
+class Solution:
+    def solve(self, board):
+        rows, cols = len(board), len(board[0])
+
+        def dfs(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != "O": return
+            board[r][c] = "#"
+            dfs(r + 1, c)
+            dfs(r - 1, c)
+            dfs(r, c + 1)
+            dfs(r, c - 1)
+
+        for r in range(rows):
+            dfs(r, 0)
+            dfs(r, cols - 1)
+
+        for c in range(cols):
+            dfs(0, c)
+            dfs(rows - 1, c)
+
+        for r in range(rows):
+            for c in range(cols):
+                if board[r][c] == "O": board[r][c] = "X"
+                elif board[r][c] == "#": board[r][c] = "O"
+```
+
+**Time Space Complexity**
+
+- **Time:** O(R × C)
+- **Space:** O(R × C) for the DFS recursion stack.
+
+### 15. ★ Pacific Atlantic Water Flow — 417
+
+[LeetCode/GFG Link](https://leetcode.com/problems/pacific-atlantic-water-flow/)
+
+Find cells from which water reaches both oceans. Search backward from ocean boundaries to equal or higher cells in the nonempty height grid.
+
+**Input/Output**
+
+```text
+Input: heights = [[1,2],[4,3]]
+Output: [[0,1],[1,0],[1,1]] (any order)
+```
+
+**Code**
+
+```python
+
+```
+
+**Time Space Complexity**
+
+- **Time:** O(R × C)
+- **Space:** O(R × C)
+
+## Cycle detection
 
 ### 16. ★ Detect Cycle in an Undirected Graph — BFS and DFS
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1)
 
 Detect a cycle in any component of an undirected graph. Input edges use vertices 0 through V − 1; edge IDs distinguish parallel edges. Mark vertices when scheduling them. Ignore only the edge used to enter the current vertex; another edge to a seen vertex proves a cycle. Both BFS and DFS are included.
+
+The rule is: process a node only when it has no incoming edges left.
+
+Indegree means the number of incoming edges to a node. In Course Schedule, it represents how many prerequisites remain.
 
 **Input/Output**
 
@@ -692,60 +678,46 @@ Output: true
 from collections import deque
 
 class Solution:
-    def isCycle(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for eid, (u, v) in enumerate(edges):
-            adj[u].append((v, eid))
-            adj[v].append((u, eid))
-        seen = set()
-        for start in range(V):
-            if start in seen:
+    def isCycle(self, adj):
+        visited = set()
+
+        for start in range(len(adj)):
+            if start in visited:
                 continue
-            seen.add(start)
+            visited.add(start)
             queue = deque([(start, -1)])
+
             while queue:
-                u, parent_edge = queue.popleft()
-                for v, eid in adj[u]:
-                    if eid == parent_edge:
-                        continue
-                    if v in seen:
+                node, parent = queue.popleft()
+                for neighbor in adj[node]:
+                    if neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append((neighbor, node))
+                    elif neighbor != parent:
                         return True
-                    seen.add(v)
-                    queue.append((v, eid))
         return False
 ```
-
-**DFS — explicit stack**
 
 ```python
 class Solution:
-    def isCycle(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for eid, (u, v) in enumerate(edges):
-            adj[u].append((v, eid))
-            adj[v].append((u, eid))
-        seen = set()
-        for start in range(V):
-            if start in seen:
-                continue
-            seen.add(start)
-            stack = [(start, -1)]
-            while stack:
-                u, parent_edge = stack.pop()
-                for v, eid in adj[u]:
-                    if eid == parent_edge:
-                        continue
-                    if v in seen:
+    def isCycle(self, adj):
+        visited = set()
+
+        def dfs(node, parent):
+            visited.add(node)
+            for neighbor in adj[node]:
+                if neighbor not in visited:
+                    if dfs(neighbor, node):
                         return True
-                    seen.add(v)
-                    stack.append((v, eid))
+                elif neighbor != parent:
+                    return True
+            return False
+
+        for start in range(len(adj)):
+            if start not in visited and dfs(start, -1):
+                return True
         return False
 ```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E)
-- **Space:** O(V + E), including the adjacency list; O(V) traversal storage for either variant.
 
 ### 17. ★ Detect Cycle in a Directed Graph — DFS
 
@@ -764,45 +736,44 @@ Output: true
 
 ```python
 class Solution:
-    def isCyclic(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-        state = [0] * V
-        for start in range(V):
-            if state[start] != 0:
-                continue
-            state[start] = 1
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                v = next(neighbors, None)
-                if v is None:
-                    state[u] = 2
-                    stack.pop()
-                elif state[v] == 1:
+    def isCyclic(self, adj):
+        state = [0] * len(adj)
+
+        def dfs(node):
+            state[node] = 1
+            for neighbor in adj[node]:
+                if state[neighbor] == 1:
                     return True
-                elif state[v] == 0:
-                    state[v] = 1
-                    stack.append((v, iter(adj[v])))
+                if state[neighbor] == 0 and dfs(neighbor):
+                    return True
+            state[node] = 2
+            return False
+
+        for node in range(len(adj)):
+            if state[node] == 0 and dfs(node):
+                return True
         return False
 ```
 
 **Time Space Complexity**
 
 - **Time:** O(V + E)
-- **Space:** O(V + E)
+- **Space:** O(V)
 
 ### 18. ★ Detect Cycle in a Directed Graph — Kahn’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
 
-Detect a directed cycle using Kahn’s algorithm: a cycle exists if not all vertices can be removed. Input: V and directed edges.
+Kahn’s algorithm is a BFS-based way to put the nodes of a directed graph in dependency order, called a topological order.
+
+The rule is: process a node only when it has no incoming edges left.
+
+Indegree means the number of incoming edges to a node. In Course Schedule, it represents how many prerequisites remain.
 
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1],[1,2],[2,0]]
+Input: edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
@@ -812,31 +783,29 @@ Output: true
 from collections import deque
 
 class Solution:
-    def isCyclic(self, V, edges):
-        n = V
-        adj = [[] for _ in range(n)]
-        for u, v in edges:
-            adj[u].append(v)
-        indegree = [0] * n
-        for neighbors in adj:
-            for v in neighbors:
-                indegree[v] += 1
-        queue = deque(u for u in range(n) if indegree[u] == 0)
-        order = []
+    def isCyclic(self, adj):
+        indegree = [0] * len(adj)
+        for node in range(len(adj)):
+            for neighbor in adj[node]:
+                indegree[neighbor] += 1
+
+        queue = deque(node for node in range(len(adj)) if indegree[node] == 0)
+        processed = 0
+
         while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
-        return len(order) != n
+            node = queue.popleft()
+            processed += 1
+            for neighbor in adj[node]:
+                indegree[neighbor] -= 1
+                if indegree[neighbor] == 0: queue.append(neighbor)
+
+        return processed != len(adj)
 ```
 
 **Time Space Complexity**
 
 - **Time:** O(V + E)
-- **Space:** O(V + E), including the adjacency list.
+- **Space:** O(V + E)
 
 ### 19. ★ Course Schedule — 207
 
@@ -858,24 +827,24 @@ from collections import deque
 
 class Solution:
     def canFinish(self, numCourses, prerequisites):
-        n = numCourses
-        adj = [[] for _ in range(n)]
+        adj = [[] for _ in range(numCourses)]
+        indegree = [0] * numCourses
+
         for course, prerequisite in prerequisites:
             adj[prerequisite].append(course)
-        indegree = [0] * n
-        for neighbors in adj:
-            for v in neighbors:
-                indegree[v] += 1
-        queue = deque(u for u in range(n) if indegree[u] == 0)
-        order = []
+            indegree[course] += 1
+
+        queue = deque(course for course in range(numCourses) if indegree[course] == 0)
+        completed = 0
+
         while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
-        return len(order) == n
+            course = queue.popleft()
+            completed += 1
+            for neighbor in adj[course]:
+                indegree[neighbor] -= 1
+                if indegree[neighbor] == 0: queue.append(neighbor)
+
+        return completed == numCourses
 ```
 
 **Time Space Complexity**
@@ -905,18 +874,24 @@ class Solution:
     def eventualSafeNodes(self, graph):
         n = len(graph)
         reverse = [[] for _ in range(n)]
-        degree = [len(neighbors) for neighbors in graph]
-        for u in range(n):
-            for v in graph[u]:
-                reverse[v].append(u)
-        queue = deque(u for u in range(n) if degree[u] == 0)
+        outdegree = [0] * n
+
+        for node in range(n):
+            outdegree[node] = len(graph[node])
+            for neighbor in graph[node]:
+                reverse[neighbor].append(node)
+
+        queue = deque(node for node in range(n) if outdegree[node] == 0)
+        safe = [False] * n
+
         while queue:
-            u = queue.popleft()
-            for v in reverse[u]:
-                degree[v] -= 1
-                if degree[v] == 0:
-                    queue.append(v)
-        return [u for u in range(n) if degree[u] == 0]
+            node = queue.popleft()
+            safe[node] = True
+            for previous in reverse[node]:
+                outdegree[previous] -= 1
+                if outdegree[previous] == 0: queue.append(previous)
+
+        return [node for node in range(n) if safe[node]]
 ```
 
 **Time Space Complexity**
@@ -924,7 +899,11 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the reversed graph.
 
-## 5. Bipartite graphs
+## Bipartite graphs
+
+A bipartite graph is a graph whose nodes can be divided into two groups, such that every edge connects a node in one group to a node in the other.
+
+No edge can connect two nodes within the same group.
 
 ### 21. ★ Is Graph Bipartite? — 785
 
@@ -1037,7 +1016,7 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-## 6. Topological sorting and dependencies
+## 5. Topological sorting and dependencies
 
 ### 23. ★ Topological Sort — DFS
 
