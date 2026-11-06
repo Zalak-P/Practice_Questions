@@ -760,7 +760,9 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V)
 
-### 18. ★ Detect Cycle in a Directed Graph — Kahn’s Algorithm
+## Kahn’s Algorithm
+
+### 18. ★ Detect Cycle in a Directed Graph
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
 
