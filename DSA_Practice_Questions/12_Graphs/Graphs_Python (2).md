@@ -917,7 +917,7 @@ A bipartite graph is a graph whose nodes have 2 different colors, or you can ass
 Thus dividing the graph in 2 groups where no edges are interconnected within same group.
 
                                                                      6 - 8
-Observations:-                                                      /.    \
+Observations:-                                                      /     \
 - Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5      10
                                                                     \
                                                                      7 - 9
