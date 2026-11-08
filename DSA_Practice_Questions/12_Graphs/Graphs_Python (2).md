@@ -21,27 +21,6 @@ Output: [0,1,2,3]
 
 **Code**
 
-```python
-class Solution:
-    def bfs(self, adj):
-        if not adj:
-            return []
-
-        visited = {0}
-        queue = deque([0])
-        result = []
-
-        while queue:
-            node = queue.popleft()
-            result.append(node)
-
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    visited.add(neighbor)
-                    queue.append(neighbor)
-
-        return result
-```
 
 **Time Space Complexity**
 
@@ -63,25 +42,6 @@ Output: true
 
 **Code**
 
-```python
-class Solution:
-    def validPath(self, n, edges, source, destination):
-        adj = [[] for _ in range(n)]
-        for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
-        seen = {source}
-        stack = [source]
-        while stack:
-            u = stack.pop()
-            if u == destination:
-                return True
-            for v in adj[u]:
-                if v not in seen:
-                    seen.add(v)
-                    stack.append(v)
-        return False
-```
 
 **Time Space Complexity**
 
@@ -103,30 +63,6 @@ Output: A new graph with adjacency list [[2],[1]], sharing no nodes with the inp
 
 **Code**
 
-```python
-from collections import deque
-
-# Node is provided by LeetCode.
-class Solution:
-    def cloneGraph(self, node):
-        if node is None:
-            return None
-
-        copies = {node: Node(node.val)}
-        queue = deque([node])
-
-        while queue:
-            original = queue.popleft()
-
-            for neighbor in original.neighbors:
-                if neighbor not in copies:
-                    copies[neighbor] = Node(neighbor.val)
-                    queue.append(neighbor)
-
-                copies[original].neighbors.append(copies[neighbor])
-
-        return copies[node]
-```
 
 **Time Space Complexity**
 
@@ -148,21 +84,6 @@ Output: true
 
 **Code**
 
-```python
-class Solution:
-    def canVisitAllRooms(self, rooms):
-        queue = deque([0])
-        visited = {0}
-
-        while queue:
-            room = queue.popleft()
-            for key in rooms[room]:
-                if key not in visited:
-                    visited.add(key)
-                    queue.append(key)
-
-        return len(visited) == len(rooms)
-```
 
 **Time Space Complexity**
 
@@ -184,36 +105,6 @@ Output: 2
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def countComponents(self, n, edges):
-        graph = [[] for _ in range(n)]
-        for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
-
-        visited = set()
-        components = 0
-
-        for start in range(n):
-            if start in visited:
-                continue
-
-            components += 1
-            queue = deque([start])
-            visited.add(start)
-
-            while queue:
-                node = queue.popleft()
-                for neighbor in graph[node]:
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-
-        return components
-```
 
 **Time Space Complexity**
 
@@ -235,32 +126,6 @@ Output: 2
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def findCircleNum(self, isConnected):
-        n = len(isConnected)
-        visited = set()
-        provinces = 0
-
-        for start in range(n):
-            if start in visited:
-                continue
-
-            provinces += 1
-            queue = deque([start])
-            visited.add(start)
-
-            while queue:
-                city = queue.popleft()
-                for neighbor in range(n):
-                    if isConnected[city][neighbor] == 1 and neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-
-        return provinces
-```
 
 **Time Space Complexity**
 
@@ -282,33 +147,6 @@ Output: 4
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def orangesRotting(self, grid):
-        rows, cols = len(grid), len(grid[0])
-        queue = deque()
-        fresh = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == 2:
-                    queue.append((r, c))
-                elif grid[r][c] == 1:
-                    fresh += 1
-        minutes = 0
-        while queue and fresh:
-            for _ in range(len(queue)):
-                r, c = queue.popleft()
-                for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    x, y = r + dr, c + dc
-                    if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
-                        grid[x][y] = 2
-                        fresh -= 1
-                        queue.append((x, y))
-            minutes += 1
-        return minutes if fresh == 0 else -1
-```
 
 **Time Space Complexity**
 
@@ -330,28 +168,6 @@ Output: [[0,1,2],[1,2,3]]
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def updateMatrix(self, mat):
-        rows, cols = len(mat), len(mat[0])
-        dist = [[-1] * cols for _ in range(rows)]
-        queue = deque()
-        for r in range(rows):
-            for c in range(cols):
-                if mat[r][c] == 0:
-                    dist[r][c] = 0
-                    queue.append((r, c))
-        while queue:
-            r, c = queue.popleft()
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and dist[x][y] == -1:
-                    dist[x][y] = dist[r][c] + 1
-                    queue.append((x, y))
-        return dist
-```
 
 **Time Space Complexity**
 
@@ -373,39 +189,6 @@ Output: 1
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def shortestBridge(self, grid):
-        rows, cols = len(grid), len(grid[0])
-        start = next((r, c) for r in range(rows) for c in range(cols) if grid[r][c] == 1)
-        dirs = ((1, 0), (-1, 0), (0, 1), (0, -1))
-        stack = [start]
-        queue = deque([start])
-        grid[start[0]][start[1]] = 2
-        while stack:
-            r, c = stack.pop()
-            for dr, dc in dirs:
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
-                    grid[x][y] = 2
-                    stack.append((x, y))
-                    queue.append((x, y))
-        flips = 0
-        while queue:
-            for _ in range(len(queue)):
-                r, c = queue.popleft()
-                for dr, dc in dirs:
-                    x, y = r + dr, c + dc
-                    if 0 <= x < rows and 0 <= y < cols and grid[x][y] != 2:
-                        if grid[x][y] == 1:
-                            return flips
-                        grid[x][y] = 2
-                        queue.append((x, y))
-            flips += 1
-        return -1
-```
 
 **Time Space Complexity**
 
@@ -427,25 +210,6 @@ Output: [0,1,3,2]
 
 **Code**
 
-```python
-class Solution:
-    def dfs(self, adj):
-        visited = set()
-        result = []
-
-        def traverse(node):
-            visited.add(node)
-            result.append(node)
-
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    traverse(neighbor)
-
-        if adj:
-            traverse(0)
-
-        return result
-```
 
 **Time Space Complexity**
 
@@ -477,29 +241,6 @@ Output: 2
 
 **Code**
 
-```python
-class Solution:
-    def numIslands(self, grid):
-        rows, cols = len(grid), len(grid[0])
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != "1":
-                return
-            grid[r][c] = "0"
-            dfs(r + 1, c)
-            dfs(r - 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
-
-        islands = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == "1":
-                    islands += 1
-                    dfs(r, c)
-
-        return islands
-```
 
 **Time Space Complexity**
 
@@ -521,24 +262,6 @@ Output: [[2,2],[2,0]]
 
 **Code**
 
-```python
-class Solution:
-    def floodFill(self, image, sr, sc, color):
-        rows, cols = len(image), len(image[0])
-        original = image[sr][sc]
-        if original == color: return image
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or image[r][c] != original: return
-            image[r][c] = color
-            dfs(r + 1, c)
-            dfs(r - 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
-
-        dfs(sr, sc)
-        return image
-```
 
 **Time Space Complexity**
 
@@ -560,22 +283,6 @@ Output: 3
 
 **Code**
 
-```python
-class Solution:
-    def maxAreaOfIsland(self, grid):
-        rows, cols = len(grid), len(grid[0])
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == 0: return 0
-            grid[r][c] = 0
-            return 1 + dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
-
-        max_area = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == 1: max_area = max(max_area, dfs(r, c))
-        return max_area
-```
 
 **Time Space Complexity**
 
@@ -597,32 +304,6 @@ Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X
 
 **Code**
 
-```python
-class Solution:
-    def solve(self, board):
-        rows, cols = len(board), len(board[0])
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != "O": return
-            board[r][c] = "#"
-            dfs(r + 1, c)
-            dfs(r - 1, c)
-            dfs(r, c + 1)
-            dfs(r, c - 1)
-
-        for r in range(rows):
-            dfs(r, 0)
-            dfs(r, cols - 1)
-
-        for c in range(cols):
-            dfs(0, c)
-            dfs(rows - 1, c)
-
-        for r in range(rows):
-            for c in range(cols):
-                if board[r][c] == "O": board[r][c] = "X"
-                elif board[r][c] == "#": board[r][c] = "O"
-```
 
 **Time Space Complexity**
 
@@ -644,9 +325,6 @@ Output: [[0,1],[1,0],[1,1]] (any order)
 
 **Code**
 
-```python
-
-```
 
 **Time Space Complexity**
 
@@ -676,50 +354,7 @@ Output: true
 
 **BFS**
 
-```python
-from collections import deque
 
-class Solution:
-    def isCycle(self, adj):
-        visited = set()
-
-        for start in range(len(adj)):
-            if start in visited:
-                continue
-            visited.add(start)
-            queue = deque([(start, -1)])
-
-            while queue:
-                node, parent = queue.popleft()
-                for neighbor in adj[node]:
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append((neighbor, node))
-                    elif neighbor != parent:
-                        return True
-        return False
-```
-
-```python
-class Solution:
-    def isCycle(self, adj):
-        visited = set()
-
-        def dfs(node, parent):
-            visited.add(node)
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    if dfs(neighbor, node):
-                        return True
-                elif neighbor != parent:
-                    return True
-            return False
-
-        for start in range(len(adj)):
-            if start not in visited and dfs(start, -1):
-                return True
-        return False
-```
 
 ### 17. ★ Detect Cycle in a Directed Graph — DFS
 
@@ -736,26 +371,6 @@ Output: true
 
 **Code**
 
-```python
-class Solution:
-    def isCyclic(self, adj):
-        state = [0] * len(adj)
-
-        def dfs(node):
-            state[node] = 1
-            for neighbor in adj[node]:
-                if state[neighbor] == 1:
-                    return True
-                if state[neighbor] == 0 and dfs(neighbor):
-                    return True
-            state[node] = 2
-            return False
-
-        for node in range(len(adj)):
-            if state[node] == 0 and dfs(node):
-                return True
-        return False
-```
 
 **Time Space Complexity**
 
@@ -783,33 +398,6 @@ Output: true
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def isCyclic(self, adj):
-        indegree = [0] * len(adj)
-
-        for node in range(len(adj)):
-            for neighbor in adj[node]:
-                indegree[neighbor] += 1
-
-        # queue containing all nodes whose indegree is 0
-        queue = deque()
-        for node in range(len(adj)):
-            if indegree[node] == 0:
-                queue.append(node)
-
-        while queue:
-            node = queue.popleft()
-            processed += 1
-            for neighbor in adj[node]:
-                indegree[neighbor] -= 1
-                if indegree[neighbor] == 0:
-                    queue.append(neighbor)
-
-        return processed != len(adj)
-```
 
 **Time Space Complexity**
 
@@ -831,33 +419,6 @@ Output: true
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def canFinish(self, numCourses, prerequisites):
-        adj = [[] for _ in range(numCourses)]
-        indegree = [0] * numCourses
-
-        for course, prerequisite in prerequisites:
-            adj[prerequisite].append(course)
-            indegree[course] += 1
-
-        # queue containing all nodes whose indegree is 0
-        queue = deque(course for course in range(numCourses) if indegree[course] == 0)
-        completed = 0
-
-        while queue:
-            course = queue.popleft()
-            completed += 1
-
-            for neighbor in adj[course]:
-                indegree[neighbor] -= 1
-                if indegree[neighbor] == 0: 
-                    queue.append(neighbor)
-
-        return completed == numCourses
-```
 
 **Time Space Complexity**
 
@@ -879,32 +440,6 @@ Output: [2,4,5,6]
 
 **Code**
 
-```python
-class Solution:
-    def eventualSafeNodes(self, graph):
-        n = len(graph)
-        reverse = [[] for _ in range(n)]
-        outdegree = [0] * n
-
-        for node in range(n):
-            outdegree[node] = len(graph[node])
-            for neighbor in graph[node]:
-                reverse[neighbor].append(node)
-
-        queue = deque(node for node in range(n) if outdegree[node] == 0)
-        safe = [False] * n
-
-        while queue:
-            node = queue.popleft()
-            safe[node] = True
-            
-            for previous in reverse[node]:
-                outdegree[previous] -= 1
-                if outdegree[previous] == 0: 
-                    queue.append(previous)
-
-        return [node for node in range(n) if safe[node]]
-```
 
 **Time Space Complexity**
 
@@ -941,55 +476,9 @@ Output: true
 
 1. **Two-Coloring Test:** Try to color every vertex using any two colors (e.g., Red and Blue) so that no two adjecent connected vertices share the same color. If you can do it, it is bipartite. (BFS Approach)
 
-```python
-class Solution:
-    def isBipartite(self, graph):
-        color = [-1] * len(graph)
-
-        for start in range(len(graph)):
-            if color[start] != -1:
-                continue
-
-            color[start] = 0
-            queue = deque([start])
-
-            while queue:
-                node = queue.popleft()
-                for neighbor in graph[node]:
-                    if color[neighbor] == -1:
-                        color[neighbor] = 1 - color[node]
-                        queue.append(neighbor)
-                    elif color[neighbor] == color[node]:
-                        return False
-
-        return True
-```
 
 2. **Odd Cycle Check:** If the graph contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
 
-```python
-class Solution:
-    def isBipartite(self, graph):
-        color = [-1] * len(graph)
-
-        def dfs(node, current_color):
-            color[node] = current_color
-
-            for neighbor in graph[node]:
-                if color[neighbor] == -1:
-                    if not dfs(neighbor, 1 - current_color):
-                        return False
-                elif color[neighbor] == current_color:
-                    return False
-
-            return True
-
-        for node in range(len(graph)):
-            if color[node] == -1 and not dfs(node, 0):
-                return False
-
-        return True
-```
 
 **Time Space Complexity**
 
@@ -1012,34 +501,6 @@ Output: true
 
 **Code**
 
-```python
-class Solution:
-    def possibleBipartition(self, n, dislikes):
-        graph = [[] for _ in range(n + 1)]
-        for u, v in dislikes:
-            graph[u].append(v)
-            graph[v].append(u)
-
-        color = [-1] * (n + 1)
-
-        for start in range(1, n + 1):
-            if color[start] != -1:
-                continue
-
-            color[start] = 0
-            queue = deque([start])
-
-            while queue:
-                node = queue.popleft()
-                for neighbor in graph[node]:
-                    if color[neighbor] == -1:
-                        color[neighbor] = 1 - color[node]
-                        queue.append(neighbor)
-                    elif color[neighbor] == color[node]:
-                        return False
-
-        return True
-```
 
 **Time Space Complexity**
 
@@ -1078,33 +539,6 @@ Output: [0,2,1,3] (one valid order)
 
 **Code**
 
-```python
-class Solution:
-    def topoSort(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-        state = [0] * V
-        order = []
-        for start in range(V):
-            if state[start] != 0:
-                continue
-            state[start] = 1
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                v = next(neighbors, None)
-                if v is None:
-                    order.append(u)
-                    state[u] = 2
-                    stack.pop()
-                elif state[v] == 1:
-                    return []
-                elif state[v] == 0:
-                    state[v] = 1
-                    stack.append((v, iter(adj[v])))
-        return order[::-1]
-```
 
 **Time Space Complexity**
 
@@ -1126,30 +560,6 @@ Output: [0,1,2,3] (one valid order)
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def topoSort(self, V, edges):
-        n = V
-        adj = [[] for _ in range(n)]
-        for u, v in edges:
-            adj[u].append(v)
-        indegree = [0] * n
-        for neighbors in adj:
-            for v in neighbors:
-                indegree[v] += 1
-        queue = deque(u for u in range(n) if indegree[u] == 0)
-        order = []
-        while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
-        return order if len(order) == n else []
-```
 
 **Time Space Complexity**
 
@@ -1171,30 +581,6 @@ Output: [0,1,2,3] (one valid order)
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def findOrder(self, numCourses, prerequisites):
-        n = numCourses
-        adj = [[] for _ in range(n)]
-        for course, prerequisite in prerequisites:
-            adj[prerequisite].append(course)
-        indegree = [0] * n
-        for neighbors in adj:
-            for v in neighbors:
-                indegree[v] += 1
-        queue = deque(u for u in range(n) if indegree[u] == 0)
-        order = []
-        while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
-        return order if len(order) == n else []
-```
 
 **Time Space Complexity**
 
@@ -1216,34 +602,6 @@ Output: "zacb" (one valid order; z before c and a before b)
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def findOrder(self, words):
-        adj = {ch: set() for word in words for ch in word}
-        degree = dict.fromkeys(adj, 0)
-        for first, second in zip(words, words[1:]):
-            for a, b in zip(first, second):
-                if a != b:
-                    if b not in adj[a]:
-                        adj[a].add(b)
-                        degree[b] += 1
-                    break
-            else:
-                if len(first) > len(second):
-                    return ''
-        queue = deque(ch for ch in adj if degree[ch] == 0)
-        order = []
-        while queue:
-            ch = queue.popleft()
-            order.append(ch)
-            for nxt in adj[ch]:
-                degree[nxt] -= 1
-                if degree[nxt] == 0:
-                    queue.append(nxt)
-        return ''.join(order) if len(order) == len(adj) else ''
-```
 
 **Time Space Complexity**
 
@@ -1265,38 +623,13 @@ Output: ["tea","combo"]
 
 **Code**
 
-```python
-from collections import defaultdict, deque
-
-class Solution:
-    def findAllRecipes(self, recipes, ingredients, supplies):
-        dependents = defaultdict(list)
-        remaining = [len(items) for items in ingredients]
-        for i, items in enumerate(ingredients):
-            for item in items:
-                dependents[item].append(i)
-        queue = deque(supplies)
-        available = set(supplies)
-        for i, recipe in enumerate(recipes):
-            if remaining[i] == 0 and recipe not in available:
-                available.add(recipe)
-                queue.append(recipe)
-        while queue:
-            item = queue.popleft()
-            for i in dependents[item]:
-                remaining[i] -= 1
-                if remaining[i] == 0 and recipes[i] not in available:
-                    available.add(recipes[i])
-                    queue.append(recipes[i])
-        return [recipe for recipe in recipes if recipe in available]
-```
 
 **Time Space Complexity**
 
 - **Time:** O(N + I + S) expected hash-table operations; N = recipes, I = ingredient occurrences, S = supplies. String hashing additionally depends on string lengths.
 - **Space:** O(N + I + S).
 
-## 7. Unweighted shortest paths and state-based BFS
+## Unweighted shortest paths and state-based BFS
 
 ### 28. ★ Shortest Path in an Undirected Graph with Unit Weights
 
@@ -1313,26 +646,6 @@ Output: [0,1,2,-1]
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def shortestPath(self, V, edges, src):
-        adj = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
-        dist = [-1] * V
-        dist[src] = 0
-        queue = deque([src])
-        while queue:
-            u = queue.popleft()
-            for v in adj[u]:
-                if dist[v] == -1:
-                    dist[v] = dist[u] + 1
-                    queue.append(v)
-        return dist
-```
 
 **Time Space Complexity**
 
@@ -1354,30 +667,6 @@ Output: 2
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def shortestPathBinaryMatrix(self, grid):
-        n = len(grid)
-        if grid[0][0] or grid[n - 1][n - 1]:
-            return -1
-        queue = deque([(0, 0, 1)])
-        grid[0][0] = 1
-        while queue:
-            r, c, length = queue.popleft()
-            if r == n - 1 and c == n - 1:
-                return length
-            for dr in (-1, 0, 1):
-                for dc in (-1, 0, 1):
-                    if dr == dc == 0:
-                        continue
-                    x, y = r + dr, c + dc
-                    if 0 <= x < n and 0 <= y < n and grid[x][y] == 0:
-                        grid[x][y] = 1
-                        queue.append((x, y, length + 1))
-        return -1
-```
 
 **Time Space Complexity**
 
@@ -1399,29 +688,6 @@ Output: 5
 
 **Code**
 
-```python
-from collections import deque
-from string import ascii_lowercase
-
-class Solution:
-    def ladderLength(self, beginWord, endWord, wordList):
-        remaining = set(wordList)
-        if endWord not in remaining:
-            return 0
-        remaining.discard(beginWord)
-        queue = deque([(beginWord, 1)])
-        while queue:
-            word, length = queue.popleft()
-            if word == endWord:
-                return length
-            for i in range(len(word)):
-                for ch in ascii_lowercase:
-                    candidate = word[:i] + ch + word[i + 1:]
-                    if candidate in remaining:
-                        remaining.remove(candidate)
-                        queue.append((candidate, length + 1))
-        return 0
-```
 
 **Time Space Complexity**
 
@@ -1443,29 +709,6 @@ Output: 1
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def openLock(self, deadends, target):
-        seen = set(deadends)
-        if '0000' in seen:
-            return -1
-        queue = deque([('0000', 0)])
-        seen.add('0000')
-        while queue:
-            state, turns = queue.popleft()
-            if state == target:
-                return turns
-            for i in range(4):
-                for delta in (-1, 1):
-                    digit = str((int(state[i]) + delta) % 10)
-                    nxt = state[:i] + digit + state[i + 1:]
-                    if nxt not in seen:
-                        seen.add(nxt)
-                        queue.append((nxt, turns + 1))
-        return -1
-```
 
 **Time Space Complexity**
 
@@ -1487,36 +730,13 @@ Output: 1
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def snakesAndLadders(self, board):
-        n = len(board)
-        queue = deque([(1, 0)])
-        seen = {1}
-        while queue:
-            square, rolls = queue.popleft()
-            if square == n * n:
-                return rolls
-            for nxt in range(square + 1, min(square + 6, n * n) + 1):
-                row_from_bottom, col = divmod(nxt - 1, n)
-                row = n - 1 - row_from_bottom
-                if row_from_bottom % 2:
-                    col = n - 1 - col
-                dest = board[row][col] if board[row][col] != -1 else nxt
-                if dest not in seen:
-                    seen.add(dest)
-                    queue.append((dest, rolls + 1))
-        return -1
-```
 
 **Time Space Complexity**
 
 - **Time:** O(n²)
 - **Space:** O(n²).
 
-## 8. Weighted shortest paths
+## Weighted shortest paths
 
 ### 33. ★ Dijkstra’s Algorithm
 
@@ -1533,29 +753,6 @@ Output: [0,4,6]
 
 **Code**
 
-```python
-from heapq import heappop, heappush
-
-class Solution:
-    def dijkstra(self, V, edges, src):
-        adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-            adj[v].append((u, w))
-        dist = [float('inf')] * V
-        dist[src] = 0
-        heap = [(0, src)]
-        while heap:
-            cost, u = heappop(heap)
-            if cost != dist[u]:
-                continue
-            for v, weight in adj[u]:
-                candidate = cost + weight
-                if candidate < dist[v]:
-                    dist[v] = candidate
-                    heappush(heap, (candidate, v))
-        return [-1 if d == float('inf') else d for d in dist]
-```
 
 **Time Space Complexity**
 
@@ -1577,30 +774,6 @@ Output: 3
 
 **Code**
 
-```python
-from heapq import heappop, heappush
-
-class Solution:
-    def networkDelayTime(self, times, n, k):
-        V, edges, src = n + 1, times, k
-        adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-        dist = [float('inf')] * V
-        dist[src] = 0
-        heap = [(0, src)]
-        while heap:
-            cost, u = heappop(heap)
-            if cost != dist[u]:
-                continue
-            for v, weight in adj[u]:
-                candidate = cost + weight
-                if candidate < dist[v]:
-                    dist[v] = candidate
-                    heappush(heap, (candidate, v))
-        answer = max(dist[1:])
-        return -1 if answer == float('inf') else answer
-```
 
 **Time Space Complexity**
 
@@ -1622,30 +795,6 @@ Output: 2
 
 **Code**
 
-```python
-from heapq import heappop, heappush
-
-class Solution:
-    def minimumEffortPath(self, heights):
-        rows, cols = len(heights), len(heights[0])
-        dist = [[float('inf')] * cols for _ in range(rows)]
-        dist[0][0] = 0
-        heap = [(0, 0, 0)]
-        while heap:
-            effort, r, c = heappop(heap)
-            if effort != dist[r][c]:
-                continue
-            if r == rows - 1 and c == cols - 1:
-                return effort
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols:
-                    candidate = max(effort, abs(heights[x][y] - heights[r][c]))
-                    if candidate < dist[x][y]:
-                        dist[x][y] = candidate
-                        heappush(heap, (candidate, x, y))
-        return 0
-```
 
 **Time Space Complexity**
 
@@ -1667,18 +816,6 @@ Output: 200
 
 **Code**
 
-```python
-class Solution:
-    def findCheapestPrice(self, n, flights, src, dst, k):
-        dist = [float('inf')] * n
-        dist[src] = 0
-        for _ in range(k + 1):
-            next_dist = dist.copy()
-            for u, v, price in flights:
-                next_dist[v] = min(next_dist[v], dist[u] + price)
-            dist = next_dist
-        return -1 if dist[dst] == float('inf') else dist[dst]
-```
 
 **Time Space Complexity**
 
@@ -1700,25 +837,6 @@ Output: [0,4,2]
 
 **Code**
 
-```python
-class Solution:
-    def bellmanFord(self, V, edges, src):
-        inf = float('inf')
-        dist = [inf] * V
-        dist[src] = 0
-        for _ in range(V - 1):
-            changed = False
-            for u, v, w in edges:
-                if dist[u] != inf and dist[u] + w < dist[v]:
-                    dist[v] = dist[u] + w
-                    changed = True
-            if not changed:
-                break
-        for u, v, w in edges:
-            if dist[u] != inf and dist[u] + w < dist[v]:
-                return [-1]
-        return [100000000 if d == inf else d for d in dist]
-```
 
 **Time Space Complexity**
 
@@ -1740,22 +858,6 @@ Output: 1 (negative cycle is disconnected from vertex 0)
 
 **Code**
 
-```python
-class Solution:
-    def isNegativeWeightCycle(self, V, edges):
-        dist = [0] * V
-        for step in range(V):
-            changed = False
-            for u, v, weight in edges:
-                if dist[u] + weight < dist[v]:
-                    dist[v] = dist[u] + weight
-                    changed = True
-                    if step == V - 1:
-                        return 1
-            if not changed:
-                return 0
-        return 0
-```
 
 **Time Space Complexity**
 
@@ -1777,19 +879,6 @@ Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no retur
 
 **Code**
 
-```python
-class Solution:
-    def floydWarshall(self, dist):
-        n = len(dist)
-        inf = 100000000
-        for k in range(n):
-            for i in range(n):
-                if dist[i][k] == inf:
-                    continue
-                for j in range(n):
-                    if dist[k][j] != inf:
-                        dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
-```
 
 **Time Space Complexity**
 
@@ -1811,25 +900,6 @@ Output: 3
 
 **Code**
 
-```python
-class Solution:
-    def findTheCity(self, n, edges, distanceThreshold):
-        dist = [[float("inf")] * n for _ in range(n)]
-        for i in range(n):
-            dist[i][i] = 0
-        for u, v, weight in edges:
-            dist[u][v] = dist[v][u] = min(dist[u][v], weight)
-        for k in range(n):
-            for i in range(n):
-                for j in range(n):
-                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
-        answer, best = -1, n
-        for i in range(n):
-            count = sum(i != j and dist[i][j] <= distanceThreshold for j in range(n))
-            if count <= best:
-                best, answer = count, i
-        return answer
-```
 
 **Time Space Complexity**
 
@@ -1851,36 +921,13 @@ Output: [0,2,1,-1]
 
 **Code**
 
-```python
-from collections import deque
-
-class Solution:
-    def shortestPath(self, V, edges):
-        adj = [[] for _ in range(V)]
-        degree = [0] * V
-        for u, v, w in edges:
-            adj[u].append((v, w))
-            degree[v] += 1
-        queue = deque(u for u in range(V) if degree[u] == 0)
-        dist = [float('inf')] * V
-        dist[0] = 0
-        while queue:
-            u = queue.popleft()
-            for v, w in adj[u]:
-                if dist[u] != float('inf'):
-                    dist[v] = min(dist[v], dist[u] + w)
-                degree[v] -= 1
-                if degree[v] == 0:
-                    queue.append(v)
-        return [-1 if d == float('inf') else d for d in dist]
-```
 
 **Time Space Complexity**
 
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-## 9. Disjoint Set Union — Union-Find
+## Disjoint Set Union — Union-Find
 
 ### 42. ★ Implement DSU — Path Compression and Union by Size
 
@@ -1897,28 +944,6 @@ Output: true; true; false; true; false (initialization has no output)
 
 **Code**
 
-```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-```
 
 **Time Space Complexity**
 
@@ -1940,36 +965,6 @@ Output: [2,3]
 
 **Code**
 
-```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def findRedundantConnection(self, edges):
-        dsu = DSU(len(edges) + 1)
-        for u, v in edges:
-            if not dsu.union(u, v):
-                return [u, v]
-        return []
-```
 
 **Time Space Complexity**
 
@@ -1991,39 +986,6 @@ Output: 1
 
 **Code**
 
-```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def makeConnected(self, n, connections):
-        if len(connections) < n - 1:
-            return -1
-        dsu = DSU(n)
-        components = n
-        for u, v in connections:
-            if dsu.union(u, v):
-                components -= 1
-        return components - 1
-```
 
 **Time Space Complexity**
 
@@ -2045,46 +1007,6 @@ Output: [["Mira","a@x.com","b@x.com","c@x.com"],["Noah","n@x.com"]] (account gro
 
 **Code**
 
-```python
-from collections import defaultdict
-
-
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def accountsMerge(self, accounts):
-        dsu = DSU(len(accounts))
-        owner = {}
-        for i, account in enumerate(accounts):
-            for email in account[1:]:
-                if email in owner:
-                    dsu.union(i, owner[email])
-                else:
-                    owner[email] = i
-        groups = defaultdict(list)
-        for email, i in owner.items():
-            groups[dsu.find(i)].append(email)
-        return [[accounts[root][0]] + sorted(emails) for root, emails in groups.items()]
-```
 
 **Time Space Complexity**
 
@@ -2106,41 +1028,6 @@ Output: 2
 
 **Code**
 
-```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def removeStones(self, stones):
-        dsu = DSU(len(stones))
-        rows, cols = {}, {}
-        components = len(stones)
-        for i, (row, col) in enumerate(stones):
-            if row in rows and dsu.union(i, rows[row]):
-                components -= 1
-            if col in cols and dsu.union(i, cols[col]):
-                components -= 1
-            rows[row] = cols[col] = i
-        return len(stones) - components
-```
 
 **Time Space Complexity**
 
@@ -2164,37 +1051,6 @@ Output: 6
 
 **Code**
 
-```python
-class DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def spanningTree(self, V, edges):
-        dsu = DSU(V)
-        total = 0
-        for u, v, w in sorted(edges, key=lambda e: e[2]):
-            if dsu.union(u, v):
-                total += w
-        return total
-```
 
 **Time Space Complexity**
 
@@ -2216,29 +1072,6 @@ Output: 6
 
 **Code**
 
-```python
-from heapq import heappop, heappush
-
-class Solution:
-    def spanningTree(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-            adj[v].append((u, w))
-        used = [False] * V
-        heap = [(0, 0)]
-        total = 0
-        while heap:
-            weight, u = heappop(heap)
-            if used[u]:
-                continue
-            used[u] = True
-            total += weight
-            for v, w in adj[u]:
-                if not used[v]:
-                    heappush(heap, (w, v))
-        return total
-```
 
 **Time Space Complexity**
 
@@ -2260,26 +1093,6 @@ Output: 4
 
 **Code**
 
-```python
-class Solution:
-    def minCostConnectPoints(self, points):
-        n = len(points)
-        if n == 0:
-            return 0
-        best = [float('inf')] * n
-        used = [False] * n
-        best[0] = 0
-        total = 0
-        for _ in range(n):
-            u = min((i for i in range(n) if not used[i]), key=lambda i: best[i])
-            used[u] = True
-            total += best[u]
-            for v in range(n):
-                if not used[v]:
-                    distance = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
-                    best[v] = min(best[v], distance)
-        return total
-```
 
 **Time Space Complexity**
 
@@ -2303,46 +1116,6 @@ Output: 2
 
 **Code**
 
-```python
-class Solution:
-    def kosaraju(self, V, edges):
-        adj = [[] for _ in range(V)]
-        reverse = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-            reverse[v].append(u)
-        seen = set()
-        order = []
-        for start in range(V):
-            if start in seen:
-                continue
-            seen.add(start)
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                v = next(neighbors, None)
-                if v is None:
-                    order.append(u)
-                    stack.pop()
-                elif v not in seen:
-                    seen.add(v)
-                    stack.append((v, iter(adj[v])))
-        seen.clear()
-        count = 0
-        for start in reversed(order):
-            if start in seen:
-                continue
-            count += 1
-            seen.add(start)
-            stack = [start]
-            while stack:
-                u = stack.pop()
-                for v in reverse[u]:
-                    if v not in seen:
-                        seen.add(v)
-                        stack.append(v)
-        return count
-```
 
 **Time Space Complexity**
 
@@ -2364,48 +1137,6 @@ Output: [[1,3]] (edge endpoints may be reversed)
 
 **Code**
 
-```python
-class Solution:
-    def criticalConnections(self, n, connections):
-        adj = [[] for _ in range(n)]
-        for eid, (u, v) in enumerate(connections):
-            adj[u].append((v, eid))
-            adj[v].append((u, eid))
-        tin = [-1] * n
-        low = [0] * n
-        parent = [-1] * n
-        parent_edge = [-1] * n
-        timer = 0
-        bridges = []
-        for start in range(n):
-            if tin[start] != -1:
-                continue
-            tin[start] = low[start] = timer
-            timer += 1
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                edge = next(neighbors, None)
-                if edge is None:
-                    stack.pop()
-                    p = parent[u]
-                    if p != -1:
-                        if low[u] > tin[p]:
-                            bridges.append([p, u])
-                        low[p] = min(low[p], low[u])
-                    continue
-                v, eid = edge
-                if eid == parent_edge[u]:
-                    continue
-                if tin[v] == -1:
-                    parent[v], parent_edge[v] = u, eid
-                    tin[v] = low[v] = timer
-                    timer += 1
-                    stack.append((v, iter(adj[v])))
-                else:
-                    low[u] = min(low[u], tin[v])
-        return bridges
-```
 
 **Time Space Complexity**
 
@@ -2429,31 +1160,6 @@ Output: [8.0,0.125,-1.0]
 
 **Code**
 
-```python
-from collections import defaultdict
-
-class Solution:
-    def calcEquation(self, equations, values, queries):
-        graph = defaultdict(list)
-        for (a, b), value in zip(equations, values):
-            graph[a].append((b, value))
-            graph[b].append((a, 1.0 / value))
-        def evaluate(source, target):
-            if source not in graph or target not in graph:
-                return -1.0
-            stack = [(source, 1.0)]
-            seen = {source}
-            while stack:
-                node, product = stack.pop()
-                if node == target:
-                    return product
-                for neighbor, weight in graph[node]:
-                    if neighbor not in seen:
-                        seen.add(neighbor)
-                        stack.append((neighbor, product * weight))
-            return -1.0
-        return [evaluate(a, b) for a, b in queries]
-```
 
 **Time Space Complexity**
 
@@ -2475,21 +1181,6 @@ Output: [[0,1,3],[0,2,3]] (any order)
 
 **Code**
 
-```python
-class Solution:
-    def allPathsSourceTarget(self, graph):
-        result, path = [], [0]
-        def dfs(node):
-            if node == len(graph) - 1:
-                result.append(path.copy())
-                return
-            for neighbor in graph[node]:
-                path.append(neighbor)
-                dfs(neighbor)
-                path.pop()
-        dfs(0)
-        return result
-```
 
 **Time Space Complexity**
 
@@ -2513,55 +1204,9 @@ Output: 4
 
 **DFS + memoization**
 
-```python
-from functools import lru_cache
-
-class Solution:
-    def longestIncreasingPath(self, matrix):
-        rows, cols = len(matrix), len(matrix[0])
-        @lru_cache(None)
-        def dfs(r, c):
-            best = 1
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] > matrix[r][c]:
-                    best = max(best, 1 + dfs(nr, nc))
-            return best
-        return max(dfs(r, c) for r in range(rows) for c in range(cols))
-```
 
 **Topological layers — avoids recursion**
 
-```python
-from collections import deque
-
-class Solution:
-    def longestIncreasingPath(self, matrix):
-        rows, cols = len(matrix), len(matrix[0])
-        directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
-        degree = [[0] * cols for _ in range(rows)]
-        queue = deque()
-        for r in range(rows):
-            for c in range(cols):
-                for dr, dc in directions:
-                    nr, nc = r + dr, c + dc
-                    if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] > matrix[r][c]:
-                        degree[r][c] += 1
-                if degree[r][c] == 0:
-                    queue.append((r, c))
-        length = 0
-        while queue:
-            for _ in range(len(queue)):
-                r, c = queue.popleft()
-                for dr, dc in directions:
-                    nr, nc = r + dr, c + dc
-                    if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] < matrix[r][c]:
-                        degree[nr][nc] -= 1
-                        if degree[nr][nc] == 0:
-                            queue.append((nr, nc))
-            length += 1
-        return length
-```
 
 **Time Space Complexity**
 
