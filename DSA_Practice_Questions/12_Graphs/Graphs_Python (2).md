@@ -2,6 +2,8 @@
 
 V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Recursive alternatives can exceed Python recursion limits or Java stack depth on long paths; use the iterative alternative where supplied.
 
+Video series and approaches follwed - https://www.youtube.com/playlist?list=PLgUwDviBIf0oE3gA41TKO2H5bHpPd7fzn
+
 ## BFS and connected components
 
 ### 1. ★ BFS Traversal of a Graph
@@ -787,19 +789,24 @@ from collections import deque
 class Solution:
     def isCyclic(self, adj):
         indegree = [0] * len(adj)
+
         for node in range(len(adj)):
             for neighbor in adj[node]:
                 indegree[neighbor] += 1
 
-        queue = deque(node for node in range(len(adj)) if indegree[node] == 0)
-        processed = 0
+        # queue containing all nodes whose indegree is 0
+        queue = deque()
+        for node in range(len(adj)):
+            if indegree[node] == 0:
+                queue.append(node)
 
         while queue:
             node = queue.popleft()
             processed += 1
             for neighbor in adj[node]:
                 indegree[neighbor] -= 1
-                if indegree[neighbor] == 0: queue.append(neighbor)
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
 
         return processed != len(adj)
 ```
@@ -836,15 +843,18 @@ class Solution:
             adj[prerequisite].append(course)
             indegree[course] += 1
 
+        # queue containing all nodes whose indegree is 0
         queue = deque(course for course in range(numCourses) if indegree[course] == 0)
         completed = 0
 
         while queue:
             course = queue.popleft()
             completed += 1
+
             for neighbor in adj[course]:
                 indegree[neighbor] -= 1
-                if indegree[neighbor] == 0: queue.append(neighbor)
+                if indegree[neighbor] == 0: 
+                    queue.append(neighbor)
 
         return completed == numCourses
 ```
@@ -870,8 +880,6 @@ Output: [2,4,5,6]
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
     def eventualSafeNodes(self, graph):
         n = len(graph)
@@ -889,9 +897,11 @@ class Solution:
         while queue:
             node = queue.popleft()
             safe[node] = True
+            
             for previous in reverse[node]:
                 outdegree[previous] -= 1
-                if outdegree[previous] == 0: queue.append(previous)
+                if outdegree[previous] == 0: 
+                    queue.append(previous)
 
         return [node for node in range(n) if safe[node]]
 ```
@@ -903,15 +913,22 @@ class Solution:
 
 ## Bipartite graphs
 
-A bipartite graph is a graph whose nodes can be divided into two groups, such that every edge connects a node in one group to a node in the other.
+A bipartite graph is a graph whose nodes have 2 different colors, or you can assign 2 diff colors to the adjcent nodes.
+Thus dividing the graph in 2 groups where no edges are interconnected within same group.
 
-No edge can connect two nodes within the same group.
+                                                                     6 - 8
+Observations:-                                                      /.    \
+- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5      10
+                                                                    \
+                                                                     7 - 9
+- Any graph with even cycle **length** is also bipartite.
+
 
 ### 21. ★ Is Graph Bipartite? — 785
 
 [LeetCode/GFG Link](https://leetcode.com/problems/is-graph-bipartite/)
 
-Check whether an undirected adjacency-list graph can be colored with two colors so adjacent vertices differ. Covers disconnected components.
+Check whether an undirected adjacency-list graph can be colored with two colors. Covers disconnected components.
 
 **Input/Output**
 
@@ -922,48 +939,55 @@ Output: true
 
 **Code**
 
-**BFS**
+1. **Two-Coloring Test:** Try to color every vertex using any two colors (e.g., Red and Blue) so that no two adjecent connected vertices share the same color. If you can do it, it is bipartite. (BFS Approach)
 
 ```python
-from collections import deque
-
 class Solution:
     def isBipartite(self, graph):
         color = [-1] * len(graph)
+
         for start in range(len(graph)):
             if color[start] != -1:
                 continue
+
             color[start] = 0
             queue = deque([start])
+
             while queue:
-                u = queue.popleft()
-                for v in graph[u]:
-                    if color[v] == -1:
-                        color[v] = 1 - color[u]
-                        queue.append(v)
-                    elif color[v] == color[u]:
+                node = queue.popleft()
+                for neighbor in graph[node]:
+                    if color[neighbor] == -1:
+                        color[neighbor] = 1 - color[node]
+                        queue.append(neighbor)
+                    elif color[neighbor] == color[node]:
                         return False
+
         return True
 ```
 
-**DFS — recursive**
+2. **Odd Cycle Check:** If the graph contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
 
 ```python
 class Solution:
     def isBipartite(self, graph):
         color = [-1] * len(graph)
+
         def dfs(node, current_color):
             color[node] = current_color
+
             for neighbor in graph[node]:
                 if color[neighbor] == -1:
                     if not dfs(neighbor, 1 - current_color):
                         return False
                 elif color[neighbor] == current_color:
                     return False
+
             return True
+
         for node in range(len(graph)):
             if color[node] == -1 and not dfs(node, 0):
                 return False
+
         return True
 ```
 
@@ -971,6 +995,7 @@ class Solution:
 
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list; includes recursion stack for DFS.
+
 
 ### 22. ★ Possible Bipartition — 886
 
@@ -988,28 +1013,31 @@ Output: true
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
     def possibleBipartition(self, n, dislikes):
         graph = [[] for _ in range(n + 1)]
         for u, v in dislikes:
             graph[u].append(v)
             graph[v].append(u)
-        color = [-1] * len(graph)
-        for start in range(len(graph)):
+
+        color = [-1] * (n + 1)
+
+        for start in range(1, n + 1):
             if color[start] != -1:
                 continue
+
             color[start] = 0
             queue = deque([start])
+
             while queue:
-                u = queue.popleft()
-                for v in graph[u]:
-                    if color[v] == -1:
-                        color[v] = 1 - color[u]
-                        queue.append(v)
-                    elif color[v] == color[u]:
+                node = queue.popleft()
+                for neighbor in graph[node]:
+                    if color[neighbor] == -1:
+                        color[neighbor] = 1 - color[node]
+                        queue.append(neighbor)
+                    elif color[neighbor] == color[node]:
                         return False
+
         return True
 ```
 
@@ -1018,13 +1046,28 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-## 5. Topological sorting and dependencies
+## Topological sorting
+
+Topological sort is used when tasks have dependencies and you need a valid order to complete them.
+For example, suppose you’re building an application:
+| Task | Must happen first |
+|---|---|
+| `0`: Create database | Nothing |
+| `1`: Build API | Create database |
+| `2`: Prepare test data | Create database |
+| `3`: Run integration tests | Build API and prepare test data |
+The dependency edges are:
+0 → 1
+0 → 2
+1 → 3
+2 → 3
+
+Topological sort gives a valid execution order:
+Create database → Build API → Prepare test data → Run integration tests
 
 ### 23. ★ Topological Sort — DFS
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/topological-sort/1)
-
-Use DFS finish times to order a DAG. Append a node after all its outgoing neighbors finish, then reverse the result. Return an empty list if an active-node edge reveals a cycle.
 
 **Input/Output**
 
