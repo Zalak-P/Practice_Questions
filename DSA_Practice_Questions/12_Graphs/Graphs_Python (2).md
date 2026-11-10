@@ -311,14 +311,13 @@ class Solution:
 
                 for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                     x, y = r + dr, c + dc
-
                     if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
                         grid[x][y] = 2
                         fresh -= 1
                         queue.append((x, y))
 
             minutes += 1
-            
+
         return minutes if fresh == 0 else -1
 ```
 
