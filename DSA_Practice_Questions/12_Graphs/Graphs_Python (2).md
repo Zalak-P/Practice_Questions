@@ -66,20 +66,24 @@ Output: true
 ```python
 class Solution:
     def validPath(self, n, edges, source, destination):
-        adj = [[] for _ in range(n)]
+        graph = [[] for _ in range(n)]
         for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
-        seen = {source}
-        stack = [source]
-        while stack:
-            u = stack.pop()
-            if u == destination:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        queue = deque([source])
+        visited = {source}
+
+        while queue:
+            node = queue.popleft()
+            if node == destination:
                 return True
-            for v in adj[u]:
-                if v not in seen:
-                    seen.add(v)
-                    stack.append(v)
+
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    visited.add(neighbor)
+                    queue.append(neighbor)
+
         return False
 ```
 
@@ -104,8 +108,6 @@ Output: A new graph with adjacency list [[2],[1]], sharing no nodes with the inp
 **Code**
 
 ```python
-from collections import deque
-
 # Node is provided by LeetCode.
 class Solution:
     def cloneGraph(self, node):
@@ -137,7 +139,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/keys-and-rooms/)
 
-Visit room 0 and follow its keys to other rooms. Return whether every room can be reached. Use iterative DFS; each room is processed once.
+Visit room 0 and follow its keys to other rooms. Return whether every room can be reached. Each room is processed once.
 
 **Input/Output**
 
@@ -156,6 +158,7 @@ class Solution:
 
         while queue:
             room = queue.popleft()
+
             for key in rooms[room]:
                 if key not in visited:
                     visited.add(key)
@@ -224,7 +227,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-provinces/)
 
-Count connected groups in a symmetric n × n adjacency matrix. Scan each undirected connection once and merge its components.
+Given an adjacency matrix isConnected, count the groups of directly or indirectly connected cities.
 
 **Input/Output**
 
@@ -271,7 +274,10 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/rotting-oranges/)
 
-Spread rot from all rotten oranges simultaneously in a nonempty grid. Return minutes until all fresh oranges rot, or −1. Updates the grid.
+Each minute, rotten oranges infect fresh oranges up, down, left, and right. Return the minimum minutes to rot all oranges, or -1 if impossible.
+- 0 = empty
+- 1 = fresh
+- 2 = rotten
 
 **Input/Output**
 
@@ -283,30 +289,36 @@ Output: 4
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
     def orangesRotting(self, grid):
         rows, cols = len(grid), len(grid[0])
         queue = deque()
         fresh = 0
+
         for r in range(rows):
             for c in range(cols):
                 if grid[r][c] == 2:
                     queue.append((r, c))
                 elif grid[r][c] == 1:
                     fresh += 1
+
         minutes = 0
+
         while queue and fresh:
             for _ in range(len(queue)):
+
                 r, c = queue.popleft()
+
                 for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
                     x, y = r + dr, c + dc
+
                     if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
                         grid[x][y] = 2
                         fresh -= 1
                         queue.append((x, y))
+
             minutes += 1
+            
         return minutes if fresh == 0 else -1
 ```
 
@@ -707,12 +719,14 @@ class Solution:
 
         def dfs(node, parent):
             visited.add(node)
+
             for neighbor in adj[node]:
                 if neighbor not in visited:
                     if dfs(neighbor, node):
                         return True
                 elif neighbor != parent:
                     return True
+
             return False
 
         for start in range(len(adj)):
@@ -733,6 +747,12 @@ Detect a directed cycle using DFS states: 0 = unvisited, 1 = active, 2 = complet
 Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
+
+Use three states:
+
+- 0: Unvisited.
+- 1: Previously visited is not enough—the node must still be active in the current path.
+- 2: Completed—all outgoing neighbors explored.
 
 **Code**
 
@@ -853,7 +873,7 @@ class Solution:
 
             for neighbor in adj[course]:
                 indegree[neighbor] -= 1
-                if indegree[neighbor] == 0: 
+                if indegree[neighbor] == 0:
                     queue.append(neighbor)
 
         return completed == numCourses
@@ -897,10 +917,10 @@ class Solution:
         while queue:
             node = queue.popleft()
             safe[node] = True
-            
+
             for previous in reverse[node]:
                 outdegree[previous] -= 1
-                if outdegree[previous] == 0: 
+                if outdegree[previous] == 0:
                     queue.append(previous)
 
         return [node for node in range(n) if safe[node]]
@@ -917,12 +937,13 @@ A bipartite graph is a graph whose nodes have 2 different colors, or you can ass
 Thus dividing the graph in 2 groups where no edges are interconnected within same group.
 
                                                                      6 - 8
-Observations:-                                                      /     \
-- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5      10
-                                                                    \
-                                                                     7 - 9
-- Any graph with even cycle **length** is also bipartite.
 
+Observations:- / \
+
+- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5 10
+  \
+   7 - 9
+- Any graph with even cycle **length** is also bipartite.
 
 ### 21. ★ Is Graph Bipartite? — 785
 
@@ -995,7 +1016,6 @@ class Solution:
 
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list; includes recursion stack for DFS.
-
 
 ### 22. ★ Possible Bipartition — 886
 
