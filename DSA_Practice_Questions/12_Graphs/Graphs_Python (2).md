@@ -533,7 +533,8 @@ class Solution:
         rows = len(image)
         cols = len(image[0])
         original_color = image[sr][sc]
-
+        
+        # Return early if the original color equals the new color, to prevent endless revisits.
         if original_color == color:
             return image
 
