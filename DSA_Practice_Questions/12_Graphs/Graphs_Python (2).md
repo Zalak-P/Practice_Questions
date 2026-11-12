@@ -337,26 +337,32 @@ Output: [[0,1,2],[1,2,3]]
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
-    def updateMatrix(self, mat):
-        rows, cols = len(mat), len(mat[0])
-        dist = [[-1] * cols for _ in range(rows)]
+    def updateMatrix(self, mat: list[list[int]]) -> list[list[int]]:
+        rows = len(mat)
+        cols = len(mat[0])
+        answer_matrix = [[-1] * cols for _ in range(rows)]
         queue = deque()
+
         for r in range(rows):
             for c in range(cols):
                 if mat[r][c] == 0:
-                    dist[r][c] = 0
+                    answer_matrix[r][c] = 0
                     queue.append((r, c))
+
+        directions = [(1,0), (0,1), (-1,0), (0,-1)]
+
         while queue:
             r, c = queue.popleft()
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and dist[x][y] == -1:
-                    dist[x][y] = dist[r][c] + 1
-                    queue.append((x, y))
-        return dist
+
+            for dr, dc in directions:
+                nr, nc = dr + r, dc + c
+                if 0 <= nr< rows and 0 <=nc < cols and answer_matrix[nr][nc] == -1:
+                    answer_matrix[nr][nc] = answer_matrix[r][c] + 1
+                    queue.append((nr, nc))
+
+        return answer_matrix
+
 ```
 
 **Time Space Complexity**
