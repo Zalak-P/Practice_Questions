@@ -239,30 +239,27 @@ Output: 2
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
-    def findCircleNum(self, isConnected):
-        n = len(isConnected)
+    def findCircleNum(self, isConnected: List[List[int]]) -> int:
         visited = set()
-        provinces = 0
+        answer = 0
+        n = len(isConnected)
 
-        for start in range(n):
-            if start in visited:
-                continue
+        for i in range(n):
+            if i not in visited:
+                answer += 1
+                queue = deque([i])
+                visited.add(i)
 
-            provinces += 1
-            queue = deque([start])
-            visited.add(start)
+                while queue:
+                    node = queue.popleft()
 
-            while queue:
-                city = queue.popleft()
-                for neighbor in range(n):
-                    if isConnected[city][neighbor] == 1 and neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
+                    for neighbor in range(n):
+                        if isConnected[node][neighbor] == 1 and neighbor not in visited:
+                            visited.add(neighbor)
+                            queue.append(neighbor)
 
-        return provinces
+        return answer
 ```
 
 **Time Space Complexity**
@@ -275,6 +272,7 @@ class Solution:
 [LeetCode/GFG Link](https://leetcode.com/problems/rotting-oranges/)
 
 Each minute, rotten oranges infect fresh oranges up, down, left, and right. Return the minimum minutes to rot all oranges, or -1 if impossible.
+
 - 0 = empty
 - 1 = fresh
 - 2 = rotten
