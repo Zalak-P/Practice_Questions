@@ -288,35 +288,32 @@ Output: 4
 
 ```python
 class Solution:
-    def orangesRotting(self, grid):
-        rows, cols = len(grid), len(grid[0])
+    def orangesRotting(self, grid: list[list[int]]) -> int:
+        rows = len(grid)
+        cols = len(grid[0])
         queue = deque()
-        fresh = 0
+        minutes = 0
+        fresh_count = 0
 
         for r in range(rows):
             for c in range(cols):
+                if grid[r][c] == 1:
+                    fresh_count += 1
+
                 if grid[r][c] == 2:
                     queue.append((r, c))
-                elif grid[r][c] == 1:
-                    fresh += 1
 
-        minutes = 0
+        directions = [(1,0), (0,1), (-1,0), (0,-1)]
 
-        while queue and fresh:
-            for _ in range(len(queue)):
-
-                r, c = queue.popleft()
-
-                for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                    x, y = r + dr, c + dc
-                    if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
-                        grid[x][y] = 2
-                        fresh -= 1
-                        queue.append((x, y))
-
+        while queue:
             minutes += 1
-
-        return minutes if fresh == 0 else -1
+            for _ in range(len(queue)):
+                r , c = queue.popleft()
+                for dr, dc in directions:
+                    nr, nc = dr + r, dc + c
+                     if 0 <= nr< rows and 0 <=nc < cols and grid[nr][nc] == 1:
+                        grid[nr][nc] = 2
+                        fresh_count -= 1
 ```
 
 **Time Space Complexity**
