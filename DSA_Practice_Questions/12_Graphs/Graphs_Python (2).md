@@ -539,7 +539,7 @@ class Solution:
         rows = len(image)
         cols = len(image[0])
         original_color = image[sr][sc]
-        
+
         # Return early if the original color equals the new color, to prevent endless revisits.
         if original_color == color:
             return image
@@ -618,9 +618,6 @@ Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X
 ```python
 class Solution:
     def solve(self, board: List[List[str]]) -> None:
-        if not board or not board[0]:
-            return
-
         rows, cols = len(board), len(board[0])
 
         def dfs(r, c):
