@@ -188,7 +188,7 @@ Output: 2
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def countComponents(self, n, edges):
@@ -386,7 +386,7 @@ Output: 1
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def shortestBridge(self, grid):
@@ -623,6 +623,7 @@ class Solution:
         def dfs(r, c):
             if r < 0 or c < 0 or r >= rows or c >= cols or board[r][c] != 'O':
                 return
+
             board[r][c] = 'T'
             dfs(r+1, c)
             dfs(r-1, c)
@@ -633,6 +634,7 @@ class Solution:
         for r in range(rows):
             dfs(r, 0)
             dfs(r, cols - 1)
+
         for c in range(cols):
             dfs(0, c)
             dfs(rows - 1, c)
@@ -644,7 +646,6 @@ class Solution:
                     board[r][c] = 'X'
                 elif board[r][c] == 'T':
                     board[r][c] = 'O'
-
 ```
 
 **Time Space Complexity**
@@ -700,8 +701,6 @@ Output: true
 **BFS**
 
 ```python
-from collections import deque
-
 class Solution:
     def isCycle(self, adj):
         visited = set()
@@ -724,26 +723,36 @@ class Solution:
 ```
 
 ```python
-class Solution:
-    def isCycle(self, adj):
-        visited = set()
+def has_cycle_undirected(vertices, edges):
+    # Build the adjacency list
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
 
-        def dfs(node, parent):
-            visited.add(node)
+    visited = set()
 
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    if dfs(neighbor, node):
-                        return True
-                elif neighbor != parent:
+    def dfs(node, parent):
+        visited.add(node)
+
+        for neighbor in graph[node]:
+            # If the neighbor hasn't been visited, explore it
+            if neighbor not in visited:
+                if dfs(neighbor, node):
                     return True
-
-            return False
-
-        for start in range(len(adj)):
-            if start not in visited and dfs(start, -1):
+            # If the neighbor is visited and is not the parent, a cycle exists
+            elif neighbor != parent:
                 return True
+
         return False
+
+    # Check all vertices to handle disconnected components
+    for v in range(vertices):
+        if v not in visited:
+            if dfs(v, -1):
+                return True
+
+    return False
 ```
 
 ### 17. ★ Detect Cycle in a Directed Graph — DFS
@@ -759,13 +768,49 @@ Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
+**Code**
+
+```python
+def has_cycle_directed(vertices, edges):
+    # Build the adjacency list
+    graph = defaultdict(list)
+    for u, v in edges:
+        graph[u].append(v)
+
+    visited = set()
+    rec_stack = set()  # Tracks nodes in the current recursion path
+
+    def dfs(node):
+        visited.add(node)
+        rec_stack.add(node)
+
+        for neighbor in graph[node]:
+            # If unvisited, recurse on the neighbor
+            if neighbor not in visited:
+                if dfs(neighbor):
+                    return True
+            # If the neighbor is in the active recursion stack, a cycle exists
+            elif neighbor in rec_stack:
+                return True
+
+        # Backtrack: remove the node from the active path before returning
+        rec_stack.remove(node)
+        return False
+
+    # Check all vertices to handle disconnected components
+    for v in range(vertices):
+        if v not in visited:
+            if dfs(v):
+                return True
+
+    return False
+```
+
 Use three states:
 
 - 0: Unvisited.
 - 1: Previously visited is not enough—the node must still be active in the current path.
 - 2: Completed—all outgoing neighbors explored.
-
-**Code**
 
 ```python
 class Solution:
@@ -815,7 +860,7 @@ Output: true
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def isCyclic(self, adj):
@@ -863,8 +908,6 @@ Output: true
 **Code**
 
 ```python
-from collections import deque
-
 class Solution:
     def canFinish(self, numCourses, prerequisites):
         adj = [[] for _ in range(numCourses)]
@@ -946,14 +989,12 @@ class Solution:
 
 A bipartite graph is a graph whose nodes have 2 different colors, or you can assign 2 diff colors to the adjcent nodes.
 Thus dividing the graph in 2 groups where no edges are interconnected within same group.
-
+                                                                  
                                                                      6 - 8
-
-Observations:- / \
-
+Observations:-                                                       |
 - Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5 10
-  \
-   7 - 9
+                                                                    \
+                                                                    7 - 9
 - Any graph with even cycle **length** is also bipartite.
 
 ### 21. ★ Is Graph Bipartite? — 785
@@ -1158,7 +1199,7 @@ Output: [0,1,2,3] (one valid order)
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def topoSort(self, V, edges):
@@ -1203,7 +1244,7 @@ Output: [0,1,2,3] (one valid order)
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def findOrder(self, numCourses, prerequisites):
@@ -1248,7 +1289,7 @@ Output: "zacb" (one valid order; z before c and a before b)
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def findOrder(self, words):
@@ -1345,7 +1386,7 @@ Output: [0,1,2,-1]
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def shortestPath(self, V, edges, src):
@@ -1386,7 +1427,7 @@ Output: 2
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def shortestPathBinaryMatrix(self, grid):
@@ -1431,7 +1472,7 @@ Output: 5
 **Code**
 
 ```python
-from collections import deque
+
 from string import ascii_lowercase
 
 class Solution:
@@ -1475,7 +1516,7 @@ Output: 1
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def openLock(self, deadends, target):
@@ -1519,7 +1560,7 @@ Output: 1
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def snakesAndLadders(self, board):
@@ -1883,7 +1924,7 @@ Output: [0,2,1,-1]
 **Code**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def shortestPath(self, V, edges):
@@ -2564,7 +2605,7 @@ class Solution:
 **Topological layers — avoids recursion**
 
 ```python
-from collections import deque
+
 
 class Solution:
     def longestIncreasingPath(self, matrix):
