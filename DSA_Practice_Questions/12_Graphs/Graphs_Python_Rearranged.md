@@ -19,7 +19,6 @@ Input: grid = [["1","1","0"],["0","0","1"]]
 Output: 2
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -63,7 +62,6 @@ Input: image = [[1,1],[1,0]], sr = 0, sc = 0, color = 2
 Output: [[2,2],[2,0]]
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -99,10 +97,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-distinct-islands/)
 
-**Code**
 
 ```python
-
 ```
 
 ## Multi-source BFS — Expand Level by Level
@@ -124,7 +120,6 @@ Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
 Output: 4
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -174,7 +169,6 @@ Input: mat = [[0,1,1],[1,1,1]]
 Output: [[0,1,2],[1,2,3]]
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -225,7 +219,6 @@ Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","X","X"],["X","O","
 Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]; no return value
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -269,10 +262,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-enclaves/)
 
-**Code**
 
 ```python
-
 ```
 
 ## Grid Shortest Path — BFS with Queue and Distance
@@ -281,10 +272,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-a-binary-maze-1655453161/1)
 
-**Code**
 
 ```python
-
 ```
 
 ## BFS / DFS — Graph Traversal
@@ -302,7 +291,6 @@ Input: adj = [[1,2],[0,3],[0],[1]]
 Output: [0,1,2,3]
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -344,7 +332,6 @@ Input: adj = [[1,2],[0,3],[0],[1]]
 Output: [0,1,3,2]
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -392,7 +379,6 @@ Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
 Output: 2
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -442,7 +428,6 @@ Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
-**Code**
 
 **BFS**
 
@@ -514,7 +499,6 @@ Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
-**Code**
 
 ```python
 def has_cycle_directed(vertices, edges):
@@ -552,50 +536,16 @@ def has_cycle_directed(vertices, edges):
     return False
 ```
 
-Use three states:
-
-- 0: Unvisited.
-- 1: Previously visited is not enough—the node must still be active in the current path.
-- 2: Completed—all outgoing neighbors explored.
-
-```python
-class Solution:
-    def isCyclic(self, adj):
-        state = [0] * len(adj)
-
-        def dfs(node):
-            state[node] = 1
-            for neighbor in adj[node]:
-                if state[neighbor] == 1:
-                    return True
-                if state[neighbor] == 0 and dfs(neighbor):
-                    return True
-            state[node] = 2
-            return False
-
-        for node in range(len(adj)):
-            if state[node] == 0 and dfs(node):
-                return True
-        return False
-```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E)
-- **Space:** O(V)
-
 ## Bipartite Graph — Two-color BFS / DFS
 
 A bipartite graph is a graph whose nodes have 2 different colors, or you can assign 2 diff colors to the adjcent nodes.
 Thus dividing the graph in 2 groups where no edges are interconnected within same group.
-
-                                                                     6 - 8
-
-Observations:- |
-
-- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5 10
-  \
-   7 - 9
+                                                             
+Observations:-                                                     10
+                                                                   |
+- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5 
+                                                                    \
+                                                                    7 - 9
 - Any graph with even cycle **length** is also bipartite.
 
 ### 14. ★ Is Graph Bipartite? — 785
@@ -611,7 +561,6 @@ Input: graph = [[1,3],[0,2],[1,3],[0,2]]
 Output: true
 ```
 
-**Code**
 
 1. **Two-Coloring Test:** Try to color every vertex using any two colors (e.g., Red and Blue) so that no two adjecent connected vertices share the same color. If you can do it, it is bipartite. (BFS Approach)
 
@@ -641,8 +590,7 @@ class Solution:
 
 2. **Odd Cycle Check:** If the graph contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
 
-```python
-class Solution:
+```pythonclass Solution:
     def isBipartite(self, graph):
         color = [-1] * len(graph)
 
@@ -676,11 +624,38 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-eventual-safe-states/)
 
-**Code**
+Use three states:
+
+- 0: Unvisited.
+- 1: Previously visited is not enough—the node must still be active in the current path.
+- 2: Completed—all outgoing neighbors explored.
 
 ```python
+class Solution:
+    def isCyclic(self, adj):
+        state = [0] * len(adj)
 
+        def dfs(node):
+            state[node] = 1
+            for neighbor in adj[node]:
+                if state[neighbor] == 1:
+                    return True
+                if state[neighbor] == 0 and dfs(neighbor):
+                    return True
+            state[node] = 2
+            return False
+
+        for node in range(len(adj)):
+            if state[node] == 0 and dfs(node):
+                return True
+        return False
 ```
+
+**Time Space Complexity**
+
+- **Time:** O(V + E)
+- **Space:** O(V)
+
 
 ## Kahn’s Algorithm — Indegree / Outdegree
 
@@ -718,10 +693,7 @@ Input: edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
-**Code**
-
 ```python
-
 
 class Solution:
     def isCyclic(self, adj):
@@ -765,8 +737,6 @@ Return sorted vertices whose every path eventually terminates. Start with termin
 Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
 Output: [2,4,5,6]
 ```
-
-**Code**
 
 ```python
 class Solution:
@@ -813,11 +783,7 @@ Input: V = 4, edges = [[0,1],[0,2],[1,3],[2,3]]
 Output: [0,1,2,3] (one valid order)
 ```
 
-**Code**
-
 ```python
-
-
 class Solution:
     def topoSort(self, V, edges):
         n = V
@@ -858,7 +824,6 @@ Input: numCourses = 2, prerequisites = [[1,0]]
 Output: true
 ```
 
-**Code**
 
 ```python
 class Solution:
@@ -904,10 +869,8 @@ Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
 Output: [0,1,2,3] (one valid order)
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def findOrder(self, numCourses, prerequisites):
@@ -949,10 +912,8 @@ Input: words = ["za","zb","ca","cb"]
 Output: "zacb" (one valid order; z before c and a before b)
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def findOrder(self, words):
@@ -1000,10 +961,8 @@ Input: V = 4, edges = [[0,1,2],[0,2,5],[1,2,-1]]
 Output: [0,2,1,-1]
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def shortestPath(self, V, edges):
@@ -1046,10 +1005,8 @@ Input: V = 4, edges = [[0,1],[1,2]], src = 0
 Output: [0,1,2,-1]
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def shortestPath(self, V, edges, src):
@@ -1089,10 +1046,8 @@ Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","
 Output: 5
 ```
 
-**Code**
 
 ```python
-
 from string import ascii_lowercase
 
 class Solution:
@@ -1124,10 +1079,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-multiplications-to-reach-end/1)
 
-**Code**
 
 ```python
-
 ```
 
 ## All Shortest Sequences — BFS and Backtracking
@@ -1136,10 +1089,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/word-ladder-ii/)
 
-**Code**
 
 ```python
-
 ```
 
 ## Dijkstra’s Algorithm
@@ -1157,10 +1108,8 @@ Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,9]], src = 0
 Output: [0,4,6]
 ```
 
-**Code**
 
-```python
-from heapq import heappop, heappush
+```pythonfrom heapq import heappop, heappush
 
 class Solution:
     def dijkstra(self, V, edges, src):
@@ -1192,10 +1141,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1)
 
-**Code**
 
 ```python
-
 ```
 
 ### 29. ★ Path With Minimum Effort — 1631
@@ -1211,10 +1158,8 @@ Input: heights = [[1,3],[2,4]]
 Output: 2
 ```
 
-**Code**
 
-```python
-from heapq import heappop, heappush
+```pythonfrom heapq import heappop, heappush
 
 class Solution:
     def minimumEffortPath(self, heights):
@@ -1247,10 +1192,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)
 
-**Code**
 
 ```python
-
 ```
 
 ## Bellman–Ford — Repeated Edge Relaxation
@@ -1268,10 +1211,8 @@ Input: V = 3, edges = [[0,1,4],[1,2,-2],[0,2,5]], src = 0
 Output: [0,4,2]
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def bellmanFord(self, V, edges, src):
         inf = float('inf')
         dist = [inf] * V
@@ -1308,10 +1249,8 @@ Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
 Output: 200
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def findCheapestPrice(self, n, flights, src, dst, k):
         dist = [float('inf')] * n
         dist[src] = 0
@@ -1343,10 +1282,8 @@ Input: dist = [[0,3,100000000],[100000000,0,2],[100000000,100000000,0]]
 Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no return value
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def floydWarshall(self, dist):
         n = len(dist)
         inf = 100000000
@@ -1377,10 +1314,8 @@ Input: n = 4, edges = [[0,1,2],[1,2,2],[2,3,2]], distanceThreshold = 2
 Output: 3
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def findTheCity(self, n, edges, distanceThreshold):
         dist = [[float("inf")] * n for _ in range(n)]
         for i in range(n):
@@ -1419,10 +1354,8 @@ Input: DSU(4); union(0,1); union(1,2); union(0,2); find(0) == find(2); find(0) =
 Output: true; true; false; true; false (initialization has no output)
 ```
 
-**Code**
 
-```python
-class DSU:
+```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -1464,10 +1397,8 @@ Input: n = 4, connections = [[0,1],[0,2],[1,2]]
 Output: 1
 ```
 
-**Code**
 
-```python
-class DSU:
+```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -1520,10 +1451,8 @@ Input: accounts = [["Mira","a@x.com","b@x.com"],["Mira","b@x.com","c@x.com"],["N
 Output: [["Mira","a@x.com","b@x.com","c@x.com"],["Noah","n@x.com"]] (account groups may appear in any order)
 ```
 
-**Code**
 
-```python
-from collections import defaultdict
+```pythonfrom collections import defaultdict
 
 
 class DSU:
@@ -1581,10 +1510,8 @@ Input: stones = [[0,0],[0,1],[1,1],[3,4]]
 Output: 2
 ```
 
-**Code**
 
-```python
-class DSU:
+```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -1630,20 +1557,16 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
 
-**Code**
 
 ```python
-
 ```
 
 ### 40. Making a Large Island (G-52)
 
 [LeetCode/GFG Link](https://leetcode.com/problems/making-a-large-island/)
 
-**Code**
 
 ```python
-
 ```
 
 ## Minimum Spanning Tree — Grow a Tree Using a Min-heap
@@ -1661,10 +1584,8 @@ Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
 Output: 6
 ```
 
-**Code**
 
-```python
-from heapq import heappop, heappush
+```pythonfrom heapq import heappop, heappush
 
 class Solution:
     def spanningTree(self, V, edges):
@@ -1707,10 +1628,8 @@ Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
 Output: 6
 ```
 
-**Code**
 
-```python
-class DSU:
+```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -1761,10 +1680,8 @@ Input: V = 4, edges = [[0,1],[1,0],[1,2],[2,3],[3,2]]
 Output: 2
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def kosaraju(self, V, edges):
         adj = [[] for _ in range(V)]
         reverse = [[] for _ in range(V)]
@@ -1824,10 +1741,8 @@ Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
 Output: [[1,3]] (edge endpoints may be reversed)
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def criticalConnections(self, n, connections):
         adj = [[] for _ in range(n)]
         for eid, (u, v) in enumerate(connections):
@@ -1878,10 +1793,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 
-**Code**
 
 ```python
-
 ```
 
 ## Additional Problems — Not in the Agreed List
@@ -1899,10 +1812,8 @@ Input: n = 3, edges = [[0,1],[1,2]], source = 0, destination = 2
 Output: true
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def validPath(self, n, edges, source, destination):
         graph = [[] for _ in range(n)]
         for u, v in edges:
@@ -1943,10 +1854,8 @@ Input: Adjacency list: [[2],[1]] (node values are 1 and 2)
 Output: A new graph with adjacency list [[2],[1]], sharing no nodes with the input
 ```
 
-**Code**
 
-```python
-# Node is provided by LeetCode.
+```python# Node is provided by LeetCode.
 class Solution:
     def cloneGraph(self, node):
         if node is None:
@@ -1986,10 +1895,8 @@ Input: rooms = [[1],[2],[3],[]]
 Output: true
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def canVisitAllRooms(self, rooms):
         queue = deque([0])
         visited = {0}
@@ -2023,10 +1930,8 @@ Input: n = 5, edges = [[0,1],[1,2],[3,4]]
 Output: 2
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def countComponents(self, n, edges):
@@ -2074,10 +1979,8 @@ Input: grid = [[0,1],[1,0]]
 Output: 1
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def shortestBridge(self, grid):
@@ -2128,10 +2031,8 @@ Input: grid = [[1,1,0],[1,0,1]]
 Output: 3
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def maxAreaOfIsland(self, grid):
         rows, cols = len(grid), len(grid[0])
 
@@ -2165,10 +2066,8 @@ Input: heights = [[1,2],[4,3]]
 Output: [[0,1],[1,0],[1,1]] (any order)
 ```
 
-**Code**
 
 ```python
-
 ```
 
 **Time Space Complexity**
@@ -2189,10 +2088,8 @@ Input: n = 4, dislikes = [[1,2],[1,3],[2,4]]
 Output: true
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def possibleBipartition(self, n, dislikes):
         graph = [[] for _ in range(n + 1)]
         for u, v in dislikes:
@@ -2236,10 +2133,8 @@ Input: V = 4, edges = [[0,1],[0,2],[1,3],[2,3]]
 Output: [0,2,1,3] (one valid order)
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def topoSort(self, V, edges):
         adj = [[] for _ in range(V)]
         for u, v in edges:
@@ -2284,10 +2179,8 @@ Input: recipes = ["tea","combo"], ingredients = [["water","leaf"],["tea","bread"
 Output: ["tea","combo"]
 ```
 
-**Code**
 
-```python
-from collections import defaultdict, deque
+```pythonfrom collections import defaultdict, deque
 
 class Solution:
     def findAllRecipes(self, recipes, ingredients, supplies):
@@ -2330,10 +2223,8 @@ Input: grid = [[0,1],[1,0]]
 Output: 2
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def shortestPathBinaryMatrix(self, grid):
@@ -2375,10 +2266,8 @@ Input: deadends = [], target = "0009"
 Output: 1
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def openLock(self, deadends, target):
@@ -2419,10 +2308,8 @@ Input: board = [[-1,-1],[-1,-1]]
 Output: 1
 ```
 
-**Code**
 
 ```python
-
 
 class Solution:
     def snakesAndLadders(self, board):
@@ -2463,10 +2350,8 @@ Input: times = [[1,2,2],[2,3,1]], n = 3, k = 1
 Output: 3
 ```
 
-**Code**
 
-```python
-from heapq import heappop, heappush
+```pythonfrom heapq import heappop, heappush
 
 class Solution:
     def networkDelayTime(self, times, n, k):
@@ -2508,10 +2393,8 @@ Input: V = 4, edges = [[0,1,2],[2,3,-2],[3,2,1]]
 Output: 1 (negative cycle is disconnected from vertex 0)
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def isNegativeWeightCycle(self, V, edges):
         dist = [0] * V
         for step in range(V):
@@ -2545,10 +2428,8 @@ Input: edges = [[1,2],[1,3],[2,3]]
 Output: [2,3]
 ```
 
-**Code**
 
-```python
-class DSU:
+```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -2596,10 +2477,8 @@ Input: points = [[0,0],[2,0],[2,2]]
 Output: 4
 ```
 
-**Code**
 
-```python
-class Solution:
+```pythonclass Solution:
     def minCostConnectPoints(self, points):
         n = len(points)
         if n == 0:
@@ -2637,10 +2516,8 @@ Input: equations = [["x","y"],["y","z"]], values = [4.0,2.0], queries = [["x","z
 Output: [8.0,0.125,-1.0]
 ```
 
-**Code**
 
-```python
-from collections import defaultdict
+```pythonfrom collections import defaultdict
 
 class Solution:
     def calcEquation(self, equations, values, queries):
@@ -2683,8 +2560,6 @@ Input: graph = [[1,2],[3],[3],[]]
 Output: [[0,1,3],[0,2,3]] (any order)
 ```
 
-**Code**
-
 ```python
 class Solution:
     def allPathsSourceTarget(self, graph):
@@ -2719,7 +2594,6 @@ Input: matrix = [[3,4],[2,5]]
 Output: 4
 ```
 
-**Code**
 
 **DFS + memoization**
 
@@ -2743,7 +2617,6 @@ class Solution:
 **Topological layers — avoids recursion**
 
 ```python
-
 
 class Solution:
     def longestIncreasingPath(self, matrix):
