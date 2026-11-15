@@ -11,14 +11,13 @@ Video series and approaches follwed - https://www.youtube.com/playlist?list=PLgU
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands/)
 
 Count 4-directionally connected groups of '1' cells in a nonempty grid. Visited land is changed to '0'.
-
+   
 **Input/Output**
 
 ```text
 Input: grid = [["1","1","0"],["0","0","1"]]
 Output: 2
 ```
-
 
 ```python
 class Solution:
@@ -61,7 +60,6 @@ Recolor the 4-connected component containing (sr, sc) in a nonempty image. Updat
 Input: image = [[1,1],[1,0]], sr = 0, sc = 0, color = 2
 Output: [[2,2],[2,0]]
 ```
-
 
 ```python
 class Solution:
@@ -149,6 +147,8 @@ class Solution:
                      if 0 <= nr< rows and 0 <=nc < cols and grid[nr][nc] == 1:
                         grid[nr][nc] = 2
                         fresh_count -= 1
+
+        return minutes
 ```
 
 **Time Space Complexity**
@@ -168,7 +168,6 @@ Find each cell’s distance to its nearest 0 using multi-source BFS. The nonempt
 Input: mat = [[0,1,1],[1,1,1]]
 Output: [[0,1,2],[1,2,3]]
 ```
-
 
 ```python
 class Solution:
@@ -218,7 +217,6 @@ Flip enclosed 'O' regions to 'X' in place. First preserve all 'O' cells connecte
 Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","X","X"],["X","O","X","X"]]
 Output: board becomes [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]; no return value
 ```
-
 
 ```python
 class Solution:
