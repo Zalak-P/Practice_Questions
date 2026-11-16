@@ -453,7 +453,6 @@ class Solution:
 
 ```python
 def has_cycle_undirected(vertices, edges):
-    # Build the adjacency list
     graph = defaultdict(list)
     for u, v in edges:
         graph[u].append(v)
@@ -465,17 +464,14 @@ def has_cycle_undirected(vertices, edges):
         visited.add(node)
 
         for neighbor in graph[node]:
-            # If the neighbor hasn't been visited, explore it
             if neighbor not in visited:
                 if dfs(neighbor, node):
                     return True
-            # If the neighbor is visited and is not the parent, a cycle exists
             elif neighbor != parent:
                 return True
 
         return False
 
-    # Check all vertices to handle disconnected components
     for v in range(vertices):
         if v not in visited:
             if dfs(v, -1):
