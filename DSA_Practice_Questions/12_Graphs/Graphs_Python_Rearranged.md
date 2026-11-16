@@ -496,7 +496,6 @@ Output: true
 
 ```python
 def has_cycle_directed(vertices, edges):
-    # Build the adjacency list
     graph = defaultdict(list)
     for u, v in edges:
         graph[u].append(v)
@@ -509,19 +508,15 @@ def has_cycle_directed(vertices, edges):
         rec_stack.add(node)
 
         for neighbor in graph[node]:
-            # If unvisited, recurse on the neighbor
             if neighbor not in visited:
                 if dfs(neighbor):
                     return True
-            # If the neighbor is in the active recursion stack, a cycle exists
             elif neighbor in rec_stack:
                 return True
 
-        # Backtrack: remove the node from the active path before returning
         rec_stack.remove(node)
         return False
 
-    # Check all vertices to handle disconnected components
     for v in range(vertices):
         if v not in visited:
             if dfs(v):
