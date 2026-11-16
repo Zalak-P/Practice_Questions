@@ -556,22 +556,22 @@ Output: true
 ```python
 class Solution:
     def isBipartite(self, graph):
-        color = [-1] * len(graph)
+        color_array = [-1] * len(graph)
 
-        for start in range(len(graph)):
-            if color[start] != -1:
+        for i in range(len(graph)):
+            if color_array[i] != -1:
                 continue
 
-            color[start] = 0
-            queue = deque([start])
+            color_array[i] = 0
+            queue = deque([i])
 
             while queue:
                 node = queue.popleft()
                 for neighbor in graph[node]:
-                    if color[neighbor] == -1:
-                        color[neighbor] = 1 - color[node]
+                    if color_array[neighbor] == -1:
+                        color_array[neighbor] = 1 - color_array[node]
                         queue.append(neighbor)
-                    elif color[neighbor] == color[node]:
+                    elif color_array[neighbor] == color_array[node]:
                         return False
 
         return True
