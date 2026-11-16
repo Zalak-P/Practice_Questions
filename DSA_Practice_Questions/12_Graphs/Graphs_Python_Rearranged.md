@@ -582,22 +582,22 @@ class Solution:
 ```python
 class Solution:
     def isBipartite(self, graph):
-        color = [-1] * len(graph)
+        color_array = [-1] * len(graph)
 
         def dfs(node, current_color):
-            color[node] = current_color
+            color_array[node] = current_color
 
             for neighbor in graph[node]:
-                if color[neighbor] == -1:
+                if color_array[neighbor] == -1:
                     if not dfs(neighbor, 1 - current_color):
                         return False
-                elif color[neighbor] == current_color:
+                elif color_array[neighbor] == current_color:
                     return False
 
             return True
 
         for node in range(len(graph)):
-            if color[node] == -1 and not dfs(node, 0):
+            if color_array[node] == -1 and not dfs(node, 0):
                 return False
 
         return True
