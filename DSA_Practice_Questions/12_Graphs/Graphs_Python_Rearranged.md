@@ -579,7 +579,8 @@ class Solution:
 
 2. **Odd Cycle Check:** If the graph contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
 
-```pythonclass Solution:
+```python
+class Solution:
     def isBipartite(self, graph):
         color = [-1] * len(graph)
 
