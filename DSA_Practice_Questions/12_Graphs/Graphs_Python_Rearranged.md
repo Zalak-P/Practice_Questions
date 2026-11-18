@@ -1377,15 +1377,18 @@ Output: 200
 
 ```python
 class Solution:
-    def findCheapestPrice(self, n, flights, src, dst, k):
+    def findCheapestPrice(self, n, flights, src, dest, k):
         dist = [float('inf')] * n
         dist[src] = 0
+
         for _ in range(k + 1):
             next_dist = dist.copy()
+
             for u, v, price in flights:
                 next_dist[v] = min(next_dist[v], dist[u] + price)
+
             dist = next_dist
-        return -1 if dist[dst] == float('inf') else dist[dst]
+        return -1 if dist[dst] == float('inf') else dist[dest]
 ```
 
 **Time Space Complexity**
