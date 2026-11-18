@@ -1162,8 +1162,8 @@ Find shortest distances from src in an undirected adj with nonnegative edge weig
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,9]], src = 0
-Output: [0,4,6]
+Input: V = 3, edges = [[0,1,10],[0,2,1],[2,1,3]], src = 0
+Output: [0,4,1]
 ```
 
 ```python
@@ -1175,18 +1175,22 @@ class Solution:
         for u, v, w in edges:
             adj[u].append((v, w))
             adj[v].append((u, w))
+
         dist = [float('inf')] * V
         dist[src] = 0
         heap = [(0, src)]
+
         while heap:
             cost, u = heappop(heap)
             if cost != dist[u]:
                 continue
+
             for v, weight in adj[u]:
                 candidate = cost + weight
                 if candidate < dist[v]:
                     dist[v] = candidate
                     heappush(heap, (candidate, v))
+
         return [-1 if d == float('inf') else d for d in dist]
 ```
 
