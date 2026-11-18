@@ -1,4 +1,4 @@
-# adjs
+# Graphs
 
 V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Recursive alternatives can exceed Python recursion limits or Java stack depth on long paths; use the iterative alternative where supplied.
 
