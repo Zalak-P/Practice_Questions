@@ -1,4 +1,4 @@
-# Graphs
+# adjs
 
 V = vertices; E = edges; R and C = grid dimensions; α = inverse Ackermann function. Recursive alternatives can exceed Python recursion limits or Java stack depth on long paths; use the iterative alternative where supplied.
 
@@ -11,7 +11,7 @@ Video series and approaches follwed - https://www.youtube.com/playlist?list=PLgU
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands/)
 
 Count 4-directionally connected groups of '1' cells in a nonempty grid. Visited land is changed to '0'.
-   
+
 **Input/Output**
 
 ```text
@@ -95,8 +95,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-distinct-islands/)
 
-
 ```python
+
 ```
 
 ## Multi-source BFS — Expand Level by Level
@@ -117,7 +117,6 @@ Each minute, rotten oranges infect fresh oranges up, down, left, and right. Retu
 Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
 Output: 4
 ```
-
 
 ```python
 class Solution:
@@ -260,8 +259,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-enclaves/)
 
-
 ```python
+
 ```
 
 ## Grid Shortest Path — BFS with Queue and Distance
@@ -270,15 +269,15 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-a-binary-maze-1655453161/1)
 
-
 ```python
+
 ```
 
-## BFS / DFS — Graph Traversal
+## BFS / DFS — adj Traversal
 
-### 9. ★ BFS Traversal of a Graph
+### 9. ★ BFS Traversal of a adj
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/bfs-traversal-of-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/bfs-traversal-of-adj/1)
 
 BFS visits nodes level by level, using a queue. Mark each node visited when adding it to the queue to prevent duplicates.
 
@@ -288,7 +287,6 @@ BFS visits nodes level by level, using a queue. Mark each node visited when addi
 Input: adj = [[1,2],[0,3],[0],[1]]
 Output: [0,1,2,3]
 ```
-
 
 ```python
 class Solution:
@@ -317,9 +315,9 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list.
 
-### 10. ★ DFS Traversal of a Graph
+### 10. ★ DFS Traversal of a adj
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/depth-first-traversal-for-a-adj/1)
 
 DFS explores one branch as deeply as possible before backtracking. Start from vertex 0 and follow adjacency-list order.
 
@@ -329,7 +327,6 @@ DFS explores one branch as deeply as possible before backtracking. Start from ve
 Input: adj = [[1,2],[0,3],[0],[1]]
 Output: [0,1,3,2]
 ```
-
 
 ```python
 class Solution:
@@ -355,12 +352,12 @@ class Solution:
 
 - **Time:**
 - Each vertex is visited at most once: O(V).
-- Each visited vertex scans its adjacency list. Across the graph, that is E entries for a directed graph, or 2E for an undirected graph so ~ O(E).
+- Each visited vertex scans its adjacency list. Across the adj, that is E entries for a directed adj, or 2E for an undirected adj so ~ O(E).
 - Assuming average O(1) set operations, total time is O(V + E).
 - The neighbor loop scans only its node’s neighbors.
 - **Space:**
 - Visited can contain V vertices: O(V).
-- A graph can produce V active recursive calls: O(V).
+- A adj can produce V active recursive calls: O(V).
 - result can contain V vertices: O(V) output space.
 - Auxiliary space is O(V). Including the output, it remains O(V).
 
@@ -376,7 +373,6 @@ Given an adjacency matrix isConnected, count the groups of directly or indirectl
 Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
 Output: 2
 ```
-
 
 ```python
 class Solution:
@@ -409,11 +405,11 @@ class Solution:
 
 ## Cycle Detection — Parent Tracking / DFS Recursion Stack / State Tracking
 
-### 12. ★ Detect Cycle in an Undirected Graph — BFS and DFS
+### 12. ★ Detect Cycle in an Undirected adj — BFS and DFS
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-an-undirected-adj/1)
 
-Detect a cycle in any component of an undirected graph. Input edges use vertices 0 through V − 1; edge IDs distinguish parallel edges. Mark vertices when scheduling them. Ignore only the edge used to enter the current vertex; another edge to a seen vertex proves a cycle. Both BFS and DFS are included.
+Detect a cycle in any component of an undirected adj. Input edges use vertices 0 through V − 1; edge IDs distinguish parallel edges. Mark vertices when scheduling them. Ignore only the edge used to enter the current vertex; another edge to a seen vertex proves a cycle. Both BFS and DFS are included.
 
 The rule is: process a node only when it has no incoming edges left.
 
@@ -425,7 +421,6 @@ Indegree means the number of incoming edges to a node. In Course Schedule, it re
 Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
-
 
 **BFS**
 
@@ -453,17 +448,17 @@ class Solution:
 
 ```python
 def has_cycle_undirected(vertices, edges):
-    graph = defaultdict(list)
+    adj = defaultdict(list)
     for u, v in edges:
-        graph[u].append(v)
-        graph[v].append(u)
+        adj[u].append(v)
+        adj[v].append(u)
 
     visited = set()
 
     def dfs(node, parent):
         visited.add(node)
 
-        for neighbor in graph[node]:
+        for neighbor in adj[node]:
             if neighbor not in visited:
                 if dfs(neighbor, node):
                     return True
@@ -480,9 +475,9 @@ def has_cycle_undirected(vertices, edges):
     return False
 ```
 
-### 13. ★ Detect Cycle in a Directed Graph — DFS
+### 13. ★ Detect Cycle in a Directed adj — DFS
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-adj/1)
 
 Detect a directed cycle using DFS states: 0 = unvisited, 1 = active, 2 = completed. An edge to an active node proves a cycle. Explicit stack frames avoid recursion depth limits.
 
@@ -493,12 +488,11 @@ Input: V = 3, edges = [[0,1],[1,2],[2,0]]
 Output: true
 ```
 
-
 ```python
 def has_cycle_directed(vertices, edges):
-    graph = defaultdict(list)
+    adj = defaultdict(list)
     for u, v in edges:
-        graph[u].append(v)
+        adj[u].append(v)
 
     visited = set()
     rec_stack = set()  # Tracks nodes in the current recursion path
@@ -507,7 +501,7 @@ def has_cycle_directed(vertices, edges):
         visited.add(node)
         rec_stack.add(node)
 
-        for neighbor in graph[node]:
+        for neighbor in adj[node]:
             if neighbor not in visited:
                 if dfs(neighbor):
                     return True
@@ -525,40 +519,40 @@ def has_cycle_directed(vertices, edges):
     return False
 ```
 
-## Bipartite Graph — Two-color BFS / DFS
+## Bipartite adj — Two-color BFS / DFS
 
-A bipartite graph is a graph whose nodes have 2 different colors, or you can assign 2 diff colors to the adjcent nodes.
-Thus dividing the graph in 2 groups where no edges are interconnected within same group.
-                                                             
-Observations:-                                                     10
-                                                                   |
-- Linear graphs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5 
-                                                                    \
-                                                                    7 - 9
-- Any graph with even cycle **length** is also bipartite.
+A bipartite adj is a adj whose nodes have 2 different colors, or you can assign 2 diff colors to the adjcent nodes.
+Thus dividing the adj in 2 groups where no edges are interconnected within same group.
 
-### 14. ★ Is Graph Bipartite? — 785
+Observations:- 10
+|
 
-[LeetCode/GFG Link](https://leetcode.com/problems/is-graph-bipartite/)
+- Linear adjs with no cycles are always Bipartite, 1 -> 2-> 4 -> 5
+  \
+   7 - 9
+- Any adj with even cycle **length** is also bipartite.
 
-Check whether an undirected adjacency-list graph can be colored with two colors. Covers disconnected components.
+### 14. ★ Is adj Bipartite? — 785
+
+[LeetCode/GFG Link](https://leetcode.com/problems/is-adj-bipartite/)
+
+Check whether an undirected adjacency-list adj can be colored with two colors. Covers disconnected components.
 
 **Input/Output**
 
 ```text
-Input: graph = [[1,3],[0,2],[1,3],[0,2]]
+Input: adj = [[1,3],[0,2],[1,3],[0,2]]
 Output: true
 ```
-
 
 1. **Two-Coloring Test:** Try to color every vertex using any two colors (e.g., Red and Blue) so that no two adjecent connected vertices share the same color. If you can do it, it is bipartite. (BFS Approach)
 
 ```python
 class Solution:
-    def isBipartite(self, graph):
-        color_array = [-1] * len(graph)
+    def isBipartite(self, adj):
+        color_array = [-1] * len(adj)
 
-        for i in range(len(graph)):
+        for i in range(len(adj)):
             if color_array[i] != -1:
                 continue
 
@@ -567,7 +561,7 @@ class Solution:
 
             while queue:
                 node = queue.popleft()
-                for neighbor in graph[node]:
+                for neighbor in adj[node]:
                     if color_array[neighbor] == -1:
                         color_array[neighbor] = 1 - color_array[node]
                         queue.append(neighbor)
@@ -577,17 +571,17 @@ class Solution:
         return True
 ```
 
-2. **Odd Cycle Check:** If the graph contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
+2. **Odd Cycle Check:** If the adj contains a loop (cycle) with an odd number of edges/vertices, it is not bipartite. (DFS Approach)
 
 ```python
 class Solution:
-    def isBipartite(self, graph):
-        color_array = [-1] * len(graph)
+    def isBipartite(self, adj):
+        color_array = [-1] * len(adj)
 
         def dfs(node, current_color):
             color_array[node] = current_color
 
-            for neighbor in graph[node]:
+            for neighbor in adj[node]:
                 if color_array[neighbor] == -1:
                     if not dfs(neighbor, 1 - current_color):
                         return False
@@ -596,7 +590,7 @@ class Solution:
 
             return True
 
-        for node in range(len(graph)):
+        for node in range(len(adj)):
             if color_array[node] == -1 and not dfs(node, 0):
                 return False
 
@@ -608,9 +602,7 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input adjacency list; includes recursion stack for DFS.
 
-## Directed Graph — DFS State Tracking
-
-### 15. Find Eventual Safe States — DFS State Tracking (G-20)
+## Directed adj — DFS State Tracking
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-eventual-safe-states/)
 
@@ -619,6 +611,8 @@ Use three states:
 - 0: Unvisited.
 - 1: Previously visited is not enough—the node must still be active in the current path.
 - 2: Completed—all outgoing neighbors explored.
+
+### 15. Detect cycle in directed adj
 
 ```python
 class Solution:
@@ -646,10 +640,15 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V)
 
+### 16. Find eventual safe states
+
+```python
+
+```
 
 ## Kahn’s Algorithm — Indegree / Outdegree
 
-Topological sort is used when tasks have dependencies and you need a valid order to complete them.
+Topological sort is a linear ordering of vertices in DAG. It is used for every directed edge u->v, u appears before v.
 For example, suppose you’re building an application:
 | Task | Must happen first |
 |---|---|
@@ -666,11 +665,11 @@ The dependency edges are:
 Topological sort gives a valid execution order:
 Create database → Build API → Prepare test data → Run integration tests
 
-### 16. ★ Detect Cycle in a Directed Graph
+### 17. ★ Detect Cycle in a Directed adj
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/detect-cycle-in-a-directed-adj/1)
 
-Kahn’s algorithm is a BFS-based way to put the nodes of a directed graph in dependency order, called a topological order.
+Kahn’s algorithm is a BFS-based way to put the nodes of a directed adj in dependency order, called a topological order.
 
 The rule is: process a node only when it has no incoming edges left.
 
@@ -679,7 +678,7 @@ Indegree means the number of incoming edges to a node. In Course Schedule, it re
 **Input/Output**
 
 ```text
-Input: edges = [[0,1],[1,2],[2,0]]
+Input: adj = [[1],[2],[3], [1,4], [5], []]
 Output: true
 ```
 
@@ -715,29 +714,29 @@ class Solution:
 - **Time:** O(V + E)
 - **Space:** O(V + E)
 
-### 17. ★ Find Eventual Safe States — 802
+### 18. ★ Find Eventual Safe States — 802
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-eventual-safe-states/)
 
-Return sorted vertices whose every path eventually terminates. Start with terminal vertices and remove edges in the reversed graph.
+Return sorted vertices whose every path eventually terminates. Start with terminal vertices and remove edges in the reversed adj.
 
 **Input/Output**
 
 ```text
-Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
+Input: adj = [[1,2],[2,3],[5],[0],[5],[],[]]
 Output: [2,4,5,6]
 ```
 
 ```python
 class Solution:
-    def eventualSafeNodes(self, graph):
-        n = len(graph)
+    def eventualSafeNodes(self, adj):
+        n = len(adj)
         reverse = [[] for _ in range(n)]
         outdegree = [0] * n
 
         for node in range(n):
-            outdegree[node] = len(graph[node])
-            for neighbor in graph[node]:
+            outdegree[node] = len(adj[node])
+            for neighbor in adj[node]:
                 reverse[neighbor].append(node)
 
         queue = deque(node for node in range(n) if outdegree[node] == 0)
@@ -758,13 +757,13 @@ class Solution:
 **Time Space Complexity**
 
 - **Time:** O(V + E)
-- **Space:** O(V + E), including the reversed graph.
+- **Space:** O(V + E), including the reversed adj.
 
-### 18. ★ Topological Sort — Kahn’s Algorithm
+### 19. ★ Topological Sort — Kahn’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/topological-sort/1)
 
-Return a valid ordering of vertices in a directed acyclic graph given V and edges. Returns an empty array/list if a cycle exists.
+Return a valid ordering of vertices in a directed acyclic adj given V and edges. Returns an empty array/list if a cycle exists.
 
 **Input/Output**
 
@@ -780,19 +779,25 @@ class Solution:
         adj = [[] for _ in range(n)]
         for u, v in edges:
             adj[u].append(v)
+
         indegree = [0] * n
+
         for neighbors in adj:
             for v in neighbors:
                 indegree[v] += 1
+
         queue = deque(u for u in range(n) if indegree[u] == 0)
         order = []
+
         while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
+            node = queue.popleft()
+            order.append(node)
+
+            for neighbor in adj[node]:
+                indegree[neighbor] -= 1
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+
         return order if len(order) == n else []
 ```
 
@@ -814,19 +819,18 @@ Input: numCourses = 2, prerequisites = [[1,0]]
 Output: true
 ```
 
-
 ```python
 class Solution:
     def canFinish(self, numCourses, prerequisites):
         adj = [[] for _ in range(numCourses)]
         indegree = [0] * numCourses
 
-        for course, prerequisite in prerequisites:
-            adj[prerequisite].append(course)
-            indegree[course] += 1
+        for u, v in prerequisites:
+            adj[u].append(v)
+            indegree[v] += 1
 
         # queue containing all nodes whose indegree is 0
-        queue = deque(course for course in range(numCourses) if indegree[course] == 0)
+        queue = deque(u for u in range(numCourses) if indegree[u] == 0)
         completed = 0
 
         while queue:
@@ -835,6 +839,7 @@ class Solution:
 
             for neighbor in adj[course]:
                 indegree[neighbor] -= 1
+
                 if indegree[neighbor] == 0:
                     queue.append(neighbor)
 
@@ -859,28 +864,33 @@ Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
 Output: [0,1,2,3] (one valid order)
 ```
 
-
 ```python
 
 class Solution:
     def findOrder(self, numCourses, prerequisites):
         n = numCourses
         adj = [[] for _ in range(n)]
-        for course, prerequisite in prerequisites:
-            adj[prerequisite].append(course)
+        for u, v in prerequisites:
+            adj[u].append(v)
+
         indegree = [0] * n
         for neighbors in adj:
             for v in neighbors:
                 indegree[v] += 1
+
         queue = deque(u for u in range(n) if indegree[u] == 0)
         order = []
+
         while queue:
-            u = queue.popleft()
-            order.append(u)
-            for v in adj[u]:
-                indegree[v] -= 1
-                if indegree[v] == 0:
-                    queue.append(v)
+            course = queue.popleft()
+            order.append(course)
+
+            for neighbor in adj[course]:
+                indegree[neighbor] -= 1
+
+                if indegree[neighbor] == 0:
+                    queue.append(neighbor)
+
         return order if len(order) == n else []
 ```
 
@@ -898,36 +908,41 @@ Infer any valid ordering of the lowercase letters appearing in sorted alien word
 **Input/Output**
 
 ```text
-Input: words = ["za","zb","ca","cb"]
+Input: words = ["wrt","wrf","er","ett", rftt]
 Output: "zacb" (one valid order; z before c and a before b)
 ```
-
 
 ```python
 
 class Solution:
     def findOrder(self, words):
-        adj = {ch: set() for word in words for ch in word}
+        adj = {ch: set() for word in words for ch in word}   # adj = { "w": set(), "r": set(), "t": set(), "f": set(), "e": set()}
+
         degree = dict.fromkeys(adj, 0)
-        for first, second in zip(words, words[1:]):
-            for a, b in zip(first, second):
-                if a != b:
-                    if b not in adj[a]:
-                        adj[a].add(b)
-                        degree[b] += 1
+
+        for curr, next in zip(words, words[1:]): # this lets compare each word with next word.
+            for ch1, ch2 in zip(curr, next):
+                if ch1 != ch2:
+                    if ch2 not in adj[ch1]:
+                        adj[ch1].add(ch2)   # adj = { "w": {"e"}, "r":{"t"}, "t":{"f"}, "f": set(), "e": {"r"} }
+                        degree[ch2] += 1  # indegree = { "w": 0, "r": 1, "t": 1, "f": 1, "e": 1}
                     break
             else:
-                if len(first) > len(second):
+                if len(curr) > len(next):
                     return ''
-        queue = deque(ch for ch in adj if degree[ch] == 0)
+
+        queue = deque(ch for ch in adj if degree[ch] == 0)  # queue = deque(["w"])
         order = []
+
         while queue:
             ch = queue.popleft()
             order.append(ch)
+
             for nxt in adj[ch]:
                 degree[nxt] -= 1
                 if degree[nxt] == 0:
                     queue.append(nxt)
+
         return ''.join(order) if len(order) == len(adj) else ''
 ```
 
@@ -938,9 +953,9 @@ class Solution:
 
 ## DAG Shortest Path — Topological Order and Edge Relaxation
 
-### 22. ★ Shortest Path in a Directed Acyclic Graph
+### 22. ★ Shortest Path in a Directed Acyclic adj
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-graph/1)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-undirected-adj/1)
 
 Find distances from vertex 0 in a nonempty DAG with edges [u, v, weight]. Relax edges in topological order; unreachable vertices return −1.
 
@@ -951,27 +966,34 @@ Input: V = 4, edges = [[0,1,2],[0,2,5],[1,2,-1]]
 Output: [0,2,1,-1]
 ```
 
-
 ```python
 
 class Solution:
     def shortestPath(self, V, edges):
+        n = V
         adj = [[] for _ in range(V)]
-        degree = [0] * V
+        degree = [0] * n
+
         for u, v, w in edges:
             adj[u].append((v, w))
             degree[v] += 1
-        queue = deque(u for u in range(V) if degree[u] == 0)
-        dist = [float('inf')] * V
+
+        queue = deque(u for u in range(n) if degree[u] == 0)
+        dist = [float('inf')] * n
         dist[0] = 0
+
         while queue:
-            u = queue.popleft()
-            for v, w in adj[u]:
-                if dist[u] != float('inf'):
-                    dist[v] = min(dist[v], dist[u] + w)
+            node = queue.popleft()
+
+            for v, w in adj[node]:
+                if dist[node] != float('inf'):
+                    dist[v] = min(dist[v], dist[node] + w)
+
                 degree[v] -= 1
+
                 if degree[v] == 0:
                     queue.append(v)
+
         return [-1 if d == float('inf') else d for d in dist]
 ```
 
@@ -984,17 +1006,16 @@ class Solution:
 
 ### 23. ★ Shortest Path in an Undirected Graph with Unit Weights
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/dsa/shortest-path-in-undirected-graph-having-unit-distance/)
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/dsa/shortest-path-in-undirected-adj-having-unit-distance/)
 
 Find distances from src in an undirected, unweighted graph with V vertices. Return −1 for unreachable vertices.
 
 **Input/Output**
 
 ```text
-Input: V = 4, edges = [[0,1],[1,2]], src = 0
-Output: [0,1,2,-1]
+Input: V = 6, edges = [[0,1],[1,2], [2,3], [4,5]], src = 0
+Output: [0,1,2,3]
 ```
-
 
 ```python
 
@@ -1004,15 +1025,19 @@ class Solution:
         for u, v in edges:
             adj[u].append(v)
             adj[v].append(u)
+
         dist = [-1] * V
         dist[src] = 0
         queue = deque([src])
+
         while queue:
-            u = queue.popleft()
-            for v in adj[u]:
+            node = queue.popleft()
+
+            for v in adj[node]:
                 if dist[v] == -1:
-                    dist[v] = dist[u] + 1
+                    dist[v] = dist[node] + 1
                     queue.append(v)
+
         return dist
 ```
 
@@ -1036,7 +1061,6 @@ Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","
 Output: 5
 ```
 
-
 ```python
 from string import ascii_lowercase
 
@@ -1045,15 +1069,19 @@ class Solution:
         remaining = set(wordList)
         if endWord not in remaining:
             return 0
+
         remaining.discard(beginWord)
         queue = deque([(beginWord, 1)])
+
         while queue:
             word, length = queue.popleft()
             if word == endWord:
                 return length
+
             for i in range(len(word)):
                 for ch in ascii_lowercase:
                     candidate = word[:i] + ch + word[i + 1:]
+
                     if candidate in remaining:
                         remaining.remove(candidate)
                         queue.append((candidate, length + 1))
@@ -1069,8 +1097,18 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-multiplications-to-reach-end/1)
 
+```text
+Input: arr = [2, 3, 5, 7, 11], start = 3, end = 2310
+Output: 4
+```
 
 ```python
+
+queue = deque([start])
+visited = {start}
+steps = 0
+
+
 ```
 
 ## All Shortest Sequences — BFS and Backtracking
@@ -1079,8 +1117,38 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/word-ladder-ii/)
 
+```text
+Input:
+beginWord = "hit"
+endWord = "cog"
+wordList = ["hot", "dot", "dog", "lot", "log", "cog"]
+
+Output:
+[
+    ["hit", "hot", "dot", "dog", "cog"],
+    ["hit", "hot", "lot", "log", "cog"]
+]
+```
 
 ```python
+from collections import deque, defaultdict
+from string import ascii_lowercase
+
+class Solution:
+    def findLadders(self, beginWord, endWord, wordList):
+        words = set(wordList)
+        if endWord not in words:
+            return []
+
+        queue = deque([beginWord])
+        distance = {beginWord: 0}
+        parents = defaultdict(list)
+
+        while queue and endWord not in distance:
+            for _ in range(len(queue)):
+                word = queue.popleft()
+
+
 ```
 
 ## Dijkstra’s Algorithm
@@ -1089,7 +1157,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
 
-Find shortest distances from src in an undirected graph with nonnegative edge weights. Edges are [u, v, weight]; unreachable vertices return −1.
+Find shortest distances from src in an undirected adj with nonnegative edge weights. Edges are [u, v, weight]; unreachable vertices return −1.
 
 **Input/Output**
 
@@ -1098,8 +1166,8 @@ Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,9]], src = 0
 Output: [0,4,6]
 ```
 
-
-```pythonfrom heapq import heappop, heappush
+```python
+from heapq import heappop, heappush
 
 class Solution:
     def dijkstra(self, V, edges, src):
@@ -1127,12 +1195,12 @@ class Solution:
 - **Time:** O(V + E log(E + 2)) with a heap that can retain outdated entries.
 - **Space:** O(V + E), including the adjacency list and heap with outdated entries.
 
-### 28. Print Shortest Path in a Weighted Undirected Graph (G-35)
+### 28. Print Shortest Path in a Weighted Undirected adj (G-35)
 
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-graph/1)
-
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-adj/1)
 
 ```python
+
 ```
 
 ### 29. ★ Path With Minimum Effort — 1631
@@ -1148,8 +1216,8 @@ Input: heights = [[1,3],[2,4]]
 Output: 2
 ```
 
-
-```pythonfrom heapq import heappop, heappush
+```python
+from heapq import heappop, heappush
 
 class Solution:
     def minimumEffortPath(self, heights):
@@ -1182,8 +1250,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)
 
-
 ```python
+
 ```
 
 ## Bellman–Ford — Repeated Edge Relaxation
@@ -1192,7 +1260,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1)
 
-Find distances from src in a directed graph with negative weights allowed. Return [-1] for a reachable negative cycle; use 100000000 for unreachable vertices (GFG convention).
+Find distances from src in a directed adj with negative weights allowed. Return [-1] for a reachable negative cycle; use 100000000 for unreachable vertices (GFG convention).
 
 **Input/Output**
 
@@ -1200,7 +1268,6 @@ Find distances from src in a directed graph with negative weights allowed. Retur
 Input: V = 3, edges = [[0,1,4],[1,2,-2],[0,2,5]], src = 0
 Output: [0,4,2]
 ```
-
 
 ```pythonclass Solution:
     def bellmanFord(self, V, edges, src):
@@ -1239,7 +1306,6 @@ Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
 Output: 200
 ```
 
-
 ```pythonclass Solution:
     def findCheapestPrice(self, n, flights, src, dst, k):
         dist = [float('inf')] * n
@@ -1272,7 +1338,6 @@ Input: dist = [[0,3,100000000],[100000000,0,2],[100000000,100000000,0]]
 Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no return value
 ```
 
-
 ```pythonclass Solution:
     def floydWarshall(self, dist):
         n = len(dist)
@@ -1295,7 +1360,7 @@ Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no retur
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/)
 
-Use Floyd–Warshall for all-pairs shortest distances in an undirected weighted graph. Count other cities within distanceThreshold. On equal counts, choose the city with the larger index.
+Use Floyd–Warshall for all-pairs shortest distances in an undirected weighted adj. Count other cities within distanceThreshold. On equal counts, choose the city with the larger index.
 
 **Input/Output**
 
@@ -1303,7 +1368,6 @@ Use Floyd–Warshall for all-pairs shortest distances in an undirected weighted 
 Input: n = 4, edges = [[0,1,2],[1,2,2],[2,3,2]], distanceThreshold = 2
 Output: 3
 ```
-
 
 ```pythonclass Solution:
     def findTheCity(self, n, edges, distanceThreshold):
@@ -1343,7 +1407,6 @@ Maintain disjoint sets for elements 0 through n − 1 using path compression and
 Input: DSU(4); union(0,1); union(1,2); union(0,2); find(0) == find(2); find(0) == find(3)
 Output: true; true; false; true; false (initialization has no output)
 ```
-
 
 ```pythonclass DSU:
     def __init__(self, n):
@@ -1386,7 +1449,6 @@ Return the fewest cable moves to connect all n computers, or −1 if there are f
 Input: n = 4, connections = [[0,1],[0,2],[1,2]]
 Output: 1
 ```
-
 
 ```pythonclass DSU:
     def __init__(self, n):
@@ -1440,7 +1502,6 @@ Merge accounts sharing an email and sort each merged email list. Each account ha
 Input: accounts = [["Mira","a@x.com","b@x.com"],["Mira","b@x.com","c@x.com"],["Noah","n@x.com"]]
 Output: [["Mira","a@x.com","b@x.com","c@x.com"],["Noah","n@x.com"]] (account groups may appear in any order)
 ```
-
 
 ```pythonfrom collections import defaultdict
 
@@ -1500,7 +1561,6 @@ Input: stones = [[0,0],[0,1],[1,1],[3,4]]
 Output: 2
 ```
 
-
 ```pythonclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
@@ -1547,16 +1607,16 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
 
-
 ```python
+
 ```
 
 ### 40. Making a Large Island (G-52)
 
 [LeetCode/GFG Link](https://leetcode.com/problems/making-a-large-island/)
 
-
 ```python
+
 ```
 
 ## Minimum Spanning Tree — Grow a Tree Using a Min-heap
@@ -1565,7 +1625,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
 
-Find the MST weight of an undirected connected graph with V ≥ 1 and edges [u, v, weight]. Add the cheapest edge reaching an unused vertex.
+Find the MST weight of an undirected connected adj with V ≥ 1 and edges [u, v, weight]. Add the cheapest edge reaching an unused vertex.
 
 **Input/Output**
 
@@ -1573,7 +1633,6 @@ Find the MST weight of an undirected connected graph with V ≥ 1 and edges [u, 
 Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
 Output: 6
 ```
-
 
 ```pythonfrom heapq import heappop, heappush
 
@@ -1609,7 +1668,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree-kruskals-algorithm/1)
 
-Find the MST weight of a connected undirected graph with edges [u, v, weight]. Process edges by weight and merge different components.
+Find the MST weight of a connected undirected adj with edges [u, v, weight]. Process edges by weight and merge different components.
 
 **Input/Output**
 
@@ -1617,7 +1676,6 @@ Find the MST weight of a connected undirected graph with edges [u, v, weight]. P
 Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
 Output: 6
 ```
-
 
 ```pythonclass DSU:
     def __init__(self, n):
@@ -1655,13 +1713,13 @@ class Solution:
 - **Time:** O(V + E log(E + 2) + E × α(V))
 - **Space:** O(V + E), including DSU and the sorted edge copy.
 
-## Advanced DFS — Finishing Order and Reversed Graph
+## Advanced DFS — Finishing Order and Reversed adj
 
 ### 43. ★ Kosaraju’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1)
 
-Count strongly connected components in a directed graph given V and edges. Record DFS finish order, then traverse the reversed graph in reverse finish order.
+Count strongly connected components in a directed adj given V and edges. Record DFS finish order, then traverse the reversed adj in reverse finish order.
 
 **Input/Output**
 
@@ -1669,7 +1727,6 @@ Count strongly connected components in a directed graph given V and edges. Recor
 Input: V = 4, edges = [[0,1],[1,0],[1,2],[2,3],[3,2]]
 Output: 2
 ```
-
 
 ```pythonclass Solution:
     def kosaraju(self, V, edges):
@@ -1731,7 +1788,6 @@ Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
 Output: [[1,3]] (edge endpoints may be reversed)
 ```
 
-
 ```pythonclass Solution:
     def criticalConnections(self, n, connections):
         adj = [[] for _ in range(n)]
@@ -1779,21 +1835,21 @@ Output: [[1,3]] (edge endpoints may be reversed)
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 45. Articulation Points in a Graph (G-56)
+### 45. Articulation Points in a adj (G-56)
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 
-
 ```python
+
 ```
 
 ## Additional Problems — Not in the Agreed List
 
-### 46. ★ Find if Path Exists in Graph — 1971
+### 46. ★ Find if Path Exists in adj — 1971
 
-[LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-graph/)
+[LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-adj/)
 
-Check whether source can reach destination in an undirected graph with vertices 0 through n − 1.
+Check whether source can reach destination in an undirected adj with vertices 0 through n − 1.
 
 **Input/Output**
 
@@ -1802,13 +1858,12 @@ Input: n = 3, edges = [[0,1],[1,2]], source = 0, destination = 2
 Output: true
 ```
 
-
 ```pythonclass Solution:
     def validPath(self, n, edges, source, destination):
-        graph = [[] for _ in range(n)]
+        adj = [[] for _ in range(n)]
         for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
+            adj[u].append(v)
+            adj[v].append(u)
 
         queue = deque([source])
         visited = {source}
@@ -1818,7 +1873,7 @@ Output: true
             if node == destination:
                 return True
 
-            for neighbor in graph[node]:
+            for neighbor in adj[node]:
                 if neighbor not in visited:
                     visited.add(neighbor)
                     queue.append(neighbor)
@@ -1831,23 +1886,22 @@ Output: true
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the constructed adjacency list.
 
-### 47. ★ Clone Graph — 133
+### 47. ★ Clone adj — 133
 
-[LeetCode/GFG Link](https://leetcode.com/problems/clone-graph/)
+[LeetCode/GFG Link](https://leetcode.com/problems/clone-adj/)
 
-Given a node in a connected undirected graph, return a deep copy of the graph. Every cloned node must be a new object with the same value and corresponding cloned neighbors.
+Given a node in a connected undirected adj, return a deep copy of the adj. Every cloned node must be a new object with the same value and corresponding cloned neighbors.
 
 **Input/Output**
 
 ```text
 Input: Adjacency list: [[2],[1]] (node values are 1 and 2)
-Output: A new graph with adjacency list [[2],[1]], sharing no nodes with the input
+Output: A new adj with adjacency list [[2],[1]], sharing no nodes with the input
 ```
-
 
 ```python# Node is provided by LeetCode.
 class Solution:
-    def cloneGraph(self, node):
+    def cloneadj(self, node):
         if node is None:
             return None
 
@@ -1870,7 +1924,7 @@ class Solution:
 **Time Space Complexity**
 
 - **Time:** O(V + E)
-- **Space:** O(V) auxiliary for the map and queue, plus O(V + E) for the cloned output graph.
+- **Space:** O(V) auxiliary for the map and queue, plus O(V + E) for the cloned output adj.
 
 ### 48. ★ Keys and Rooms — 841
 
@@ -1884,7 +1938,6 @@ Visit room 0 and follow its keys to other rooms. Return whether every room can b
 Input: rooms = [[1],[2],[3],[]]
 Output: true
 ```
-
 
 ```pythonclass Solution:
     def canVisitAllRooms(self, rooms):
@@ -1907,11 +1960,11 @@ Output: true
 - **Time:** O(V + E)
 - **Space:** O(V), excluding the input; E is the total number of keys.
 
-### 49. ★ Number of Connected Components in an Undirected Graph — 323
+### 49. ★ Number of Connected Components in an Undirected adj — 323
 
-[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-adj/)
 
-Count connected components, including isolated vertices, in an undirected graph.
+Count connected components, including isolated vertices, in an undirected adj.
 
 **Input/Output**
 
@@ -1920,15 +1973,14 @@ Input: n = 5, edges = [[0,1],[1,2],[3,4]]
 Output: 2
 ```
 
-
 ```python
 
 class Solution:
     def countComponents(self, n, edges):
-        graph = [[] for _ in range(n)]
+        adj = [[] for _ in range(n)]
         for u, v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
+            adj[u].append(v)
+            adj[v].append(u)
 
         visited = set()
         components = 0
@@ -1943,7 +1995,7 @@ class Solution:
 
             while queue:
                 node = queue.popleft()
-                for neighbor in graph[node]:
+                for neighbor in adj[node]:
                     if neighbor not in visited:
                         visited.add(neighbor)
                         queue.append(neighbor)
@@ -1968,7 +2020,6 @@ Given exactly two 4-connected islands, return the fewest water cells to flip to 
 Input: grid = [[0,1],[1,0]]
 Output: 1
 ```
-
 
 ```python
 
@@ -2021,7 +2072,6 @@ Input: grid = [[1,1,0],[1,0,1]]
 Output: 3
 ```
 
-
 ```pythonclass Solution:
     def maxAreaOfIsland(self, grid):
         rows, cols = len(grid), len(grid[0])
@@ -2056,8 +2106,8 @@ Input: heights = [[1,2],[4,3]]
 Output: [[0,1],[1,0],[1,1]] (any order)
 ```
 
-
 ```python
+
 ```
 
 **Time Space Complexity**
@@ -2069,7 +2119,7 @@ Output: [[0,1],[1,0],[1,1]] (any order)
 
 [LeetCode/GFG Link](https://leetcode.com/problems/possible-bipartition/)
 
-Split people labeled 1 through n into two groups so every disliked pair is separated. Build an undirected graph and two-color it.
+Split people labeled 1 through n into two groups so every disliked pair is separated. Build an undirected adj and two-color it.
 
 **Input/Output**
 
@@ -2078,13 +2128,12 @@ Input: n = 4, dislikes = [[1,2],[1,3],[2,4]]
 Output: true
 ```
 
-
 ```pythonclass Solution:
     def possibleBipartition(self, n, dislikes):
-        graph = [[] for _ in range(n + 1)]
+        adj = [[] for _ in range(n + 1)]
         for u, v in dislikes:
-            graph[u].append(v)
-            graph[v].append(u)
+            adj[u].append(v)
+            adj[v].append(u)
 
         color = [-1] * (n + 1)
 
@@ -2097,7 +2146,7 @@ Output: true
 
             while queue:
                 node = queue.popleft()
-                for neighbor in graph[node]:
+                for neighbor in adj[node]:
                     if color[neighbor] == -1:
                         color[neighbor] = 1 - color[node]
                         queue.append(neighbor)
@@ -2122,7 +2171,6 @@ Output: true
 Input: V = 4, edges = [[0,1],[0,2],[1,3],[2,3]]
 Output: [0,2,1,3] (one valid order)
 ```
-
 
 ```pythonclass Solution:
     def topoSort(self, V, edges):
@@ -2169,7 +2217,6 @@ Input: recipes = ["tea","combo"], ingredients = [["water","leaf"],["tea","bread"
 Output: ["tea","combo"]
 ```
 
-
 ```pythonfrom collections import defaultdict, deque
 
 class Solution:
@@ -2213,7 +2260,6 @@ Input: grid = [[0,1],[1,0]]
 Output: 2
 ```
 
-
 ```python
 
 class Solution:
@@ -2256,7 +2302,6 @@ Input: deadends = [], target = "0009"
 Output: 1
 ```
 
-
 ```python
 
 class Solution:
@@ -2297,7 +2342,6 @@ Use BFS over square numbers to find the minimum dice rolls from 1 to n². Conver
 Input: board = [[-1,-1],[-1,-1]]
 Output: 1
 ```
-
 
 ```python
 
@@ -2340,7 +2384,6 @@ Input: times = [[1,2,2],[2,3,1]], n = 3, k = 1
 Output: 3
 ```
 
-
 ```pythonfrom heapq import heappop, heappush
 
 class Solution:
@@ -2374,7 +2417,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/negative-weight-cycle3504/1)
 
-Detect a negative-weight cycle anywhere in a directed graph, including disconnected components. Initialize every distance to zero, equivalent to a super-source. An improvement on the Vth Bellman–Ford pass proves a negative cycle. Return 1 if found, otherwise 0.
+Detect a negative-weight cycle anywhere in a directed adj, including disconnected components. Initialize every distance to zero, equivalent to a super-source. An improvement on the Vth Bellman–Ford pass proves a negative cycle. Return 1 if found, otherwise 0.
 
 **Input/Output**
 
@@ -2382,7 +2425,6 @@ Detect a negative-weight cycle anywhere in a directed graph, including disconnec
 Input: V = 4, edges = [[0,1,2],[2,3,-2],[3,2,1]]
 Output: 1 (negative cycle is disconnected from vertex 0)
 ```
-
 
 ```pythonclass Solution:
     def isNegativeWeightCycle(self, V, edges):
@@ -2417,7 +2459,6 @@ An undirected tree on labels 1 through n has one extra edge. Return the edge tha
 Input: edges = [[1,2],[1,3],[2,3]]
 Output: [2,3]
 ```
-
 
 ```pythonclass DSU:
     def __init__(self, n):
@@ -2467,7 +2508,6 @@ Input: points = [[0,0],[2,0],[2,2]]
 Output: 4
 ```
 
-
 ```pythonclass Solution:
     def minCostConnectPoints(self, points):
         n = len(points)
@@ -2506,17 +2546,16 @@ Input: equations = [["x","y"],["y","z"]], values = [4.0,2.0], queries = [["x","z
 Output: [8.0,0.125,-1.0]
 ```
 
-
 ```pythonfrom collections import defaultdict
 
 class Solution:
     def calcEquation(self, equations, values, queries):
-        graph = defaultdict(list)
+        adj = defaultdict(list)
         for (a, b), value in zip(equations, values):
-            graph[a].append((b, value))
-            graph[b].append((a, 1.0 / value))
+            adj[a].append((b, value))
+            adj[b].append((a, 1.0 / value))
         def evaluate(source, target):
-            if source not in graph or target not in graph:
+            if source not in adj or target not in adj:
                 return -1.0
             stack = [(source, 1.0)]
             seen = {source}
@@ -2524,7 +2563,7 @@ class Solution:
                 node, product = stack.pop()
                 if node == target:
                     return product
-                for neighbor, weight in graph[node]:
+                for neighbor, weight in adj[node]:
                     if neighbor not in seen:
                         seen.add(neighbor)
                         stack.append((neighbor, product * weight))
@@ -2546,19 +2585,19 @@ Given a DAG adjacency list, enumerate every path from node 0 to node n − 1. Us
 **Input/Output**
 
 ```text
-Input: graph = [[1,2],[3],[3],[]]
+Input: adj = [[1,2],[3],[3],[]]
 Output: [[0,1,3],[0,2,3]] (any order)
 ```
 
 ```python
 class Solution:
-    def allPathsSourceTarget(self, graph):
+    def allPathsSourceTarget(self, adj):
         result, path = [], [0]
         def dfs(node):
-            if node == len(graph) - 1:
+            if node == len(adj) - 1:
                 result.append(path.copy())
                 return
-            for neighbor in graph[node]:
+            for neighbor in adj[node]:
                 path.append(neighbor)
                 dfs(neighbor)
                 path.pop()
@@ -2583,7 +2622,6 @@ Strictly increasing edges form a DAG. DFS memoizes the longest path starting at 
 Input: matrix = [[3,4],[2,5]]
 Output: 4
 ```
-
 
 **DFS + memoization**
 
