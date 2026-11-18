@@ -1157,7 +1157,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/implementing-dijkstra-set-1-adjacency-matrix/1)
 
-Find shortest distances from src in an undirected adj with nonnegative edge weights. Edges are [u, v, weight]; unreachable vertices return −1.
+Find minimum distances from src to every vertex in an undirected graph with nonnegative edge weights. Edges are [u, v, weight]; unreachable vertices return −1.
 
 **Input/Output**
 
@@ -1172,26 +1172,29 @@ from heapq import heappop, heappush
 class Solution:
     def dijkstra(self, V, edges, src):
         adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-            adj[v].append((u, w))
 
-        dist = [float('inf')] * V
-        dist[src] = 0
+        for u, v, weight in edges:
+            adj[u].append((v, weight))
+            adj[v].append((u, weight))
+
+        distance = [float('inf')] * V
+        distance[src] = 0
         heap = [(0, src)]
 
         while heap:
             cost, u = heappop(heap)
-            if cost != dist[u]:
+
+            if cost != distance[u]:
                 continue
 
             for v, weight in adj[u]:
-                candidate = cost + weight
-                if candidate < dist[v]:
-                    dist[v] = candidate
-                    heappush(heap, (candidate, v))
+                new_cost = cost + weight
+                if new_cost < distance[v]:
+                    distance[v] = new_cost
+                    heappush(heap, (new_cost, v))
 
-        return [-1 if d == float('inf') else d for d in dist]
+        return [-1 if cost == float('inf') else cost for cost in distance]
+
 ```
 
 **Time Space Complexity**
@@ -1201,11 +1204,61 @@ class Solution:
 
 ### 28. Print Shortest Path in a Weighted Undirected adj (G-35)
 
+Return the sequence path of vertices from source to destination (total number of nodes)
+
+```text
+Input: V = 5, edges = [[1,2,2], [2,5,5], [2,3,4], [1,4,1], [4,3,3], [3,5,1]], src = 1, dest = 5
+Output: [1,4,3,5]
+```
+
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-weighted-undirected-adj/1)
 
 ```python
+from heapq import heappop, heappush
 
+class Solution:
+    def shortestPath(self, V, edges, source, destination):
+        adj = [[] for _ in range(V+1)]
+
+        for u, v, weight in edges:
+            adj[u].append((v, weight))
+            adj[v].append((u, weight))
+
+        distance = [float('inf')] * (V+1)
+        parent = [-1] * (V + 1)
+        distance[src] = 0
+        heap = [(0, src)]
+
+        while heap:
+            cost, u = heappop(heap)
+
+            if cost != distance[u]:
+                continue
+
+            for v, weight in adj[u]:
+                new_cost = cost + weight
+                if new_cost < distance[v]:
+                    distance[v] = new_cost
+                    parent[v] = u
+                    heappush(heap, (new_cost, v))
+
+        if distance[dest] == float("inf"):
+            return [-1]
+        
+        path = []
+        node = dest 
+
+        while node != -1:
+            path.append(node)
+            node = parent[node]
+
+        return path[::-1]
 ```
+
+**Time Space Complexity**
+
+- **Time:** O(V + E log(E + 2))
+- **Space:** O(V + E)
 
 ### 29. ★ Path With Minimum Effort — 1631
 
