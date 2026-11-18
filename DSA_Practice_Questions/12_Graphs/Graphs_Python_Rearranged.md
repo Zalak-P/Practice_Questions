@@ -1269,7 +1269,7 @@ Minimize the largest absolute height difference along a 4-directional path from 
 **Input/Output**
 
 ```text
-Input: heights = [[1,3],[2,4]]
+Input: heights = [[1,2,2],[3,8,2],[5,3,5]]
 Output: 2
 ```
 
@@ -1279,29 +1279,37 @@ from heapq import heappop, heappush
 class Solution:
     def minimumEffortPath(self, heights):
         rows, cols = len(heights), len(heights[0])
-        dist = [[float('inf')] * cols for _ in range(rows)]
-        dist[0][0] = 0
+        effort = [[float('inf')] * cols for _ in range(rows)]
+        effort[0][0] = 0
         heap = [(0, 0, 0)]
+        directions = [(1,0),(0,1),(-1,0),(0,-1)]
+
         while heap:
-            effort, r, c = heappop(heap)
-            if effort != dist[r][c]:
+            cost, r, c = heappop(heap)
+
+            if cost != effort[r][c]:
                 continue
+
             if r == rows - 1 and c == cols - 1:
-                return effort
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols:
-                    candidate = max(effort, abs(heights[x][y] - heights[r][c]))
-                    if candidate < dist[x][y]:
-                        dist[x][y] = candidate
-                        heappush(heap, (candidate, x, y))
+                return cost
+
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+
+                if 0 <= nr < rows and 0 <= nc < cols:
+                    new_cost = max(cost, abs(heights[nr][nc] - heights[r][c]))
+
+                    if new_cost < effort[nr][nc]:
+                        effort[nr][nc] = new_cost
+                        heappush(heap, (new_cost, nr, nc))
+
         return 0
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(RC log(RC + 1))
-- **Space:** O(R × C) for distances and the heap (a grid has O(R × C) edges).
+- **Time:** O(rows x cols x log(rows x cols))
+- **Space:** O(rows x cols) for distances and the heap (a grid has O(R × C) edges).
 
 ### 30. Number of Ways to Arrive at Destination (G-40)
 
