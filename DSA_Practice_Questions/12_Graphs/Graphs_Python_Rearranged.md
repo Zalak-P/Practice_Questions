@@ -1325,7 +1325,7 @@ class Solution:
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/distance-from-the-source-bellman-ford-algorithm/1)
 
-Find distances from src in a directed adj with negative weights allowed. Return [-1] for a reachable negative cycle; use 100000000 for unreachable vertices (GFG convention).
+Find shortest distances from src to every vertex in a directed weighted graph. Negative weights allowed. Return [-1] for a reachable negative cycle; use 100000000 for unreachable vertices (GFG convention).
 
 **Input/Output**
 
@@ -1334,11 +1334,13 @@ Input: V = 3, edges = [[0,1,4],[1,2,-2],[0,2,5]], src = 0
 Output: [0,4,2]
 ```
 
-```pythonclass Solution:
+```python
+class Solution:
     def bellmanFord(self, V, edges, src):
         inf = float('inf')
         dist = [inf] * V
         dist[src] = 0
+
         for _ in range(V - 1):
             changed = False
             for u, v, w in edges:
@@ -1347,9 +1349,11 @@ Output: [0,4,2]
                     changed = True
             if not changed:
                 break
+
         for u, v, w in edges:
             if dist[u] != inf and dist[u] + w < dist[v]:
                 return [-1]
+
         return [100000000 if d == inf else d for d in dist]
 ```
 
