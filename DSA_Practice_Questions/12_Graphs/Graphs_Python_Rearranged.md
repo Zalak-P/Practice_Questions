@@ -1244,9 +1244,9 @@ class Solution:
 
         if distance[dest] == float("inf"):
             return [-1]
-        
+
         path = []
-        node = dest 
+        node = dest
 
         while node != -1:
             path.append(node)
@@ -1347,7 +1347,7 @@ class Solution:
                 if dist[u] != inf and dist[u] + w < dist[v]:
                     dist[v] = dist[u] + w
                     changed = True
-            if not changed:
+            if changed == False:
                 break
 
         for u, v, w in edges:
@@ -1375,7 +1375,8 @@ Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
 Output: 200
 ```
 
-```pythonclass Solution:
+```python
+class Solution:
     def findCheapestPrice(self, n, flights, src, dst, k):
         dist = [float('inf')] * n
         dist[src] = 0
