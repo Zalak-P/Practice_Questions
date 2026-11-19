@@ -1315,8 +1315,54 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-ways-to-arrive-at-destination/)
 
-```python
+Count the shortest paths from node 0 to node n - 1 in an undirected weighted graph. Return the count modulo 10⁹ + 7. All road weights are positive.
 
+```text
+Input:
+n = 4
+roads = [[0,1,1], [0,2,1], [1,3,1], [2,3,1], [0,3,2]]
+
+Output: 3
+0 → 1 → 3
+0 → 2 → 3
+0 → 3
+```
+
+```python
+from heapq import heappush, heappop
+
+class Solution:
+    def countPaths(self, n, roads):
+        mod = 10**9 + 7
+        adj = [[] for _ in range(n)]
+
+        for u, v, weight in roads:
+            adj[u].append((v, weight))
+            adj[v].append((u, weight))
+
+        distance = [float("inf")] * n
+        ways = [0] * n
+        distance[0] = 0
+        ways[0] = 1
+        heap = [(0, 0)]
+
+        while heap:
+            cost, u = heappop(heap)
+
+            if cost != distance[u]:
+                continue
+
+            for v, weight in adj[u]:
+                new_cost = cost + weight
+
+                if new_cost < distance[v]:
+                    distance[v] = new_cost
+                    ways[v] = ways[u]
+                    heappush(heap, (new_cost, v))
+                elif new_cost == distance[v]:
+                    ways[v] = (ways[v] + ways[u]) % mod
+
+        return ways[n - 1]
 ```
 
 ## Bellman–Ford — Repeated Edge Relaxation
