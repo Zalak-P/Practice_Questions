@@ -1457,14 +1457,17 @@ Input: dist = [[0,3,100000000],[100000000,0,2],[100000000,100000000,0]]
 Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no return value
 ```
 
-```pythonclass Solution:
+```python
+class Solution:
     def floydWarshall(self, dist):
         n = len(dist)
         inf = 100000000
+
         for k in range(n):
             for i in range(n):
                 if dist[i][k] == inf:
                     continue
+
                 for j in range(n):
                     if dist[k][j] != inf:
                         dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
@@ -1488,18 +1491,22 @@ Input: n = 4, edges = [[0,1,2],[1,2,2],[2,3,2]], distanceThreshold = 2
 Output: 3
 ```
 
-```pythonclass Solution:
+```python
+class Solution:
     def findTheCity(self, n, edges, distanceThreshold):
         dist = [[float("inf")] * n for _ in range(n)]
         for i in range(n):
             dist[i][i] = 0
+
         for u, v, weight in edges:
             dist[u][v] = dist[v][u] = min(dist[u][v], weight)
+            
         for k in range(n):
             for i in range(n):
                 for j in range(n):
                     dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
         answer, best = -1, n
+
         for i in range(n):
             count = sum(i != j and dist[i][j] <= distanceThreshold for j in range(n))
             if count <= best:
@@ -1527,7 +1534,8 @@ Input: DSU(4); union(0,1); union(1,2); union(0,2); find(0) == find(2); find(0) =
 Output: true; true; false; true; false (initialization has no output)
 ```
 
-```pythonclass DSU:
+```pytho
+nclass DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
