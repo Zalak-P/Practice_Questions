@@ -1482,8 +1482,9 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/)
 
-In Floyd–Warshall, we update the distance from i to j by checking:
-“Is going through vertex k cheaper than the best route we currently know?”
+You are given cities connected by **weighted roads** and a distance threshold.
+For each city, count how many other cities it can reach with a shortest-path distance less than or equal to the threshold.
+Return the city with the smallest count. If cities tie, return the one with the largest city number.
 
 **Input/Output**
 
