@@ -1482,7 +1482,8 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/)
 
-Use Floyd–Warshall for all-pairs shortest distances in an undirected weighted adj. Count other cities within distanceThreshold. On equal counts, choose the city with the larger index.
+In Floyd–Warshall, we update the distance from i to j by checking:
+“Is going through vertex k cheaper than the best route we currently know?”
 
 **Input/Output**
 
