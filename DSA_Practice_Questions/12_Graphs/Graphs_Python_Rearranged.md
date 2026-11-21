@@ -1521,6 +1521,57 @@ class Solution:
 - **Time:** O(n³ + E)
 - **Space:** O(n²).
 
+## Minimum Spanning Tree — Grow a Tree Using a Min-heap
+
+### 35. ★ Prim’s Algorithm
+
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
+
+**MST:**
+A tree in which have N nodes and N-1 edges, and all nodes are reachable from each other.
+
+Find the MST weight of an undirected connected adj with V ≥ 1 and edges [u, v, weight]. Add the cheapest edge reaching an unused vertex.
+
+**Input/Output**
+
+```text
+Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
+Output: 6
+```
+
+```python
+from heapq import heappop, heappush
+
+class Solution:
+    def spanningTree(self, V, edges):
+        adj = [[] for _ in range(V)]
+        for u, v, w in edges:
+            adj[u].append((v, w))
+            adj[v].append((u, w))
+
+        used = [False] * V
+        heap = [(0, 0)]
+        total = 0
+
+        while heap:
+            weight, u = heappop(heap)
+            if used[u]:
+                continue
+            used[u] = True
+            total += weight
+            
+            for v, w in adj[u]:
+                if not used[v]:
+                    heappush(heap, (w, v))
+        return total
+```
+
+**Time Space Complexity**
+
+- **Time:** O(V + E log(E + 2))
+- **Space:** O(V + E), including the adjacency list and heap.
+
+
 ## DSU / Union Find — Basic Operations
 
 ### 35. ★ Implement DSU — Path Compression and Union by Size
@@ -1747,49 +1798,6 @@ class Solution:
 ```python
 
 ```
-
-## Minimum Spanning Tree — Grow a Tree Using a Min-heap
-
-### 41. ★ Prim’s Algorithm
-
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
-
-Find the MST weight of an undirected connected adj with V ≥ 1 and edges [u, v, weight]. Add the cheapest edge reaching an unused vertex.
-
-**Input/Output**
-
-```text
-Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
-Output: 6
-```
-
-```pythonfrom heapq import heappop, heappush
-
-class Solution:
-    def spanningTree(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-            adj[v].append((u, w))
-        used = [False] * V
-        heap = [(0, 0)]
-        total = 0
-        while heap:
-            weight, u = heappop(heap)
-            if used[u]:
-                continue
-            used[u] = True
-            total += weight
-            for v, w in adj[u]:
-                if not used[v]:
-                    heappush(heap, (w, v))
-        return total
-```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E log(E + 2))
-- **Space:** O(V + E), including the adjacency list and heap.
 
 ## Minimum Spanning Tree — Sort Edges and Merge Using DSU
 
