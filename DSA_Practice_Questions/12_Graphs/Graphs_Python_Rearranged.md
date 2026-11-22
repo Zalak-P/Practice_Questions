@@ -1874,65 +1874,94 @@ class Solution:
 
 ## DSU — Merge Entities through Shared Identifiers
 
-### 37. ★ Accounts Merge — 721
+### 40. ★ Accounts Merge — 721
 
 [LeetCode/GFG Link](https://leetcode.com/problems/accounts-merge/)
 
-Merge accounts sharing an email and sort each merged email list. Each account has a name and at least one email; shared-email accounts have the same name.
+Each account contains a name followed by email addresses. Merge accounts sharing an email, and sort the emails in each merged account. Matching names alone do not mean accounts belong together.
 
 **Input/Output**
 
 ```text
-Input: accounts = [["Mira","a@x.com","b@x.com"],["Mira","b@x.com","c@x.com"],["Noah","n@x.com"]]
-Output: [["Mira","a@x.com","b@x.com","c@x.com"],["Noah","n@x.com"]] (account groups may appear in any order)
+Input:
+accounts = [
+    ["John", "a@mail.com", "b@mail.com"],
+    ["John", "b@mail.com", "c@mail.com"],
+    ["Mary", "m@mail.com"],
+    ["John", "x@mail.com"]
+]
+
+Output:
+[
+    ["John", "a@mail.com", "b@mail.com", "c@mail.com"],
+    ["Mary", "m@mail.com"],
+    ["John", "x@mail.com"]
+]
 ```
 
-```pythonfrom collections import defaultdict
-
+```python
+from collections import defaultdict
 
 class DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
 
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
 
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
             return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
         return True
+
 
 class Solution:
     def accountsMerge(self, accounts):
         dsu = DSU(len(accounts))
-        owner = {}
+        email_owner = {}
+
         for i, account in enumerate(accounts):
             for email in account[1:]:
-                if email in owner:
-                    dsu.union(i, owner[email])
+                if email in email_owner:
+                    dsu.union(i, email_owner[email])
                 else:
-                    owner[email] = i
+                    email_owner[email] = i
+
         groups = defaultdict(list)
-        for email, i in owner.items():
-            groups[dsu.find(i)].append(email)
-        return [[accounts[root][0]] + sorted(emails) for root, emails in groups.items()]
+
+        for email, owner in email_owner.items():
+            root = dsu.find(owner)
+            groups[root].append(email)
+
+        result = []
+
+        for root, emails in groups.items():
+            result.append([accounts[root][0]] + sorted(emails))
+
+        return result
 ```
 
 **Time Space Complexity**
+```text
+Time: O(N + M × α(N) + U log U)
+Space: O(N + M + U)
 
-- **Time:** O(A + M × (L + α(A)) + U log(U + 1) × L), where A = accounts, M = email occurrences, U = unique emails, L = maximum email length.
-- **Space:** O(A + M + U × L), including temporary email lists and output; sorting can also use linear temporary storage.
+N = accounts, M = email occurrences, U = unique emails. These bounds treat email string operations as constant cost.
+```
 
-### 38. ★ Most Stones Removed with Same Row or Column — 947
+### 41. ★ Most Stones Removed with Same Row or Column — 947
 
 [LeetCode/GFG Link](https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/)
 
