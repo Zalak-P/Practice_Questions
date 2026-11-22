@@ -1811,11 +1811,13 @@ Space: O(n)
 
 ## DSU — Count Components and Redundant Connections
 
-### 38. ★ Number of Operations to Make Network Connected — 1319
+### 39. ★ Minimum of Number of Operations to Make Network Connected — 1319
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-operations-to-make-network-connected/)
 
-Return the fewest cable moves to connect all n computers, or −1 if there are fewer than n − 1 cables.
+Given n computers and undirected connections, you can move an existing cable to connect two disconnected computers. Return the minimum moves needed to connect the entire network, or -1 if impossible.
+
+You need at least n - 1 cables. If enough cables exist, the answer is number of components − 1.
 
 **Input/Output**
 
@@ -1830,31 +1832,38 @@ class DSU:
         self.parent = list(range(n))
         self.size = [1] * n
 
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
 
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
             return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
         return True
+
 
 class Solution:
     def makeConnected(self, n, connections):
         if len(connections) < n - 1:
             return -1
+
         dsu = DSU(n)
         components = n
+
         for u, v in connections:
             if dsu.union(u, v):
                 components -= 1
+
         return components - 1
 ```
 
