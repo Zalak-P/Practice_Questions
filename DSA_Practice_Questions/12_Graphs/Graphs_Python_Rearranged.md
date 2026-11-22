@@ -1968,8 +1968,65 @@ N = accounts, M = email occurrences, U = unique emails. These bounds treat email
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
 
 ```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
 
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
+        return True
+
+
+class Solution:
+    def numOfIslands(self, n, m, operators):
+        dsu = DSU(n * m)
+        land = [[False] * m for _ in range(n)]
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        islands = 0
+        result = []
+
+        for r, c in operators:
+            if land[r][c]:
+                result.append(islands)
+                continue
+
+            land[r][c] = True
+            islands += 1
+            node = r * m + c
+
+            for dr, dc in directions:
+                nr, nc = r + dr, c + dc
+
+                if 0 <= nr < n and 0 <= nc < m and land[nr][nc]:
+                    neighbor = nr * m + nc
+
+                    if dsu.union(node, neighbor):
+                        islands -= 1
+
+            result.append(islands)
+
+        return result
 ```
+
+**Time Complexity:** O(n × m + Q × α(n × m))
+**Space Complexity:** O(n × m) auxiliary space, plus O(Q) for the output.
+Q is the number of queries; α is the inverse Ackermann function, which is nearly constant.
 
 ### 42. Making a Large Island (G-52)
 
