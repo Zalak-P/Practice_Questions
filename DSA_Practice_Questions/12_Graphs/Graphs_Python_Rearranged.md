@@ -1675,9 +1675,141 @@ print(dsu.union(0, 2))           # False: already connected
 - With path compression, rank is a height bound, not necessarily the tree’s current height.
 
 
+### 37. ★ Find Minimum Spanning Tree using DSU (Kruskal’s Algorithm)
+
+1. Sort all edges according to weight
+2. DSU Data structure
+
+[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree-kruskals-algorithm/1)
+
+Find the MST weight of a connected undirected adj with edges [u, v, weight]. Process edges by weight and merge different components.
+
+**Input/Output**
+
+```text
+V = 4
+adj = [
+    [[1, 1], [2, 3]],
+    [[0, 1], [2, 2], [3, 5]],
+    [[0, 3], [1, 2], [3, 4]],
+    [[1, 5], [2, 4]]
+]
+
+Output: 7
+MST edges: 0–1, 1–2, 2–3
+```
+
+```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
+        return True
+
+
+class Solution:
+    def spanningTree(self, V, adj):
+        edges = []
+        #O(V+E)
+        for u in range(V):
+            for v, weight in adj[u]:
+                if u < v:
+                    edges.append((weight, u, v))
+        # V log V
+        edges.sort()
+        dsu = DSU(V)
+        total_weight = 0
+        # V x 4 x alpha x 2
+        for weight, u, v in edges:
+            if dsu.union(u, v):
+                total_weight += weight
+
+        return total_weight
+```
+
+**Time Space Complexity**
+
+- **Time:** O(V + E log(E + 2) + E × α(V))
+- **Space:** O(V + E), including DSU and the sorted edge copy.
+- Why u < v? An undirected edge appears in both nodes’ lists. This keeps only one copy.
+
+### 38. ★ DSU - Number of Provinces — 547
+
+```text
+Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Output: 2
+```
+
+```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
+        return True
+
+
+class Solution:
+    def findCircleNum(self, isConnected):
+        n = len(isConnected)
+        dsu = DSU(n)
+        provinces = n
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                if isConnected[i][j] == 1:
+                    if dsu.union(i, j):
+                        provinces -= 1
+
+        return provinces
+```
+```text
+Initially, {0}, {1}, {2} are 3 provinces. Merging cities 0 and 1 leaves {0,1} and {2}: 2 provinces.
+
+Why j = i + 1 onward? The matrix is symmetric, so we check each city pair once and skip self-connections.
+
+Time: O(n² × α(n))
+Space: O(n)
+```
+
 ## DSU — Count Components and Redundant Connections
 
-### 36. ★ Number of Operations to Make Network Connected — 1319
+### 38. ★ Number of Operations to Make Network Connected — 1319
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-operations-to-make-network-connected/)
 
@@ -1690,7 +1822,8 @@ Input: n = 4, connections = [[0,1],[0,2],[1,2]]
 Output: 1
 ```
 
-```pythonclass DSU:
+```python
+class DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
@@ -1859,56 +1992,6 @@ class Solution:
 
 ```
 
-## Minimum Spanning Tree — Sort Edges and Merge Using DSU
-
-### 42. ★ Kruskal’s Algorithm
-
-[LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree-kruskals-algorithm/1)
-
-Find the MST weight of a connected undirected adj with edges [u, v, weight]. Process edges by weight and merge different components.
-
-**Input/Output**
-
-```text
-Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
-Output: 6
-```
-
-```pythonclass DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
-
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def spanningTree(self, V, edges):
-        dsu = DSU(V)
-        total = 0
-        for u, v, w in sorted(edges, key=lambda e: e[2]):
-            if dsu.union(u, v):
-                total += w
-        return total
-```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E log(E + 2) + E × α(V))
-- **Space:** O(V + E), including DSU and the sorted edge copy.
 
 ## Advanced DFS — Finishing Order and Reversed adj
 
