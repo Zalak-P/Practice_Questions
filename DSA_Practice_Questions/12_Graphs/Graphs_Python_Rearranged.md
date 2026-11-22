@@ -1961,7 +1961,25 @@ Space: O(N + M + U)
 N = accounts, M = email occurrences, U = unique emails. These bounds treat email string operations as constant cost.
 ```
 
-### 41. ★ Most Stones Removed with Same Row or Column — 947
+## DSU on Grids — Merge Neighboring Land
+
+### 41. Number of Islands II — Online Queries (G-51)
+
+[LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
+
+```python
+
+```
+
+### 42. Making a Large Island (G-52)
+
+[LeetCode/GFG Link](https://leetcode.com/problems/making-a-large-island/)
+
+```python
+
+```
+
+### 43. ★ Most Stones Removed with Same Row or Column — 947
 
 [LeetCode/GFG Link](https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/)
 
@@ -1974,39 +1992,8 @@ Input: stones = [[0,0],[0,1],[1,1],[3,4]]
 Output: 2
 ```
 
-```pythonclass DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
+```python
 
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def removeStones(self, stones):
-        dsu = DSU(len(stones))
-        rows, cols = {}, {}
-        components = len(stones)
-        for i, (row, col) in enumerate(stones):
-            if row in rows and dsu.union(i, rows[row]):
-                components -= 1
-            if col in cols and dsu.union(i, cols[col]):
-                components -= 1
-            rows[row] = cols[col] = i
-        return len(stones) - components
 ```
 
 **Time Space Complexity**
@@ -2014,27 +2001,10 @@ class Solution:
 - **Time:** O(n × α(n)) expected, where n = stones; hash-map operations are expected O(1).
 - **Space:** O(n).
 
-## DSU on Grids — Merge Neighboring Land
-
-### 39. Number of Islands II — Online Queries (G-51)
-
-[LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
-
-```python
-
-```
-
-### 40. Making a Large Island (G-52)
-
-[LeetCode/GFG Link](https://leetcode.com/problems/making-a-large-island/)
-
-```python
-
-```
 
 ## Advanced DFS — Finishing Order and Reversed adj
 
-### 43. ★ Kosaraju’s Algorithm
+### 44. ★ Strongly connected components (Kosaraju’s Algorithm)
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1)
 
@@ -2047,44 +2017,8 @@ Input: V = 4, edges = [[0,1],[1,0],[1,2],[2,3],[3,2]]
 Output: 2
 ```
 
-```pythonclass Solution:
-    def kosaraju(self, V, edges):
-        adj = [[] for _ in range(V)]
-        reverse = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-            reverse[v].append(u)
-        seen = set()
-        order = []
-        for start in range(V):
-            if start in seen:
-                continue
-            seen.add(start)
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                v = next(neighbors, None)
-                if v is None:
-                    order.append(u)
-                    stack.pop()
-                elif v not in seen:
-                    seen.add(v)
-                    stack.append((v, iter(adj[v])))
-        seen.clear()
-        count = 0
-        for start in reversed(order):
-            if start in seen:
-                continue
-            count += 1
-            seen.add(start)
-            stack = [start]
-            while stack:
-                u = stack.pop()
-                for v in reverse[u]:
-                    if v not in seen:
-                        seen.add(v)
-                        stack.append(v)
-        return count
+```python
+
 ```
 
 **Time Space Complexity**
@@ -2094,7 +2028,7 @@ Output: 2
 
 ## Advanced DFS — Discovery Times and Low-link Values
 
-### 44. ★ Critical Connections in a Network — 1192
+### 45. ★ Critical Connections in a Network — 1192
 
 [LeetCode/GFG Link](https://leetcode.com/problems/critical-connections-in-a-network/)
 
@@ -2107,46 +2041,8 @@ Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
 Output: [[1,3]] (edge endpoints may be reversed)
 ```
 
-```pythonclass Solution:
-    def criticalConnections(self, n, connections):
-        adj = [[] for _ in range(n)]
-        for eid, (u, v) in enumerate(connections):
-            adj[u].append((v, eid))
-            adj[v].append((u, eid))
-        tin = [-1] * n
-        low = [0] * n
-        parent = [-1] * n
-        parent_edge = [-1] * n
-        timer = 0
-        bridges = []
-        for start in range(n):
-            if tin[start] != -1:
-                continue
-            tin[start] = low[start] = timer
-            timer += 1
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                edge = next(neighbors, None)
-                if edge is None:
-                    stack.pop()
-                    p = parent[u]
-                    if p != -1:
-                        if low[u] > tin[p]:
-                            bridges.append([p, u])
-                        low[p] = min(low[p], low[u])
-                    continue
-                v, eid = edge
-                if eid == parent_edge[u]:
-                    continue
-                if tin[v] == -1:
-                    parent[v], parent_edge[v] = u, eid
-                    tin[v] = low[v] = timer
-                    timer += 1
-                    stack.append((v, iter(adj[v])))
-                else:
-                    low[u] = min(low[u], tin[v])
-        return bridges
+```python
+
 ```
 
 **Time Space Complexity**
@@ -2154,7 +2050,7 @@ Output: [[1,3]] (edge endpoints may be reversed)
 - **Time:** O(V + E)
 - **Space:** O(V + E), including the adjacency list.
 
-### 45. Articulation Points in a adj (G-56)
+### 46. Articulation Points in a adj (G-56)
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 
