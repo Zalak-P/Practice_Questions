@@ -1575,13 +1575,14 @@ class Solution:
 
 ## DSU / Union Find — Basic Operations
 
-Disjoint Set will work in constant time. Ex. node belong to any component or not etc. Instead of using DFS/BFS and exploring all the nodes-depth/nodes-levels. 
+Disjoint Set will work in constant time. Ex. node belong to any component or not etc. Instead of using DFS/BFS and exploring all the nodes-depth/nodes-levels.
 
 Used for Dynamic Graphs (which changes a lot)
 
 Two functionalites of Disjoint Sets:
+
 1. Finding Parent()
-2. Union() [rank, size] - will connect the edges 
+2. Union() [rank, size] - will connect the edges
 
 ### 36. ★ Implement DSU — Path Compression and Union by Rank and Size
 
@@ -1595,6 +1596,7 @@ Output: true; true; false; true; false (initialization has no output)
 ```
 
 1. Union by rank - rank array and parent array.
+
 - Find ultimate parent of u and v, -> pu, pv
 - Find ultimate rank of pu and pv
 - Connect smaller rank to larger rank always
@@ -1673,7 +1675,6 @@ print(dsu.union(0, 2))           # False: already connected
 - **Time:** O(n) initialization; O(α(n)) amortized per find/union, where α is the inverse Ackermann function.
 - **Space:** O(n) for parent and size arrays.
 - With path compression, rank is a height bound, not necessarily the tree’s current height.
-
 
 ### 37. ★ Find Minimum Spanning Tree using DSU (Kruskal’s Algorithm)
 
@@ -1798,6 +1799,7 @@ class Solution:
 
         return provinces
 ```
+
 ```text
 Initially, {0}, {1}, {2} are 3 provinces. Merging cities 0 and 1 leaves {0,1} and {2}: 2 provinces.
 
@@ -1991,7 +1993,6 @@ class Solution:
 ```python
 
 ```
-
 
 ## Advanced DFS — Finishing Order and Reversed adj
 
