@@ -1502,7 +1502,7 @@ class Solution:
 
         for u, v, weight in edges:
             dist[u][v] = dist[v][u] = min(dist[u][v], weight)
-            
+
         for k in range(n):
             for i in range(n):
                 for j in range(n):
@@ -1523,14 +1523,14 @@ class Solution:
 
 ## Minimum Spanning Tree — Grow a Tree Using a Min-heap
 
+**MST:**
+We can draw multiple Spanning Trees from a graph. Spanning Tree means - A tree in which we have N nodes and N-1 edges, and all nodes are reachable from each other. Total sum of all the edges have to be the least from all the spanning trees. That is called MST.
+
 ### 35. ★ Prim’s Algorithm
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/minimum-spanning-tree/1)
 
-**MST:**
-A tree in which have N nodes and N-1 edges, and all nodes are reachable from each other.
-
-Find the MST weight of an undirected connected adj with V ≥ 1 and edges [u, v, weight]. Add the cheapest edge reaching an unused vertex.
+This algo is used to find MST in a graph using heap. A total minium weight is returned of MST. We can also return edges/tree of MST.
 
 **Input/Output**
 
@@ -1557,12 +1557,14 @@ class Solution:
             weight, u = heappop(heap)
             if used[u]:
                 continue
+
             used[u] = True
             total += weight
-            
+
             for v, w in adj[u]:
                 if not used[v]:
                     heappush(heap, (w, v))
+
         return total
 ```
 
@@ -1571,14 +1573,19 @@ class Solution:
 - **Time:** O(V + E log(E + 2))
 - **Space:** O(V + E), including the adjacency list and heap.
 
-
 ## DSU / Union Find — Basic Operations
 
-### 35. ★ Implement DSU — Path Compression and Union by Size
+Disjoint Set will work in constant time. Ex. node belong to any component or not etc. Instead of using DFS/BFS and exploring all the nodes-depth/nodes-levels. 
+
+Used for Dynamic Graphs (which changes a lot)
+
+Two functionalites of Disjoint Sets:
+1. Finding Parent()
+2. Union() [rank, size] - will connect the edges 
+
+### 36. ★ Implement DSU — Path Compression and Union by Rank and Size
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/disjoint-set-union-find/1)
-
-Maintain disjoint sets for elements 0 through n − 1 using path compression and union by size. union returns whether two different components were merged.
 
 **Input/Output**
 
@@ -1587,33 +1594,86 @@ Input: DSU(4); union(0,1); union(1,2); union(0,2); find(0) == find(2); find(0) =
 Output: true; true; false; true; false (initialization has no output)
 ```
 
-```pytho
-nclass DSU:
+1. Union by rank - rank array and parent array.
+- Find ultimate parent of u and v, -> pu, pv
+- Find ultimate rank of pu and pv
+- Connect smaller rank to larger rank always
+
+```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.rank[root_u] < self.rank[root_v]:
+            self.parent[root_u] = root_v
+        elif self.rank[root_u] > self.rank[root_v]:
+            self.parent[root_v] = root_u
+        else:
+            self.parent[root_v] = root_u
+            self.rank[root_u] += 1
+
+        return True
+```
+
+2. Union by Size - size array and parent array.
+
+```python
+class DSU:
     def __init__(self, n):
         self.parent = list(range(n))
         self.size = [1] * n
 
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
 
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
             return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
+
+        if self.size[root_u] < self.size[root_v]:
+            self.parent[root_u] = root_v
+            self.size[root_v] += self.size[root_u]
+        else:
+            self.parent[root_v] = root_u
+            self.size[root_u] += self.size[root_v]
+
         return True
+```
+
+```python
+dsu = DSU(5)
+
+print(dsu.union(0, 1))           # True
+print(dsu.union(1, 2))           # True
+print(dsu.find(0) == dsu.find(2))  # True
+print(dsu.find(0) == dsu.find(4))  # False
+print(dsu.union(0, 2))           # False: already connected
 ```
 
 **Time Space Complexity**
 
 - **Time:** O(n) initialization; O(α(n)) amortized per find/union, where α is the inverse Ackermann function.
 - **Space:** O(n) for parent and size arrays.
+- With path compression, rank is a height bound, not necessarily the tree’s current height.
+
 
 ## DSU — Count Components and Redundant Connections
 
