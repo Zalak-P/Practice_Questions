@@ -1510,9 +1510,14 @@ class Solution:
         answer, best = -1, n
 
         for i in range(n):
-            count = sum(i != j and dist[i][j] <= distanceThreshold for j in range(n))
+            count = 0
+            for j in range(n):
+                if i != j and dist[i][j] <= distanceThreshold:
+                    count += 1
             if count <= best:
-                best, answer = count, i
+                best = count
+                answer = i
+
         return answer
 ```
 
@@ -1954,6 +1959,7 @@ class Solution:
 ```
 
 **Time Space Complexity**
+
 ```text
 Time: O(N + M × α(N) + U log U)
 Space: O(N + M + U)
@@ -2034,6 +2040,7 @@ Q is the number of queries; α is the inverse Ackermann function, which is nearl
 
 ```python
 
+
 ```
 
 ### 43. ★ Most Stones Removed with Same Row or Column — 947
@@ -2057,7 +2064,6 @@ Output: 2
 
 - **Time:** O(n × α(n)) expected, where n = stones; hash-map operations are expected O(1).
 - **Space:** O(n).
-
 
 ## Advanced DFS — Finishing Order and Reversed adj
 
@@ -2130,7 +2136,8 @@ Input: n = 3, edges = [[0,1],[1,2]], source = 0, destination = 2
 Output: true
 ```
 
-```pythonclass Solution:
+```python
+class Solution:
     def validPath(self, n, edges, source, destination):
         adj = [[] for _ in range(n)]
         for u, v in edges:
@@ -2171,7 +2178,8 @@ Input: Adjacency list: [[2],[1]] (node values are 1 and 2)
 Output: A new adj with adjacency list [[2],[1]], sharing no nodes with the input
 ```
 
-```python# Node is provided by LeetCode.
+```python
+# Node is provided by LeetCode.
 class Solution:
     def cloneadj(self, node):
         if node is None:
