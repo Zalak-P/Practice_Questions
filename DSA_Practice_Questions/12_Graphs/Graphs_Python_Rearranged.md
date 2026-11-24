@@ -1971,6 +1971,15 @@ N = accounts, M = email occurrences, U = unique emails. These bounds treat email
 
 ### 41. Number of Islands II — Online Queries (G-51)
 
+Initially, an n × m grid contains only water (0). Each query [r, c] turns that cell into land (1). Return the number of islands after each query.
+Land cells connect horizontally or vertically. Adding land to an existing land cell makes no change.
+
+```text
+n = 3
+m = 3
+operators = [[0, 0], [0, 1], [2, 2], [1, 2], [1, 1]]
+```
+
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
 
 ```python
@@ -2038,26 +2047,148 @@ Q is the number of queries; α is the inverse Ackermann function, which is nearl
 
 [LeetCode/GFG Link](https://leetcode.com/problems/making-a-large-island/)
 
+Given an n × n grid of 0s and 1s, change at most one 0 into 1. Return the largest possible island area. Connections are only up, down, left, and right.
+
+```text
+grid = [
+    [1, 1, 0, 0],
+    [1, 0, 1, 1],
+    [0, 0, 0, 1],
+    [0, 0, 0, 0]
+]
+output: 7
+```
+
 ```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
 
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
 
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
+        return True
+
+class Solution:
+    def largestIsland(self, grid):
+        n = len(grid)
+        dsu = DSU(n * n)
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+
+        for r in range(n):
+            for c in range(n):
+                if grid[r][c] == 0:
+                    continue
+
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+
+                    if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 1:
+                        dsu.union(r * n + c, nr * n + nc)
+
+        answer = 0
+
+        for r in range(n):
+            for c in range(n):
+                if grid[r][c] == 1:
+                    answer = max(answer, dsu.size[dsu.find(r * n + c)])
+                    continue
+
+                roots = set()
+
+                for dr, dc in directions:
+                    nr, nc = r + dr, c + dc
+
+                    if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 1:
+                        roots.add(dsu.find(nr * n + nc))
+
+                area = 1
+                for root in roots:
+                    area += dsu.size[root]
+
+                answer = max(answer, area)
+
+        return answer
 ```
 
 ### 43. ★ Most Stones Removed with Same Row or Column — 947
 
 [LeetCode/GFG Link](https://leetcode.com/problems/most-stones-removed-with-same-row-or-column/)
 
-Model stones as nodes. Union stones sharing a row or column, using a representative map for each coordinate. Each connected component must keep one stone; return the number of stones minus the number of components.
+You are given stone positions as [row, column].
+You can remove a stone if another stone still on the board shares its row or its column.
+Return the maximum number of stones you can remove.
 
 **Input/Output**
 
 ```text
-Input: stones = [[0,0],[0,1],[1,1],[3,4]]
+Input: stones = [[0, 0], [0, 1], [1, 0], [2, 2]]
 Output: 2
 ```
 
 ```python
+class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
 
+    def find(self, node):
+        if self.parent[node] != node:
+            self.parent[node] = self.find(self.parent[node])
+        return self.parent[node]
+
+    def union(self, u, v):
+        root_u = self.find(u)
+        root_v = self.find(v)
+
+        if root_u == root_v:
+            return False
+
+        if self.size[root_u] < self.size[root_v]:
+            root_u, root_v = root_v, root_u
+
+        self.parent[root_v] = root_u
+        self.size[root_u] += self.size[root_v]
+
+        return True
+
+class Solution:
+    def removeStones(self, stones):
+        n = len(stones)
+        dsu = DSU(n)
+        row_owner = {}
+        col_owner = {}
+        components = n
+
+        for i, (row, col) in enumerate(stones):
+            if row in row_owner:
+                if dsu.union(i, row_owner[row]):
+                    components -= 1
+            else:
+                row_owner[row] = i
+
+            if col in col_owner:
+                if dsu.union(i, col_owner[col]):
+                    components -= 1
+            else:
+                col_owner[col] = i
+
+        return n - components
 ```
 
 **Time Space Complexity**
@@ -2071,17 +2202,75 @@ Output: 2
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/strongly-connected-components-kosarajus-algo/1)
 
-Count strongly connected components in a directed adj given V and edges. Record DFS finish order, then traverse the reversed adj in reverse finish order.
+In a directed graph, a strongly connected component (SCC) is a group of vertices where every vertex can reach every other vertex in that group.
+
+Return the number of strongly connected components.
 
 **Input/Output**
 
 ```text
-Input: V = 4, edges = [[0,1],[1,0],[1,2],[2,3],[3,2]]
+Input: adj = [
+    [1],       # 0 → 1
+    [2],       # 1 → 2
+    [0, 3],    # 2 → 0, 2 → 3
+    [4],       # 3 → 4
+    [3]        # 4 → 3
+]
 Output: 2
 ```
 
-```python
+The components are {0, 1, 2} and {3, 4}. The first group can reach the second through 2 → 3, but the second cannot reach the first.
 
+Kosaraju’s algorithm has three steps:
+1. Run DFS and record each vertex after finishing all its neighbors.
+2. Reverse every edge.
+3. Process vertices in reverse finishing order on the reversed graph. Each new DFS identifies one SCC.
+
+```python
+class Solution:
+    def kosaraju(self, adj):
+        n = len(adj)
+        visited = [False] * n
+        order = []
+
+        def dfs(node):
+            visited[node] = True
+
+            for neighbor in adj[node]:
+                if not visited[neighbor]:
+                    dfs(neighbor)
+
+            order.append(node)
+
+        for node in range(n):
+            if not visited[node]:
+                dfs(node)
+
+        reverse = [[] for _ in range(n)]
+
+        for node in range(n):
+            for neighbor in adj[node]:
+                reverse[neighbor].append(node)
+
+        visited = [False] * n
+
+        def reverse_dfs(node):
+            visited[node] = True
+
+            for neighbor in reverse[node]:
+                if not visited[neighbor]:
+                    reverse_dfs(neighbor)
+
+        components = 0
+
+        while order:
+            node = order.pop()
+
+            if not visited[node]:
+                components += 1
+                reverse_dfs(node)
+
+        return components
 ```
 
 **Time Space Complexity**
@@ -2095,16 +2284,58 @@ Output: 2
 
 [LeetCode/GFG Link](https://leetcode.com/problems/critical-connections-in-a-network/)
 
-Find bridges: edges whose removal increases the number of connected components. Iterative DFS tracks discovery times and the lowest reachable ancestor; edge IDs handle parallel edges.
+Given n servers and undirected connections, return all critical connections, also called bridges.
+A connection is critical if removing it disconnects the network.
 
 **Input/Output**
 
 ```text
-Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
+n = 4, connections = [[0, 1], [1, 2], [2, 0], [1, 3]]
 Output: [[1,3]] (edge endpoints may be reversed)
 ```
 
+Code — DFS with discovery times and low-link values
+- discovery[node]: When DFS first visits this node.
+- low[node]: The earliest discovery time reachable from its DFS subtree using tree edges and at most one back edge.
+- An edge from a DFS parent node to its child neighbor is a bridge when low[neighbor] > discovery[node].
+
 ```python
+class Solution:
+    def criticalConnections(self, n, connections):
+        adj = [[] for _ in range(n)]
+
+        for u, v in connections:
+            adj[u].append(v)
+            adj[v].append(u)
+
+        discovery = [-1] * n
+        low = [-1] * n
+        bridges = []
+        timer = 0
+
+        def dfs(node, parent):
+            nonlocal timer
+
+            discovery[node] = low[node] = timer
+            timer += 1
+
+            for neighbor in adj[node]:
+                if neighbor == parent:
+                    continue
+
+                if discovery[neighbor] == -1:
+                    dfs(neighbor, node)
+                    low[node] = min(low[node], low[neighbor])
+
+                    if low[neighbor] > discovery[node]:
+                        bridges.append([node, neighbor])
+                else:
+                    low[node] = min(low[node], discovery[neighbor])
+
+        for node in range(n):
+            if discovery[node] == -1:
+                dfs(node, -1)
+        return bridges
 
 ```
 
@@ -2117,8 +2348,60 @@ Output: [[1,3]] (edge endpoints may be reversed)
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/articulation-point-1/1)
 
-```python
+Given an undirected graph, return all articulation points.
+An articulation point is a vertex whose removal, along with its incident edges, increases the number of connected components.
+Return the vertices in ascending order, or [-1] if none exist.
 
+```text
+adj = [
+    [1, 2],
+    [0, 2, 3],
+    [0, 1],
+    [1, 4],
+    [3]
+]
+[1, 3]
+```
+
+```python
+class Solution:
+    def articulationPoints(self, V, adj):
+        discovery = [-1] * V
+        low = [-1] * V
+        marked = [False] * V
+        timer = 0
+
+        def dfs(node, parent):
+            nonlocal timer
+
+            discovery[node] = low[node] = timer
+            timer += 1
+            children = 0
+
+            for neighbor in adj[node]:
+                if neighbor == parent:
+                    continue
+
+                if discovery[neighbor] == -1:
+                    children += 1
+                    dfs(neighbor, node)
+                    low[node] = min(low[node], low[neighbor])
+
+                    if parent != -1 and low[neighbor] >= discovery[node]:
+                        marked[node] = True
+                else:
+                    low[node] = min(low[node], discovery[neighbor])
+
+            if parent == -1 and children > 1:
+                marked[node] = True
+
+        for node in range(V):
+            if discovery[node] == -1:
+                dfs(node, -1)
+
+        result = [node for node in range(V) if marked[node]]
+        return result if result else [-1]
+        
 ```
 
 ## Additional Problems — Not in the Agreed List
