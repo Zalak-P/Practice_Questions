@@ -15,8 +15,13 @@ Count 4-directionally connected groups of '1' cells in a nonempty grid. Visited 
 **Input/Output**
 
 ```text
-Input: grid = [["1","1","0"],["0","0","1"]]
-Output: 2
+Input: grid = [
+    ["1","1","0","0"],
+    ["1","0","0","1"],
+    ["0","0","1","1"],
+    ["1","0","0","0"]
+]
+Output: 3
 ```
 
 ```python
@@ -57,8 +62,20 @@ Recolor the 4-connected component containing (sr, sc) in a nonempty image. Updat
 **Input/Output**
 
 ```text
-Input: image = [[1,1],[1,0]], sr = 0, sc = 0, color = 2
-Output: [[2,2],[2,0]]
+Input: image = [
+    [1,1,0,0],
+    [1,0,0,1],
+    [1,1,0,1],
+    [0,0,0,1]
+]
+sr = 0, sc = 0, color = 2
+
+Output: [
+    [2,2,0,0],
+    [2,0,0,1],
+    [2,2,0,1],
+    [0,0,0,1]
+]
 ```
 
 ```python
@@ -95,6 +112,18 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-distinct-islands/)
 
+**Input/Output**
+
+```text
+Input: grid = [
+    [1,1,0,0],
+    [1,0,0,0],
+    [0,0,1,1],
+    [0,0,1,0]
+]
+Output: 1
+```
+
 ```python
 
 ```
@@ -114,8 +143,13 @@ Each minute, rotten oranges infect fresh oranges up, down, left, and right. Retu
 **Input/Output**
 
 ```text
-Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
-Output: 4
+Input: grid = [
+    [2,1,1,0],
+    [1,1,0,0],
+    [0,1,1,1],
+    [0,0,0,1]
+]
+Output: 6
 ```
 
 ```python
@@ -164,8 +198,19 @@ Find each cell’s distance to its nearest 0 using multi-source BFS. The nonempt
 **Input/Output**
 
 ```text
-Input: mat = [[0,1,1],[1,1,1]]
-Output: [[0,1,2],[1,2,3]]
+Input: mat = [
+    [0,1,1,1],
+    [1,1,1,1],
+    [1,1,1,1],
+    [1,1,1,0]
+]
+
+Output: [
+    [0,1,2,3],
+    [1,2,3,2],
+    [2,3,2,1],
+    [3,2,1,0]
+]
 ```
 
 ```python
@@ -259,6 +304,18 @@ class Solution:
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-enclaves/)
 
+**Input/Output**
+
+```text
+Input: grid = [
+    [0,0,0,0],
+    [1,0,1,0],
+    [0,1,1,0],
+    [0,0,0,0]
+]
+Output: 3
+```
+
 ```python
 
 ```
@@ -268,6 +325,19 @@ class Solution:
 ### 8. Shortest Distance in a Binary Maze (G-36)
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/shortest-path-in-a-binary-maze-1655453161/1)
+
+**Input/Output**
+
+```text
+Input: mat = [
+    [1,1,0,0],
+    [0,1,1,0],
+    [0,0,1,1],
+    [0,0,0,1]
+]
+src = [0,0], dest = [3,3]
+Output: 6
+```
 
 ```python
 
@@ -284,8 +354,8 @@ BFS visits nodes level by level, using a queue. Mark each node visited when addi
 **Input/Output**
 
 ```text
-Input: adj = [[1,2],[0,3],[0],[1]]
-Output: [0,1,2,3]
+Input: adj = [[1,2],[0,3,4],[0,5],[1],[1],[2]]
+Output: [0,1,2,3,4,5]
 ```
 
 ```python
@@ -324,8 +394,8 @@ DFS explores one branch as deeply as possible before backtracking. Start from ve
 **Input/Output**
 
 ```text
-Input: adj = [[1,2],[0,3],[0],[1]]
-Output: [0,1,3,2]
+Input: adj = [[1,2],[0,3,4],[0,5],[1],[1],[2]]
+Output: [0,1,3,4,2,5]
 ```
 
 ```python
@@ -370,7 +440,12 @@ Given an adjacency matrix isConnected, count the groups of directly or indirectl
 **Input/Output**
 
 ```text
-Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Input: isConnected = [
+    [1,1,0,0],
+    [1,1,0,0],
+    [0,0,1,1],
+    [0,0,1,1]
+]
 Output: 2
 ```
 
@@ -418,7 +493,10 @@ Indegree means the number of incoming edges to a node. In Course Schedule, it re
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1],[1,2],[2,0]]
+Input:
+V = 5
+edges = [[0,1],[1,2],[2,0],[1,3],[3,4]]
+adj = [[1,2],[0,2,3],[1,0],[1,4],[3]]
 Output: true
 ```
 
@@ -484,7 +562,7 @@ Detect a directed cycle using DFS states: 0 = unvisited, 1 = active, 2 = complet
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1],[1,2],[2,0]]
+Input: V = 5, edges = [[0,1],[1,2],[2,0],[1,3],[3,4]]
 Output: true
 ```
 
@@ -614,6 +692,13 @@ Use three states:
 
 ### 15. Detect cycle in directed adj
 
+**Input/Output**
+
+```text
+Input: adj = [[1],[2,3],[0],[4],[]]
+Output: true
+```
+
 ```python
 class Solution:
     def isCyclic(self, adj):
@@ -641,6 +726,13 @@ class Solution:
 - **Space:** O(V)
 
 ### 16. Find eventual safe states
+
+**Input/Output**
+
+```text
+Input: adj = [[1],[2,3],[1],[4],[]]
+Output: [3,4]
+```
 
 ```python
 
@@ -678,7 +770,7 @@ Indegree means the number of incoming edges to a node. In Course Schedule, it re
 **Input/Output**
 
 ```text
-Input: adj = [[1],[2],[3], [1,4], [5], []]
+Input: adj = [[1],[2,3],[0],[4],[]]
 Output: true
 ```
 
@@ -723,8 +815,8 @@ Return sorted vertices whose every path eventually terminates. Start with termin
 **Input/Output**
 
 ```text
-Input: adj = [[1,2],[2,3],[5],[0],[5],[],[]]
-Output: [2,4,5,6]
+Input: adj = [[1],[2,3],[1],[4],[]]
+Output: [3,4]
 ```
 
 ```python
@@ -768,8 +860,8 @@ Return a valid ordering of vertices in a directed acyclic adj given V and edges.
 **Input/Output**
 
 ```text
-Input: V = 4, edges = [[0,1],[0,2],[1,3],[2,3]]
-Output: [0,1,2,3] (one valid order)
+Input: V = 5, edges = [[0,1],[0,2],[1,3],[2,3],[3,4]]
+Output: [0,1,2,3,4] (one valid order)
 ```
 
 ```python
@@ -815,7 +907,7 @@ Determine whether all courses can be completed. Each prerequisite pair is [cours
 **Input/Output**
 
 ```text
-Input: numCourses = 2, prerequisites = [[1,0]]
+Input: numCourses = 5, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3]]
 Output: true
 ```
 
@@ -860,8 +952,8 @@ Return a valid course order, or an empty array/list when a cycle makes completio
 **Input/Output**
 
 ```text
-Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
-Output: [0,1,2,3] (one valid order)
+Input: numCourses = 5, prerequisites = [[1,0],[2,0],[3,1],[3,2],[4,3]]
+Output: [0,1,2,3,4] (one valid order)
 ```
 
 ```python
@@ -1162,8 +1254,8 @@ Find minimum distances from src to every vertex in an undirected graph with nonn
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1,10],[0,2,1],[2,1,3]], src = 0
-Output: [0,4,1]
+Input: V = 5, edges = [[0,1,4],[0,2,1],[2,1,2],[1,3,1],[3,4,3]], src = 0
+Output: [0,3,1,4,7]
 ```
 
 ```python
@@ -1269,7 +1361,12 @@ Minimize the largest absolute height difference along a 4-directional path from 
 **Input/Output**
 
 ```text
-Input: heights = [[1,2,2],[3,8,2],[5,3,5]]
+Input: heights = [
+    [1,2,2,2],
+    [3,8,2,2],
+    [5,3,5,2],
+    [5,5,5,5]
+]
 Output: 2
 ```
 
@@ -1376,8 +1473,8 @@ Find shortest distances from src to every vertex in a directed weighted graph. N
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1,4],[1,2,-2],[0,2,5]], src = 0
-Output: [0,4,2]
+Input: V = 5, edges = [[0,1,4],[0,2,5],[1,2,-2],[2,3,3],[3,4,1]], src = 0
+Output: [0,4,2,5,6]
 ```
 
 ```python
@@ -1417,8 +1514,8 @@ Find the cheapest route from src to dst using at most k stops (k + 1 edges). Eac
 **Input/Output**
 
 ```text
-Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
-Output: 200
+Input: n = 4, flights = [[0,1,100],[1,2,100],[2,3,100],[0,3,500],[1,3,350]], src = 0, dest = 3, k = 1
+Output: 450
 ```
 
 ```python
@@ -1453,8 +1550,22 @@ Find all-pairs shortest paths in place. Input matrix has 0 on its diagonal and 1
 **Input/Output**
 
 ```text
-Input: dist = [[0,3,100000000],[100000000,0,2],[100000000,100000000,0]]
-Output: dist becomes [[0,3,5],[100000000,0,2],[100000000,100000000,0]]; no return value
+Input: dist = [
+    [0,4,5,100000000,100000000],
+    [100000000,0,-2,100000000,100000000],
+    [100000000,100000000,0,3,100000000],
+    [100000000,100000000,100000000,0,1],
+    [100000000,100000000,100000000,100000000,0]
+]
+
+Output: dist becomes [
+    [0,4,2,5,6],
+    [100000000,0,-2,1,2],
+    [100000000,100000000,0,3,4],
+    [100000000,100000000,100000000,0,1],
+    [100000000,100000000,100000000,100000000,0]
+]
+No return value.
 ```
 
 ```python
@@ -1489,8 +1600,8 @@ Return the city with the smallest count. If cities tie, return the one with the 
 **Input/Output**
 
 ```text
-Input: n = 4, edges = [[0,1,2],[1,2,2],[2,3,2]], distanceThreshold = 2
-Output: 3
+Input: n = 5, edges = [[0,1,4],[0,2,1],[2,1,2],[1,3,1],[3,4,3]], distanceThreshold = 3
+Output: 4
 ```
 
 ```python
@@ -1540,8 +1651,9 @@ This algo is used to find MST in a graph using heap. A total minium weight is re
 **Input/Output**
 
 ```text
-Input: V = 3, edges = [[0,1,4],[1,2,2],[0,2,7]]
-Output: 6
+Input: V = 5, edges = [[0,1,4],[0,2,1],[2,1,2],[1,3,1],[3,4,3]]
+Output: 7
+MST edges: 0–2, 2–1, 1–3, 3–4
 ```
 
 ```python
@@ -1760,7 +1872,13 @@ class Solution:
 ### 38. ★ DSU - Number of Provinces — 547
 
 ```text
-Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+Input: isConnected = [
+    [1,1,0,0,0],
+    [1,1,1,0,0],
+    [0,1,1,0,0],
+    [0,0,0,1,1],
+    [0,0,0,1,1]
+]
 Output: 2
 ```
 
@@ -1806,7 +1924,7 @@ class Solution:
 ```
 
 ```text
-Initially, {0}, {1}, {2} are 3 provinces. Merging cities 0 and 1 leaves {0,1} and {2}: 2 provinces.
+Initially, {0}, {1}, {2}, {3}, {4} are 5 provinces. Merging connected cities leaves {0,1,2} and {3,4}: 2 provinces.
 
 Why j = i + 1 onward? The matrix is symmetric, so we check each city pair once and skip self-connections.
 
@@ -1827,7 +1945,7 @@ You need at least n - 1 cables. If enough cables exist, the answer is number of 
 **Input/Output**
 
 ```text
-Input: n = 4, connections = [[0,1],[0,2],[1,2]]
+Input: n = 5, connections = [[0,1],[0,2],[1,2],[1,3],[2,3]]
 Output: 1
 ```
 
@@ -1975,9 +2093,11 @@ Initially, an n × m grid contains only water (0). Each query [r, c] turns that 
 Land cells connect horizontally or vertically. Adding land to an existing land cell makes no change.
 
 ```text
+Input:
 n = 3
 m = 3
-operators = [[0, 0], [0, 1], [2, 2], [1, 2], [1, 1]]
+operators = [[0,0],[0,2],[2,2],[0,1]]
+Output: [1,2,3,2]
 ```
 
 [LeetCode/GFG Link](https://leetcode.com/problems/number-of-islands-ii/)
@@ -2408,265 +2528,123 @@ class Solution:
 
 ### 46. ★ Find if Path Exists in adj — 1971
 
-[LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-adj/)
-
-Check whether source can reach destination in an undirected adj with vertices 0 through n − 1.
+[LeetCode/GFG Link](https://leetcode.com/problems/find-if-path-exists-in-graph/)
 
 **Input/Output**
 
 ```text
-Input: n = 3, edges = [[0,1],[1,2]], source = 0, destination = 2
-Output: true
+Input: n = 6, edges = [[0,1],[0,2],[1,3],[2,3],[4,5]], source = 0, destination = 5
+Output: false
 ```
 
 ```python
-class Solution:
-    def validPath(self, n, edges, source, destination):
-        adj = [[] for _ in range(n)]
-        for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
 
-        queue = deque([source])
-        visited = {source}
-
-        while queue:
-            node = queue.popleft()
-            if node == destination:
-                return True
-
-            for neighbor in adj[node]:
-                if neighbor not in visited:
-                    visited.add(neighbor)
-                    queue.append(neighbor)
-
-        return False
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V + E), including the constructed adjacency list.
+- **Time:**
+- **Space:**
 
 ### 47. ★ Clone adj — 133
 
-[LeetCode/GFG Link](https://leetcode.com/problems/clone-adj/)
-
-Given a node in a connected undirected adj, return a deep copy of the adj. Every cloned node must be a new object with the same value and corresponding cloned neighbors.
+[LeetCode/GFG Link](https://leetcode.com/problems/clone-graph/)
 
 **Input/Output**
 
 ```text
-Input: Adjacency list: [[2],[1]] (node values are 1 and 2)
-Output: A new adj with adjacency list [[2],[1]], sharing no nodes with the input
+Input: adj = [[2,3],[1,3],[1,2,4],[3,5],[4]]
+Output: A deep copy with adj = [[2,3],[1,3],[1,2,4],[3,5],[4]], sharing no nodes with the input
 ```
 
 ```python
-# Node is provided by LeetCode.
-class Solution:
-    def cloneadj(self, node):
-        if node is None:
-            return None
 
-        copies = {node: Node(node.val)}
-        queue = deque([node])
-
-        while queue:
-            original = queue.popleft()
-
-            for neighbor in original.neighbors:
-                if neighbor not in copies:
-                    copies[neighbor] = Node(neighbor.val)
-                    queue.append(neighbor)
-
-                copies[original].neighbors.append(copies[neighbor])
-
-        return copies[node]
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V) auxiliary for the map and queue, plus O(V + E) for the cloned output adj.
+- **Time:**
+- **Space:**
 
 ### 48. ★ Keys and Rooms — 841
 
 [LeetCode/GFG Link](https://leetcode.com/problems/keys-and-rooms/)
 
-Visit room 0 and follow its keys to other rooms. Return whether every room can be reached. Each room is processed once.
-
 **Input/Output**
 
 ```text
-Input: rooms = [[1],[2],[3],[]]
+Input: rooms = [[1,2],[2,3],[3],[4],[]]
 Output: true
-```
-
-```pythonclass Solution:
-    def canVisitAllRooms(self, rooms):
-        queue = deque([0])
-        visited = {0}
-
-        while queue:
-            room = queue.popleft()
-
-            for key in rooms[room]:
-                if key not in visited:
-                    visited.add(key)
-                    queue.append(key)
-
-        return len(visited) == len(rooms)
-```
-
-**Time Space Complexity**
-
-- **Time:** O(V + E)
-- **Space:** O(V), excluding the input; E is the total number of keys.
-
-### 49. ★ Number of Connected Components in an Undirected adj — 323
-
-[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-adj/)
-
-Count connected components, including isolated vertices, in an undirected adj.
-
-**Input/Output**
-
-```text
-Input: n = 5, edges = [[0,1],[1,2],[3,4]]
-Output: 2
 ```
 
 ```python
 
-class Solution:
-    def countComponents(self, n, edges):
-        adj = [[] for _ in range(n)]
-        for u, v in edges:
-            adj[u].append(v)
-            adj[v].append(u)
-
-        visited = set()
-        components = 0
-
-        for start in range(n):
-            if start in visited:
-                continue
-
-            components += 1
-            queue = deque([start])
-            visited.add(start)
-
-            while queue:
-                node = queue.popleft()
-                for neighbor in adj[node]:
-                    if neighbor not in visited:
-                        visited.add(neighbor)
-                        queue.append(neighbor)
-
-        return components
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V + E), including the constructed adjacency list.
+- **Time:**
+- **Space:**
+
+### 49. ★ Number of Connected Components in an Undirected adj — 323
+
+[LeetCode/GFG Link](https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/)
+
+**Input/Output**
+
+```text
+Input: n = 7, edges = [[0,1],[1,2],[2,0],[3,4],[4,5]]
+Output: 3
+```
+
+```python
+
+```
+
+**Time Space Complexity**
+
+- **Time:**
+- **Space:**
 
 ### 50. ★ Shortest Bridge — 934
 
 [LeetCode/GFG Link](https://leetcode.com/problems/shortest-bridge/)
 
-Given exactly two 4-connected islands, return the fewest water cells to flip to connect them. Mark one island, then expand it by BFS. Updates the grid.
-
 **Input/Output**
 
 ```text
-Input: grid = [[0,1],[1,0]]
-Output: 1
+Input: grid = [
+    [1,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,1]
+]
+Output: 5
 ```
 
 ```python
 
-class Solution:
-    def shortestBridge(self, grid):
-        rows, cols = len(grid), len(grid[0])
-        start = next((r, c) for r in range(rows) for c in range(cols) if grid[r][c] == 1)
-        dirs = ((1, 0), (-1, 0), (0, 1), (0, -1))
-        stack = [start]
-        queue = deque([start])
-        grid[start[0]][start[1]] = 2
-        while stack:
-            r, c = stack.pop()
-            for dr, dc in dirs:
-                x, y = r + dr, c + dc
-                if 0 <= x < rows and 0 <= y < cols and grid[x][y] == 1:
-                    grid[x][y] = 2
-                    stack.append((x, y))
-                    queue.append((x, y))
-        flips = 0
-        while queue:
-            for _ in range(len(queue)):
-                r, c = queue.popleft()
-                for dr, dc in dirs:
-                    x, y = r + dr, c + dc
-                    if 0 <= x < rows and 0 <= y < cols and grid[x][y] != 2:
-                        if grid[x][y] == 1:
-                            return flips
-                        grid[x][y] = 2
-                        queue.append((x, y))
-            flips += 1
-        return -1
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the DFS stack and BFS queue.
+- **Time:**
+- **Space:**
 
 ### 51. ★ Max Area of Island — 695
 
 [LeetCode/GFG Link](https://leetcode.com/problems/max-area-of-island/)
 
-Return the largest 4-connected area of 1s in a nonempty binary grid. Visited land is changed to 0.
-
 **Input/Output**
 
 ```text
-Input: grid = [[1,1,0],[1,0,1]]
-Output: 3
-```
-
-```pythonclass Solution:
-    def maxAreaOfIsland(self, grid):
-        rows, cols = len(grid), len(grid[0])
-
-        def dfs(r, c):
-            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == 0: return 0
-            grid[r][c] = 0
-            return 1 + dfs(r + 1, c) + dfs(r - 1, c) + dfs(r, c + 1) + dfs(r, c - 1)
-
-        max_area = 0
-        for r in range(rows):
-            for c in range(cols):
-                if grid[r][c] == 1: max_area = max(max_area, dfs(r, c))
-        return max_area
-```
-
-**Time Space Complexity**
-
-- **Time:** O(R × C)
-- **Space:** O(R × C) for the DFS stack.
-
-### 52. ★ Pacific Atlantic Water Flow — 417
-
-[LeetCode/GFG Link](https://leetcode.com/problems/pacific-atlantic-water-flow/)
-
-Find cells from which water reaches both oceans. Search backward from ocean boundaries to equal or higher cells in the nonempty height grid.
-
-**Input/Output**
-
-```text
-Input: heights = [[1,2],[4,3]]
-Output: [[0,1],[1,0],[1,1]] (any order)
+Input: grid = [
+    [1,1,0,0],
+    [1,1,0,1],
+    [0,1,0,1],
+    [0,0,0,1]
+]
+Output: 5
 ```
 
 ```python
@@ -2675,54 +2653,53 @@ Output: [[0,1],[1,0],[1,1]] (any order)
 
 **Time Space Complexity**
 
-- **Time:** O(R × C)
-- **Space:** O(R × C)
+- **Time:**
+- **Space:**
+
+### 52. ★ Pacific Atlantic Water Flow — 417
+
+[LeetCode/GFG Link](https://leetcode.com/problems/pacific-atlantic-water-flow/)
+
+**Input/Output**
+
+```text
+Input: heights = [
+    [1,2,3,4],
+    [2,3,4,5],
+    [3,4,5,6],
+    [4,5,6,7]
+]
+Output: [[0,3],[1,3],[2,3],[3,0],[3,1],[3,2],[3,3]] (any order)
+```
+
+```python
+
+```
+
+**Time Space Complexity**
+
+- **Time:**
+- **Space:**
 
 ### 53. ★ Possible Bipartition — 886
 
 [LeetCode/GFG Link](https://leetcode.com/problems/possible-bipartition/)
 
-Split people labeled 1 through n into two groups so every disliked pair is separated. Build an undirected adj and two-color it.
-
 **Input/Output**
 
 ```text
-Input: n = 4, dislikes = [[1,2],[1,3],[2,4]]
+Input: n = 6, dislikes = [[1,2],[1,4],[3,2],[3,6],[5,4]]
 Output: true
 ```
 
-```pythonclass Solution:
-    def possibleBipartition(self, n, dislikes):
-        adj = [[] for _ in range(n + 1)]
-        for u, v in dislikes:
-            adj[u].append(v)
-            adj[v].append(u)
+```python
 
-        color = [-1] * (n + 1)
-
-        for start in range(1, n + 1):
-            if color[start] != -1:
-                continue
-
-            color[start] = 0
-            queue = deque([start])
-
-            while queue:
-                node = queue.popleft()
-                for neighbor in adj[node]:
-                    if color[neighbor] == -1:
-                        color[neighbor] = 1 - color[node]
-                        queue.append(neighbor)
-                    elif color[neighbor] == color[node]:
-                        return False
-
-        return True
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V + E), including the adjacency list.
+- **Time:**
+- **Space:**
 
 ### 54. ★ Topological Sort — DFS
 
@@ -2731,513 +2708,258 @@ Output: true
 **Input/Output**
 
 ```text
-Input: V = 4, edges = [[0,1],[0,2],[1,3],[2,3]]
-Output: [0,2,1,3] (one valid order)
+Input: V = 5, edges = [[0,1],[0,2],[1,3],[2,3],[3,4]]
+Output: [0,2,1,3,4] (one valid order)
 ```
 
-```pythonclass Solution:
-    def topoSort(self, V, edges):
-        adj = [[] for _ in range(V)]
-        for u, v in edges:
-            adj[u].append(v)
-        state = [0] * V
-        order = []
-        for start in range(V):
-            if state[start] != 0:
-                continue
-            state[start] = 1
-            stack = [(start, iter(adj[start]))]
-            while stack:
-                u, neighbors = stack[-1]
-                v = next(neighbors, None)
-                if v is None:
-                    order.append(u)
-                    state[u] = 2
-                    stack.pop()
-                elif state[v] == 1:
-                    return []
-                elif state[v] == 0:
-                    state[v] = 1
-                    stack.append((v, iter(adj[v])))
-        return order[::-1]
+```python
+
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E)
-- **Space:** O(V + E)
+- **Time:**
+- **Space:**
 
 ### 55. ★ Find All Possible Recipes from Given Supplies — 2115
 
 [LeetCode/GFG Link](https://leetcode.com/problems/find-all-possible-recipes-from-given-supplies/)
 
-Process supplies as available nodes. Each ingredient unlocks dependent recipes by reducing their remaining ingredient count. Enqueue a recipe when all its ingredients are available; cyclic or missing dependencies remain unresolved. Supplies are unlimited.
-
 **Input/Output**
 
 ```text
-Input: recipes = ["tea","combo"], ingredients = [["water","leaf"],["tea","bread"]], supplies = ["water","leaf","bread"]
-Output: ["tea","combo"]
+Input:
+recipes = ["bread","toast","sandwich","burger","meal"]
+ingredients = [["flour"],["bread"],["toast","cheese"],["bread","patty"],["sandwich","burger"]]
+supplies = ["flour","cheese","patty"]
+
+Output: ["bread","toast","sandwich","burger","meal"] (any order)
 ```
 
-```pythonfrom collections import defaultdict, deque
+```python
 
-class Solution:
-    def findAllRecipes(self, recipes, ingredients, supplies):
-        dependents = defaultdict(list)
-        remaining = [len(items) for items in ingredients]
-        for i, items in enumerate(ingredients):
-            for item in items:
-                dependents[item].append(i)
-        queue = deque(supplies)
-        available = set(supplies)
-        for i, recipe in enumerate(recipes):
-            if remaining[i] == 0 and recipe not in available:
-                available.add(recipe)
-                queue.append(recipe)
-        while queue:
-            item = queue.popleft()
-            for i in dependents[item]:
-                remaining[i] -= 1
-                if remaining[i] == 0 and recipes[i] not in available:
-                    available.add(recipes[i])
-                    queue.append(recipes[i])
-        return [recipe for recipe in recipes if recipe in available]
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(N + I + S) expected hash-table operations; N = recipes, I = ingredient occurrences, S = supplies. String hashing additionally depends on string lengths.
-- **Space:** O(N + I + S).
+- **Time:**
+- **Space:**
 
 ### 56. ★ Shortest Path in Binary Matrix — 1091
 
 [LeetCode/GFG Link](https://leetcode.com/problems/shortest-path-in-binary-matrix/)
 
-Find the shortest 8-directional path of 0s from top-left to bottom-right in an n × n grid. Count visited cells; return −1 if impossible. Updates the grid.
-
 **Input/Output**
 
 ```text
-Input: grid = [[0,1],[1,0]]
-Output: 2
+Input: grid = [
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0],
+    [0,0,0,0]
+]
+Output: 4
 ```
 
 ```python
 
-class Solution:
-    def shortestPathBinaryMatrix(self, grid):
-        n = len(grid)
-        if grid[0][0] or grid[n - 1][n - 1]:
-            return -1
-        queue = deque([(0, 0, 1)])
-        grid[0][0] = 1
-        while queue:
-            r, c, length = queue.popleft()
-            if r == n - 1 and c == n - 1:
-                return length
-            for dr in (-1, 0, 1):
-                for dc in (-1, 0, 1):
-                    if dr == dc == 0:
-                        continue
-                    x, y = r + dr, c + dc
-                    if 0 <= x < n and 0 <= y < n and grid[x][y] == 0:
-                        grid[x][y] = 1
-                        queue.append((x, y, length + 1))
-        return -1
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(n²)
-- **Space:** O(n²) for the BFS queue.
+- **Time:**
+- **Space:**
 
 ### 57. ★ Open the Lock — 752
 
 [LeetCode/GFG Link](https://leetcode.com/problems/open-the-lock/)
 
-Find the minimum wheel turns from 0000 to target while avoiding deadends; return −1 if impossible. Each state has four decimal digits.
-
 **Input/Output**
 
 ```text
-Input: deadends = [], target = "0009"
-Output: 1
+Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+Output: 6
 ```
 
 ```python
 
-class Solution:
-    def openLock(self, deadends, target):
-        seen = set(deadends)
-        if '0000' in seen:
-            return -1
-        queue = deque([('0000', 0)])
-        seen.add('0000')
-        while queue:
-            state, turns = queue.popleft()
-            if state == target:
-                return turns
-            for i in range(4):
-                for delta in (-1, 1):
-                    digit = str((int(state[i]) + delta) % 10)
-                    nxt = state[:i] + digit + state[i + 1:]
-                    if nxt not in seen:
-                        seen.add(nxt)
-                        queue.append((nxt, turns + 1))
-        return -1
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(D + 10⁴ × 8) for four fixed digits; D = number of deadends.
-- **Space:** O(D + 10⁴) for fixed four-digit states; D = deadends.
+- **Time:**
+- **Space:**
 
 ### 58. ★ Snakes and Ladders — 909
 
 [LeetCode/GFG Link](https://leetcode.com/problems/snakes-and-ladders/)
 
-Use BFS over square numbers to find the minimum dice rolls from 1 to n². Convert each square to its boustrophedon board coordinate. Follow at most one snake or ladder per roll; return −1 if the target is unreachable.
-
 **Input/Output**
 
 ```text
-Input: board = [[-1,-1],[-1,-1]]
-Output: 1
+Input: board = [
+    [-1,-1,-1,-1],
+    [-1,-1,-1,-1],
+    [-1,-1,-1,-1],
+    [-1,-1,-1,-1]
+]
+Output: 3
 ```
 
 ```python
 
-class Solution:
-    def snakesAndLadders(self, board):
-        n = len(board)
-        queue = deque([(1, 0)])
-        seen = {1}
-        while queue:
-            square, rolls = queue.popleft()
-            if square == n * n:
-                return rolls
-            for nxt in range(square + 1, min(square + 6, n * n) + 1):
-                row_from_bottom, col = divmod(nxt - 1, n)
-                row = n - 1 - row_from_bottom
-                if row_from_bottom % 2:
-                    col = n - 1 - col
-                dest = board[row][col] if board[row][col] != -1 else nxt
-                if dest not in seen:
-                    seen.add(dest)
-                    queue.append((dest, rolls + 1))
-        return -1
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(n²)
-- **Space:** O(n²).
+- **Time:**
+- **Space:**
 
 ### 59. ★ Network Delay Time — 743
 
 [LeetCode/GFG Link](https://leetcode.com/problems/network-delay-time/)
 
-Find when all nodes receive a signal from k, or −1 if some cannot. Directed edges times use labels 1 through n and nonnegative travel times.
-
 **Input/Output**
 
 ```text
-Input: times = [[1,2,2],[2,3,1]], n = 3, k = 1
-Output: 3
+Input: times = [[1,2,4],[1,3,1],[3,2,2],[2,4,1],[4,5,3]], n = 5, k = 1
+Output: 7
 ```
 
-```pythonfrom heapq import heappop, heappush
+```python
 
-class Solution:
-    def networkDelayTime(self, times, n, k):
-        V, edges, src = n + 1, times, k
-        adj = [[] for _ in range(V)]
-        for u, v, w in edges:
-            adj[u].append((v, w))
-        dist = [float('inf')] * V
-        dist[src] = 0
-        heap = [(0, src)]
-        while heap:
-            cost, u = heappop(heap)
-            if cost != dist[u]:
-                continue
-            for v, weight in adj[u]:
-                candidate = cost + weight
-                if candidate < dist[v]:
-                    dist[v] = candidate
-                    heappush(heap, (candidate, v))
-        answer = max(dist[1:])
-        return -1 if answer == float('inf') else answer
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E log(E + 2))
-- **Space:** O(V + E), including the adjacency list and heap.
+- **Time:**
+- **Space:**
 
 ### 60. ★ Negative Cycle Detection
 
 [LeetCode/GFG Link](https://www.geeksforgeeks.org/problems/negative-weight-cycle3504/1)
 
-Detect a negative-weight cycle anywhere in a directed adj, including disconnected components. Initialize every distance to zero, equivalent to a super-source. An improvement on the Vth Bellman–Ford pass proves a negative cycle. Return 1 if found, otherwise 0.
-
 **Input/Output**
 
 ```text
-Input: V = 4, edges = [[0,1,2],[2,3,-2],[3,2,1]]
-Output: 1 (negative cycle is disconnected from vertex 0)
+Input: V = 5, edges = [[0,1,2],[1,2,3],[2,0,1],[3,4,-2],[4,3,1]]
+Output: 1
 ```
 
-```pythonclass Solution:
-    def isNegativeWeightCycle(self, V, edges):
-        dist = [0] * V
-        for step in range(V):
-            changed = False
-            for u, v, weight in edges:
-                if dist[u] + weight < dist[v]:
-                    dist[v] = dist[u] + weight
-                    changed = True
-                    if step == V - 1:
-                        return 1
-            if not changed:
-                return 0
-        return 0
+```python
+
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + VE)
-- **Space:** O(V), excluding the input edge list.
+- **Time:**
+- **Space:**
 
 ### 61. ★ Redundant Connection — 684
 
 [LeetCode/GFG Link](https://leetcode.com/problems/redundant-connection/)
 
-An undirected tree on labels 1 through n has one extra edge. Return the edge that creates a cycle when edges are processed in input order.
-
 **Input/Output**
 
 ```text
-Input: edges = [[1,2],[1,3],[2,3]]
-Output: [2,3]
+Input: edges = [[1,2],[2,3],[3,4],[4,5],[1,5]]
+Output: [1,5]
 ```
 
-```pythonclass DSU:
-    def __init__(self, n):
-        self.parent = list(range(n))
-        self.size = [1] * n
+```python
 
-    def find(self, x):
-        while x != self.parent[x]:
-            self.parent[x] = self.parent[self.parent[x]]
-            x = self.parent[x]
-        return x
-
-    def union(self, a, b):
-        a, b = self.find(a), self.find(b)
-        if a == b:
-            return False
-        if self.size[a] < self.size[b]:
-            a, b = b, a
-        self.parent[b] = a
-        self.size[a] += self.size[b]
-        return True
-
-class Solution:
-    def findRedundantConnection(self, edges):
-        dsu = DSU(len(edges) + 1)
-        for u, v in edges:
-            if not dsu.union(u, v):
-                return [u, v]
-        return []
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(n × α(n))
-- **Space:** O(n) for DSU.
+- **Time:**
+- **Space:**
 
 ### 62. ★ Min Cost to Connect All Points — 1584
 
 [LeetCode/GFG Link](https://leetcode.com/problems/min-cost-to-connect-all-points/)
 
-Connect all points with minimum total Manhattan distance. Use dense Prim without building all pairwise edges.
-
 **Input/Output**
 
 ```text
-Input: points = [[0,0],[2,0],[2,2]]
+Input: points = [[0,0],[1,0],[2,0],[3,0],[4,0]]
 Output: 4
 ```
 
-```pythonclass Solution:
-    def minCostConnectPoints(self, points):
-        n = len(points)
-        if n == 0:
-            return 0
-        best = [float('inf')] * n
-        used = [False] * n
-        best[0] = 0
-        total = 0
-        for _ in range(n):
-            u = min((i for i in range(n) if not used[i]), key=lambda i: best[i])
-            used[u] = True
-            total += best[u]
-            for v in range(n):
-                if not used[v]:
-                    distance = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
-                    best[v] = min(best[v], distance)
-        return total
+```python
+
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(n²)
-- **Space:** O(n), excluding input points.
+- **Time:**
+- **Space:**
 
 ### 63. ★ Evaluate Division — 399
 
 [LeetCode/GFG Link](https://leetcode.com/problems/evaluate-division/)
 
-For a / b = value, store edges a → b with value and b → a with its reciprocal. For each query, DFS multiplies edge weights along a path. Unknown or disconnected variables return −1.0; a known variable divided by itself returns 1.0. Equations are consistent.
-
 **Input/Output**
 
 ```text
-Input: equations = [["x","y"],["y","z"]], values = [4.0,2.0], queries = [["x","z"],["z","x"],["u","u"]]
-Output: [8.0,0.125,-1.0]
+Input:
+equations = [["a","b"],["b","c"],["c","d"],["d","e"],["e","f"]]
+values = [2.0,3.0,4.0,5.0,6.0]
+queries = [["a","f"],["f","a"],["b","d"],["a","a"],["x","x"]]
+
+Output: [720.0,0.001388888888888889,12.0,1.0,-1.0]
 ```
 
-```pythonfrom collections import defaultdict
+```python
 
-class Solution:
-    def calcEquation(self, equations, values, queries):
-        adj = defaultdict(list)
-        for (a, b), value in zip(equations, values):
-            adj[a].append((b, value))
-            adj[b].append((a, 1.0 / value))
-        def evaluate(source, target):
-            if source not in adj or target not in adj:
-                return -1.0
-            stack = [(source, 1.0)]
-            seen = {source}
-            while stack:
-                node, product = stack.pop()
-                if node == target:
-                    return product
-                for neighbor, weight in adj[node]:
-                    if neighbor not in seen:
-                        seen.add(neighbor)
-                        stack.append((neighbor, product * weight))
-            return -1.0
-        return [evaluate(a, b) for a, b in queries]
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V + E + Q(V + E)) expected map/set operations; Q = queries. Variable-name hashing additionally depends on string length.
-- **Space:** O(V + E) auxiliary, plus O(Q) output.
+- **Time:**
+- **Space:**
 
 ### 64. ★ All Paths From Source to Target — 797
 
 [LeetCode/GFG Link](https://leetcode.com/problems/all-paths-from-source-to-target/)
 
-Given a DAG adjacency list, enumerate every path from node 0 to node n − 1. Use DFS/backtracking: append a neighbor before exploring and remove it afterward. A global visited set would incorrectly discard distinct paths.
-
 **Input/Output**
 
 ```text
-Input: adj = [[1,2],[3],[3],[]]
-Output: [[0,1,3],[0,2,3]] (any order)
+Input: adj = [[1,2],[3],[3,4],[4],[]]
+Output: [[0,1,3,4],[0,2,3,4],[0,2,4]] (any order)
 ```
 
 ```python
-class Solution:
-    def allPathsSourceTarget(self, adj):
-        result, path = [], [0]
-        def dfs(node):
-            if node == len(adj) - 1:
-                result.append(path.copy())
-                return
-            for neighbor in adj[node]:
-                path.append(neighbor)
-                dfs(neighbor)
-                path.pop()
-        dfs(0)
-        return result
+
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(V × 2^V) worst case, including path copies; the number of paths can be exponential.
-- **Space:** O(V) auxiliary for the path and recursion, plus O(V × 2^V) worst-case output.
+- **Time:**
+- **Space:**
 
 ### 65. ★ Longest Increasing Path in a Matrix — 329
 
 [LeetCode/GFG Link](https://leetcode.com/problems/longest-increasing-path-in-a-matrix/)
 
-Strictly increasing edges form a DAG. DFS memoizes the longest path starting at each cell, so each cell is solved once. The alternative topological-layer solution avoids recursion depth limits on long paths.
-
 **Input/Output**
 
 ```text
-Input: matrix = [[3,4],[2,5]]
-Output: 4
+Input: matrix = [
+    [1,2,3,4],
+    [8,7,6,5],
+    [9,10,11,12],
+    [16,15,14,13]
+]
+Output: 16
 ```
-
-**DFS + memoization**
-
-```python
-from functools import lru_cache
-
-class Solution:
-    def longestIncreasingPath(self, matrix):
-        rows, cols = len(matrix), len(matrix[0])
-        @lru_cache(None)
-        def dfs(r, c):
-            best = 1
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                nr, nc = r + dr, c + dc
-                if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] > matrix[r][c]:
-                    best = max(best, 1 + dfs(nr, nc))
-            return best
-        return max(dfs(r, c) for r in range(rows) for c in range(cols))
-```
-
-**Topological layers — avoids recursion**
 
 ```python
 
-class Solution:
-    def longestIncreasingPath(self, matrix):
-        rows, cols = len(matrix), len(matrix[0])
-        directions = ((1, 0), (-1, 0), (0, 1), (0, -1))
-        degree = [[0] * cols for _ in range(rows)]
-        queue = deque()
-        for r in range(rows):
-            for c in range(cols):
-                for dr, dc in directions:
-                    nr, nc = r + dr, c + dc
-                    if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] > matrix[r][c]:
-                        degree[r][c] += 1
-                if degree[r][c] == 0:
-                    queue.append((r, c))
-        length = 0
-        while queue:
-            for _ in range(len(queue)):
-                r, c = queue.popleft()
-                for dr, dc in directions:
-                    nr, nc = r + dr, c + dc
-                    if 0 <= nr < rows and 0 <= nc < cols and matrix[nr][nc] < matrix[r][c]:
-                        degree[nr][nc] -= 1
-                        if degree[nr][nc] == 0:
-                            queue.append((nr, nc))
-            length += 1
-        return length
 ```
 
 **Time Space Complexity**
 
-- **Time:** O(R × C)
-- **Space:** O(R × C).
+- **Time:**
+- **Space:**
