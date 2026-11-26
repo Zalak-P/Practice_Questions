@@ -1,7 +1,5 @@
 # Dynamic Programming — Python
 
-Each Python block is an independent solution. Copy one block at a time. Recursive implementations may exceed Python’s recursion limit on large inputs; use an iterative version when needed.
-
 ## 1. House Robber I
 
 Maximize money robbed from a line of houses without robbing adjacent houses. At each house, choose between skipping it and taking it with the best total two houses back.
