@@ -6,7 +6,7 @@
 
 [LeetCode/GFG Link](https://leetcode.com/problems/climbing-stairs/)
 
-Count the distinct ways to reach stair n when each move climbs either one or two stairs. Different move orders count separately.
+You are climbing a staircase with n steps. Each time, you can climb 1 or 2 steps. Return the number of distinct ways to reach the top.
 
 **Input/Output**
 
@@ -16,13 +16,21 @@ Output: 8
 ```
 
 ```python
+class Solution:
+    def climbStairs(self, n):
+        previous = 1
+        current = 1
 
+        for step in range(2, n + 1):
+            previous, current = current, previous + current
+
+        return current
 ```
 
 **Time Space Complexity**
 
-- **Time:**
-- **Space:**
+- **Time:** O(n)
+- **Space:** O(1)
 
 ### 2. Frog Jump
 
@@ -38,6 +46,7 @@ Output: 40
 ```
 
 ```python
+
 
 ```
 
@@ -756,7 +765,7 @@ Output: 5
 
 [LeetCode/GFG Link](https://leetcode.com/problems/wildcard-matching/)
 
-Determine whether the entire string s matches pattern p. The wildcard ? matches one character, and * matches any sequence, including the empty sequence.
+Determine whether the entire string s matches pattern p. The wildcard ? matches one character, and \* matches any sequence, including the empty sequence.
 
 **Input/Output**
 
