@@ -1,5 +1,12 @@
 # Dynamic Programming
 
+Recursion - try all possible ways
+Notes:
+
+1. Express the problem in index
+2. Do all stuffs on that index
+3. Take the minimal of all stuffs
+
 ## 1D DP — Previous States and Non-adjacent Choices
 
 ### 1. Climbing Stairs — 70
@@ -38,22 +45,53 @@ class Solution:
 
 A frog starts at index 0 and can jump one or two indices forward. A jump from i to j costs abs(heights[i] - heights[j]). Return the minimum total cost to reach the last index.
 
+Recursion to DP - Memo (look at the paramters changing) (Top down)
+
+1. declare an array size + 1
+2. before returning add it up
+3. whenever you call recursion then check if it is previously computed
+
+Tabulation - Bottom up
+
+1. In memo we used size + 1 array, use the same here
+2. Look at the base case from recursion
+3. Recursive steps for which indexes ? Run the loop for those indexes and Replace them with dp.
+
+Reduce Space - (wherever there is index-1, index-2 -> thumb rule, space optimization will happen)
+
 **Input/Output**
 
 ```text
 Input: heights = [10,20,30,10,40,20,10]
 Output: 40
+One optimal path uses indices 0 → 1 → 3 → 5 → 6:
 ```
 
 ```python
+class Solution:
+    def minCost(self, heights):
+        n = len(heights)
+        previous = 0
+        previous_two = 0
 
+        for i in range(1, n):
+            one_step = previous + abs(heights[i] - heights[i - 1])
+            two_steps = float("inf")
 
+            if i > 1:
+                two_steps = previous_two + abs(heights[i] - heights[i - 2])
+
+            current = min(one_step, two_steps)
+            previous_two = previous
+            previous = current
+
+        return previous
 ```
 
 **Time Space Complexity**
 
-- **Time:**
-- **Space:**
+- **Time:** O(n)
+- **Space:** O(1)
 
 ### 3. Frog Jump with K Distance
 
